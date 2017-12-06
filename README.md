@@ -8,8 +8,6 @@ eCLIP is a pipeline designed to identify genomic locations of RNA-bound proteins
 
 [Install singularity](http://singularity.lbl.gov/install-linux)
 
-[Download executable into an empty directory](link_to_singularity)
-
 That's it!
 
 # Running the Pipeline:
@@ -19,6 +17,7 @@ singularity run shub://YeoLab/eclip-dev:master
 ```
 
 Display  a brief overview of options and expected parameters:
+
 ```
 ./eclip
 ```
