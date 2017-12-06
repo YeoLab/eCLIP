@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+  cp -a ${ECLIP_DOCUMENTATION}/* ./
+
+  cp -a ${ECLIP_INIT}/* ./
+

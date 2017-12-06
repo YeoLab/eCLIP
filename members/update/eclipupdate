@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+
+CWLTOOLORCWLTOIL=$1
+
+#####################################################################
+# TODO: catch when no argument provided - and display usage message
+######################################################################
+
+#echo
+#echo ==========================================================================
+#echo UPDATING RESULTS
+#echo ==========================================================================
+#echo
+
+rm -f results/demux/*
+rm -f results/essentials/*
+rm -f results/finals/*
+rm -f results/geo/*
+rm -f results/intermediates/*
+rm -f results/trackhubs/*
+#rm -f results/metricsfiles/*
+#rm -f results/textfiles/*
+
+
+echo
+
+echo INTERMEDIATES
+echo =============
+echo
+ecliplink_intermediates.sh $CWLTOOLORCWLTOIL
+ls -1 results/intermediates
+
+echo
+
+echo DEMUX
+echo ======
+echo
+ecliplink_demux.sh $CWLTOOLORCWLTOIL
+ls -1 results/demux
+
+echo
+
+echo FINALS
+echo ======
+echo
+ecliplink_finals.sh $CWLTOOLORCWLTOIL
+ls -1 results/finals
+
+echo
+
+echo GEO
+echo ===
+echo
+ecliplink_geo.sh $CWLTOOLORCWLTOIL
+ls -1 results/geo
+
+echo
+
+echo ==========
+echo ESSENTIALS
+echo ==========
+echo
+ecliplink_essentials.sh $CWLTOOLORCWLTOIL
+ls -1 results/essentials
+
+echo
+
+echo TRACKHUBS
+echo ===========
+echo
+ecliplink_trackhubs.sh  $CWLTOOLORCWLTOIL
+ls -1 results/trackhubs
+
+echo
+
+echo MD5SUM
+echo ======
+echo
+cd results
+md5sum */* > md5sum.txt
+cd -
+
+
+echo ECLIP ANALYSIS
+echo ==============
+echo
+#eclipanalyse.sh
+
+echo
+
+
+#echo Q C SUMMARY
+#echo ===========
+#echo
+#eclipqcsummary
+#ls -1 qc
+
+
+#ecliplink_metrics.sh
+#ecliplink_texts.sh
+
+echo
+
+echo DOCUMENTATION
+echo =============
+echo
+eclipdocumentation
+ls -1 documentation
+
+echo
+
+
+#echo LEGACY
+#echo ======
+#echo
+###ecliplegacy.sh
+
+
+echo
+
+
+echo ERRORS
+echo ======
+echo
+ecliperrorsfails.sh
+echo
+

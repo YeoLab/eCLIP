@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+  ###############################################################################
+  # TEST - this will be run once upon completion of container building
+  ###############################################################################
+
+  set -x
+
+  #echo "This is the test code running" | sed -e 's/code //'
+  #false || true # This will fail without the double pipe
+  #true
+
+  mkdir SINGULARITY_BUILD_TEST
+  cd SINGULARITY_BUILD_TEST
+
+  eclip
+  ./kbp550.eclip
+  cd kbp550
+
+  /opt/test_demux.sh
+  /opt/test_rep.sh
+
+  cd ..

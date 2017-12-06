@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+
+set -x
+
+echo command: ${@}
+
+BW1=$1
+BW2=$2
+BB=$3
+HUB=$5
+GENOME=$7
+
+DOTBW1=$(basename ${BW1} .posbw).pos.bw
+DOTBW2=$(basename ${BW2} .negbw).neg.bw
+DOTBB=$(basename ${BB} .bb).bb
+
+#echo BW1    $BW1
+#echo BW2    $BW2
+#echo BB     $BB
+#echo DOTBW1 $DOTBW1
+#echo DOTBW2 $DOTBW2
+#echo DOTBB  $DOTBB
+#echo HUB    $HUB
+
+
+cp $BW1 $DOTBW1
+cp $BW2 $DOTBW2
+cp $BB  $DOTBB
+ls -l
+maketrackhubs \
+  --hub ${HUB} \
+  --genome ${GENOME} \
+  $DOTBW1 \
+  $DOTBW2 \
+  $DOTBB  \
+  ${@:8}
+ls -l
+set +x
+

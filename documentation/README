@@ -1,0 +1,119 @@
+
+###############################################################################
+This documentation for the eclip pipeline describes:
+
+- how to decode output file names into all successsive pipeline steps performed
+
+- how to associate file name extensions (anything after the first dor) into
+  a standard or eclip-specific file formats
+###############################################################################
+
+
+
+CODES denote a process STEP (2 uppercase letters)
+===========================
+
+  De  Demultiplex
+
+  Tr  TRim
+
+  U1  Unmapped mate1, output of star alignment
+  U2  Unmapped mate2, output of star alignment
+  Ma  MApped to genome, output of star alignment
+
+  Me  MErge, merging 2 sorted bam files into one
+
+  Cl  CLipper peak calling
+
+  V2  samtools View, from a bam file keep only reads 2 into a bam file
+
+  So  SOrt
+        either: fastqsort on a fq.gz file
+        or: bed sort after clip and fix
+        or: samtools sort by reads genomic position on a bam file
+  # TODO change to Sf for fastq Sb for bed sortand Sg for bam genomic positions ?
+
+  Sl  Sort Lexicographically
+        samtools sort by read names lexicographically on a bam file
+
+
+  Cp CollaPse:
+        barcodecollapse on bam file after star alignment
+
+
+  No  NOrmalize:
+        either: normalization as part of generating bigwig
+        or: turns peaks bed file into normalize peaks bed file (based on the clipper bam files: for IP and Input)
+            bed file foolows "ENCODE narrowPeak" file format as defined at : https://genome.ucsc.edu/FAQ/FAQformat.html#format12
+            bed6 + 4 columns:  chr   start   stop    peak    peak_read_counts    {$peak}{"expt"}     $peak_read_counts{$peak}{"input"}     chipval    chival    chitype    chienrdepl   log10pval   l2fc
+  N-  NOrmalize: same as No but implemented with perl instead of python
+
+
+
+  # TODO (?) change to Pc for pcr duplicates collapse, and Pn for Peaks neighbours collapse
+  Co COmpress: peakscompress on bed file after clipper peak calling
+  C- COmpress: same as Co but implemented with perl instead of python
+        bedfile has 6 columns: 'chr', 'start', 'stop', '-log10pval', 'log2fc', 'strand'
+
+
+  Fc3PV3  FoldChangeLog2>=3 PValueMinusLog10>=3
+        filtered peaks matching both criteria:
+        (log2 of Fold Change) and l(minus log10 of P Value) above threshold values in job file ( or the defaults of: 3 nd 3)
+
+
+  Fi  FIx scores by converting them to an appropriate range of values prior to making bigbed files
+
+  An  Annotated
+
+
+EXTENSIONS denote a file FORMAT
+===============================
+
+  fq
+
+  fq.gz   (binary)
+
+  bam     (binary)
+  bam.bai (binary)
+
+  bed
+  bb      (binary)
+
+  neg.bw  (binary)
+  pos.bw  (binary)
+
+  metrics
+  
+Merging paired files names:
+===========================
+
+Paired reads:
+-------------
+  LIN28B.11CLIP.r1.fq.gz.TR.fq.gz.TR.fq.gz
+  LIN28B.11CLIP.r2.fq.gz.TR.fq.gz.TR.fq.gz
+
+get combined during alignment as:
+
+  LIN28B.11CLIP.r_.fq.gz.TR.fq.gz.TR.fq.gz.MA.bam
+
+Merged barcodes:
+----------------
+  SLIN28B.11.CLIP.DE.A01.r_.fq.gz.TR.fq.gz.TR.fq.gz.U_.fq.SO.fq.MA.bam.CO.bam
+  SLIN28B.11.CLIP.DE.B06.r_.fq.gz.TR.fq.gz.TR.fq.gz.U_.fq.SO.fq.MA.bam.CO.bam
+
+get combined during bam-merge as:
+
+  SLIN28B.11.CLIP.DE.___.r_.fq.gz.TR.fq.gz.TR.fq.gz.U_.fq.SO.fq.MA.bam.CO.ME.bam
+
+
+
+THRESHOLD CRITERIA
+===================
+
+QC summary:
+-----------
+
+sample passes QC if :
+      usable reads >  1000000  and percent usable > 70 %
+
+

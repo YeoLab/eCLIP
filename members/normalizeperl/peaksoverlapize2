@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Debugging settings:
+#####################
+# exit immediately upon any error, output each line as it is executed
+set -ex -o pipefail
+
+#echo ${@}
+
+ls -la
+
+cp ${1#file://} ./
+cp ${2#file://} ./
+cp ${3#file://} ./
+
+cp ${4#file://} ./
+cp ${5#file://} ./
+
+
+ls -la
+
+IPBED=${6}
+IPBAM=${7}
+IPBAI=${8}
+
+INBAM=${9}
+INBAI=${10}
+
+OUTPUT=${11}
+OUTPUTFULL=${12}
+
+peaksnormalize.pl $IPBAM $INBAM $IPBED $OUTPUT $OUTPUTFULL $IPBAI $INBAI

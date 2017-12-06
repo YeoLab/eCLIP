@@ -1,0 +1,297 @@
+#!/usr/bin/env bash
+
+
+# get the ECLIP full directory name no matter where it is called from
+ECLIP_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"                 # TODO move this one level up (include final /../)
+export ECLIP_DOCUMENTATION=${ECLIP_HOME}/../documentation
+export ECLIP_INIT=${ECLIP_HOME}/../init
+
+#ls -1 "${ECLIP_HOME}/../ECLIP-VERSION-*.*.*"                                  # TODO get this from env variable
+ECLIPVERSION=eclip-version-0.1.6.99
+
+
+
+###########################################
+#TMPDIR="/oasis/tscc/scratch/adomissy/TMPDIR"
+
+
+JOB_FILE=$1
+
+if [[ -z ${JOB_FILE} ]]; then
+###############################################################
+# no parameter was given (no eclip jobfile)
+# initialize current directory with template files and show help
+################################################################
+
+  eclipinit
+  eclipusage
+
+else
+######################################
+# parameter was given (eclip jobfile)              # TODO get rid of MOREORLESS
+######################################             # TODO simplify toil/torque choice
+
+  FULLPATHCOMMAND=$0
+  # remove the path and the 'eclip' at the beginning of full path command
+  # to get the cwlrunner and workflow type
+  CWLRUNNER_MOREORLESS_WORKFLOW=${FULLPATHCOMMAND##*/eclip}
+  # if command was 'eclip' then use the default cwlrunner and the default workflos
+  if [ -z $CWLRUNNER_MOREORLESS_WORKFLOW ]
+  then
+    #echo default cwlrunner and workflow
+    WORKFLOW=wf_scatter
+    MOREORLESS=more
+    CWLRUNNER=cwltool
+  else
+    WORKFLOW=${CWLRUNNER_MOREORLESS_WORKFLOW#cwlto??????}         # yields either OLMORE or OLLESS or ILMORE or ILLESS  # TODO caution: no .cwl extension !
+    CWLRUNNER_MOREORLESS=${CWLRUNNER_MOREORLESS_WORKFLOW%$WORKFLOW}
+    MOREORLESS=${CWLRUNNER_MOREORLESS#cwlto??}                    # yields either MORE or LESS
+    CWLRUNNER=${CWLRUNNER_MOREORLESS%$MOREORLESS}
+  fi
+
+  # initialize directories
+  ########################
+
+  # get the eclipjob.yaml full directory name
+  JOB_HOME="$( cd "$( dirname "${BASH_SOURCE[1]}" )" && pwd )"
+
+  # get the eclipjob.yaml file name without extension
+  JOB_BASENAME=${JOB_FILE##*/}
+  JOB_NAME="${JOB_BASENAME%.*}"
+
+
+  # create temporary intermediates directory # TODO only needed for cwltool
+  INTERM=${JOB_HOME}/${JOB_NAME}/.tmp/cwltool_interm
+  mkdir -p ${INTERM}
+
+
+
+
+  # create temp work directory    # TODO should be absolute path for toil, is it ?
+  WORKDIR=${JOB_HOME}/${JOB_NAME}/.tmp/workdir
+  mkdir -p ${WORKDIR}
+  echo "WORKDIR: ${WORKDIR}"
+
+  # define jobstore directory, but do not create it
+  JOBSTORE=${JOB_HOME}/${JOB_NAME}/.tmp/cwltoil_jobstore
+  #mkdir -p ${JOBSTORE};
+  JOBSTOREEXITSLETSRESTART=
+  # if jobaore exists set arguments to restart toil
+  if [ -d $JOBSTORE ]
+  then echo jobstore exists; JOBSTOREEXITSLETSRESTART="--restart"
+  fi
+
+  # create outdir directory
+  OUTDIR=${JOB_HOME}/${JOB_NAME}/.tmp/outdir
+  mkdir -p ${OUTDIR}
+
+  # create toillogs directory
+  TOILLOGS=${JOB_HOME}/${JOB_NAME}/.tmp/toillogs
+  mkdir -p ${TOILLOGS}
+
+  # copy utility to seperate out binaries from text results
+  #########################################################
+  # cp ${ECLIP_HOME}/init_more/bin/copy_*${CWLRUNNER}.sh ${JOB_HOME}/${JOB_NAME}
+  # cp ${ECLIP_HOME}/init_more/bin/link_*${CWLRUNNER}.sh ${JOB_HOME}/${JOB_NAME} # TODO equivalents for cwltoil and cwltorq ?
+  # cp ${ECLIP_HOME}/init_more/bin/list_*${CWLRUNNER}.sh ${JOB_HOME}/${JOB_NAME} # TODO equivalents for cwltool ?
+
+  # copy job file and log eclip version in output directory
+  #########################################################
+  # TODO softcode version nb
+  JOBCOPYFILEPATH="${JOB_HOME}/${JOB_NAME}/eclip-job-copy.${JOB_NAME}.txt"
+  cp ${JOB_FILE} ${JOBCOPYFILEPATH}
+  chmod -x ${JOBCOPYFILEPATH}
+  touch ${JOB_HOME}/${JOB_NAME}/${ECLIPVERSION}
+
+  # activate conda environnment
+  #############################
+  # export PATH=/projects/ps-yeolab/software/eclip/miniconda/envs/eclip1/bin/:${PATH}
+  # source activate eclip
+  # source /projects/ps-yeolab/software/eclip/miniconda/envs/eclip/bin/activate eclip   #<--TODO ?
+
+
+
+  # # Debugging settings
+  # ####################
+
+  # Print commands and their arguments as they are executed.
+  # set -x
+
+  # #Exit immediately if a command exits with a non-zero status.
+  # set -e
+
+  # #the return value of a pipeline is the status of
+  # #the last command to exit with a non-zero status,
+  # #or zero if no command exited with a non-zero status
+  # set -o pipefail
+
+
+
+
+
+  echo
+  echo ========================================================================
+  echo PATHS
+  echo ========================================================================
+  echo
+  echo "PATH:" $PATH
+  echo "PERL5LIB:" $PERL5LIB
+  echo "which eclipdemux:" `which eclipdemux`
+  echo "which bedtools:" `which bedtools`
+  echo "which genomeCoverageBed:" `which genomeCoverageBed`
+  echo "which conda:" `which conda`
+  echo "which clipper:" `which clipper`
+  CLIPPERHELP=`clipper --help`
+  echo "clipper --help" ${CLIPPERHELP:0:100}
+  echo
+
+  ####### MODIFIED FOR v 0.1.4
+  ####source /projects/ps-yeolab/software/eclipconda/envs/eclip/bin/activate eclip${MOREORLESS}peakstoilbxaws  # TODO CONDA ENV CHOICE
+  ####source activate eclip${MOREORLESS}peakstoilbxaws
+  ####### MODIFIED AGAIN FOR v 0.1.4 - env activated by module
+  ####source /projects/ps-yeolab/software/eclipconda/envs/eclip/bin/activate eclip-0.1.4  # TODO CONDA ENV CHOICE
+  ####source activate eclip-0.1.4
+
+
+
+  echo
+  echo ========================================================================
+  echo EXECUTING CWL JOB
+  echo ========================================================================
+  echo
+
+
+
+
+  if [ $CWLRUNNER == cwltool ]; then
+  #-------------------------------
+  # echo calling cwltool
+  cwltool --debug \
+    --outdir ${OUTDIR} \
+    --cachedir ${INTERM} \
+    ${ECLIP_HOME}/../cwl/${WORKFLOW}.cwl \
+    ${JOB_FILE} \
+    2>&1 | tee ${JOB_HOME}/${JOB_NAME}/eclip-job-log.txt
+  fi
+
+
+  if [ $CWLRUNNER == cwltoil -o $CWLRUNNER == cwltorq ] ; then
+  #-------------------------------
+
+  set -x
+
+  if [ $CWLRUNNER == cwltorq ]; then
+    BATCHSYSTEM_TORQUE_DISABLE_CACHING=" --batchSystem torque --disableCaching"
+  else
+    BATCHSYSTEM_TORQUE_DISABLE_CACHING=""
+  fi
+
+  echo ************************************************************************
+  echo ************************************************************************
+  echo ************************************************************************
+  echo CWLRUNNER : $CWLRUNNER
+  echo BATCHSYSTEM_TORQUE_DISABLE_CACHING: $BATCHSYSTEM_TORQUE_DISABLE_CACHING
+  echo ************************************************************************
+  echo ************************************************************************
+  echo ************************************************************************
+
+
+
+
+  #export TOIL_TORQUE_ARGS="-l walltime=4:00:00 -q home-yeo"
+  #export TOIL_TORQUE_ARGS="-l walltime=8:00:00 -q condo"
+  export TOIL_TORQUE_ARGS="-l walltime=1:00:00 -q condo"
+  ########################################################
+
+  # --logDebug --stats \
+  # --logLevel DEBUG \
+  cwltoil ${JOBSTOREEXITSLETSRESTART} ${BATCHSYSTEM_TORQUE_DISABLE_CACHING} \
+    --logDebug --stats \
+    --writeLogs ${TOILLOGS} \
+    --jobStore file:${JOBSTORE} \
+    --workDir ${WORKDIR} \
+    --outdir ${OUTDIR} \
+    --clean never \
+    --cleanWorkDir never \
+    --defaultCores 1.0 --defaultMemory 8.0G  \
+    ${ECLIP_HOME}/../cwl/${WORKFLOW}.cwl \
+    ${JOB_FILE} \
+    2>&1 | tee ${JOB_HOME}/${JOB_NAME}/eclip-job-log.txt
+
+    # --defaultDisk 20.0G
+
+  set +x
+
+  fi
+
+
+  #--clusterStats \
+  #--logDebug \
+  #--realTimeLogging \
+  #--stats \
+
+  #-maxCores=  --maxMemory=8.0Ei --maxDisk 8.0Ei \
+
+  #--maxLogFileSize -1 \
+
+  # error when using option --maxLogFileSize -1
+  #  h2b = lambda x : human2bytes(str(x))
+  #File "/projects/ps-yeolab/software/eclipconda/envs/ecliplesspeakstoil/lib/python2.7/site-packages/bd2k/util/humanize.py", line 111, in human2bytes
+  #  num = float(num)
+
+
+  #> >(tee ${JOB_HOME}/${JOB_NAME}/status.txt) \
+  #2>${JOB_HOME}/${JOB_NAME}/log.txt
+
+
+
+  # see : http://stackoverflow.com/questions/692000/how-do-i-write-stderr-to-a-file-while-using-tee-with-a-pipe
+  ### STDOUT to STATUSFILE and screen, STDERR to LOGFILE
+  #exec > >(tee ${STATUSFILE}) 2>${LOGFILE}
+
+
+
+  # remove leftover intermediateXXXXXX folders   # TODO only needed if cwltool crashed ?
+  ############################################
+  #rmdir ${JOB_HOME}/${JOB_NAME}/intermediates??????
+
+  echo
+  echo ========================================================================
+  echo UPDATING RESULTS
+  echo ========================================================================
+  echo
+
+  cd ${JOB_HOME}/${JOB_NAME}
+  # TODO caution: needs to be in job directory
+  #if [ $CWLRUNNER == cwltool ]; then
+  #  eclipupdate cwltool
+  #fi
+  #if [ $CWLRUNNER != cwltool ]; then
+  #  eclipupdate cwltoil
+  #fi
+  eclipupdate $CWLRUNNER
+
+
+  # setup analysis folder
+  ########################
+  # mkdir -p analysis/inputs                                  # TODO this is already done by ecliplink_update_cwltool.sh
+  # cp finals.L/*V2.bam finals.L/*NoCo.bed analysis/inputs
+  # cp ${ECLIP_HOME}/init/TEMPLATE.analysis.Fc?Pv?.eclip
+
+
+  # TODO this now commented out, so to finish inside job folder
+  #cd -
+
+  # Stop printing commands and their arguments as they are executed.
+  #set +x
+
+
+  echo
+  echo "*********************************************************************"
+  echo "********** SUCCESS: ${JOB_NAME} PROCESSED WITH ${ECLIPVERSION} ******"
+  echo "*********************************************************************"
+  echo
+  echo Bye!
+  echo
+
+fi
