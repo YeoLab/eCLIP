@@ -14,18 +14,19 @@ That's it!
 
 # Running the Pipeline:
 
-Mark downloaded program as executable:
 ```
-chmod +x eCLIP-0.1.4
+singularity run shub://YeoLab/eclip-dev:master
 ```
 
 Display  a brief overview of options and expected parameters:
 ```
-./eCLIP-0.1.4
+./eclip
 ```
 
-To get started, you'll need to download a [rather large file](LINKTOZIPPEDFILE)  
-This file contains everything that's needed to run a small example 
+To get you started, this provides you with a reference data file and a tutorial
+.dataset
+
+These files contain everything needed to run a small example
 
 <b>(make sure to place this in a location with plenty of space!)</b>:
 - (IP sample) Read 1 FASTQ.gz
@@ -38,7 +39,7 @@ This file contains everything that's needed to run a small example
 
 Execute the analysis using the provided example YAML file pointing to the appropriate bundled example files
 ```
-./eCLIP-0.1.4 eclip_example.yaml
+./KBP550.eclip
 ```
 
 ### Running the data with required arguments:
