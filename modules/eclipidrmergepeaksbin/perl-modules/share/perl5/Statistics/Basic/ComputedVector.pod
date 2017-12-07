@@ -1,0 +1,165 @@
+=head1 NAME
+
+Statistics::Basic::ComputedVector - a class for computing filtered vectors
+
+=head1 SYNOPSIS
+
+Invoke it this way:
+
+    my $vector   = vector(1,2,3);
+    my $computed = computed($vector)->set_filter(sub{
+        # NOTE: only interested in even numbers:
+        grep { !($_ % 2) } @_
+    });
+
+    # nearly the same, opposite order:
+
+    my $computed = computed(1,2,3)->set_filter(sub {map{$_+1}@_});
+    my $vector   = $computed->query_vector; 
+
+=head1 METHODS
+
+=over 4
+
+=item B<new()>
+
+The constructor takes a single array ref or a single
+L<Statistics::Basic::ComputedVector> as its argument.  It returns a
+L<Statistics::Basic::ComputedVector> object.
+
+If passed arguments other than L<Statistics::Basic::Vector> objects, the
+constructor will built an appropriate vector object -- which can be queried with
+L</query_vector()>
+
+Note: normally you'd use the L<computed()|Statistics::Basic/computed()>
+constructor, rather than building these by hand using C<new()>.
+
+=item B<copy()>
+
+Creates a new computed vector object referring to the same source vector and
+using the same filter as this one.
+
+    my $v1 = vector(1,2,3);
+    my $c1 = computed($v1); $c1->set_filter(my $s = sub {});
+
+    my $copy1 = computed($v1); $copy1->set_filter($s);
+    my $copy2 = $c1->copy; # just like $c2, but in one step
+
+To instead create a filtered version of a filtered vector, choose this form:
+
+    my $v1 = vector(1,2,3);
+    my $c1 = computed($v1); $c1->set_filter(sub {});
+    my $c2 = computed($c1); $c2->set_filter(sub {});
+
+=item B<insert()>
+
+Insert new values into the input vector.  If the vector was already full (see
+L</set_size()>), this will also shift oldest elements from the input vector to
+compensate.
+
+    $computed->insert( 4, 3 ); # insert a 3 and a 4
+
+Note that continuing from the L</SYNOPSIS> example, this would certainly insert
+a 4 and a 3 into the input vector, but the 3 wouldn't be returned from a
+L</query()> because it is odd.
+
+This function returns the object itself, for chaining purposes.
+
+=item B<append()> B<ginsert()>
+
+Insert new values into the input vector.  If the vector was already full (see
+L</set_size()>), these functions will grow the size of the input vector to
+accommodate the new values, rather than shifting things.
+
+    $computed->append( 4, 3 ); # append a 3 and a 4
+
+Note that continuing from the L</SYNOPSIS> example, this would certainly insert
+a 4 and a 3 into the input vector, but the 3 wouldn't be returned from a
+L</query()> because it is odd.
+
+This function returns the object itself, for chaining purposes.
+
+=item B<query()>
+
+C<query()> returns the contents of the computed vector (after filtering) either
+as a list or as an arrayref.
+
+    my @copy_of_contents      = $computed->query;
+    my $reference_to_contents = $computed->query;
+
+Note that changing the C<$reference_to_contents> will not usefully affect the
+contents of the vector itself, but it will adversely affect any computations
+based on the vector.  If you need to change the contents of a vector in a
+special way, use another L<Statistics::Basic::ComputedVector> object instead.
+
+Keeping C<$reference_to_contents> available long term should work acceptably
+(since it refers to the vector contents itself).
+
+=item B<query_vector()>
+
+Return the input L<Statistics::Basic::Vector> object.
+
+=item B<query_filled()>
+
+This returns true when the input vector is full (see
+L<Statistics::Basic::Vector/query_filled()>).  This is of questionable
+usefulness on computed vectors, but is provided for completeness (and internal
+package consistency).
+
+=item B<query_size()>
+
+Return the current size of the computed vector.
+
+=item B<set_filter()>
+
+Set the filtering for the computed vector.  This function takes a single coderef
+argument -- all other arguments will be ignored.  The elements of the input
+vector are passed to your filter coderef in C<@_> and your ref should return the
+calculated elements of the computed vector as a list.
+
+    my $vec = vector(1,2,3);
+    my $pow = computed($vec);
+       $pow->set_filter(sub { return map { $_ ** 2 } @_ })
+
+If you need to call more than one filter function, concatenate them together
+using map or an anonymous sub.
+
+    $pow->set_filter(sub { return f1(f2(f3(f4(@_)))) });
+
+This function returns the object itself, for chaining purposes.
+
+=item B<set_size()>
+ 
+Set the size of the input vector (not the computed vector, that would make
+little sense).
+
+This function returns the object itself, for chaining purposes.
+
+=item B<set_vector()>
+
+Set the contents of the input vector (not the computed one).
+
+This function returns the object itself, for chaining purposes.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+vector and raises errors in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::Vector>
+
+=cut

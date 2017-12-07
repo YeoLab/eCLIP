@@ -1,0 +1,85 @@
+=head1 NAME
+
+Statistics::Basic::_TwoVectorBase - base class objects like Correlation
+
+=head1 METHODS
+
+=over 4
+
+=item B<query()>
+
+Query the value of the object.  It will return the undefined value until there's
+something to calculate.
+
+=item B<insert()>
+
+Insert two new new values into the vectors.  This function must be given
+precisely two arguments and probably shouldn't be undefined values in most
+cases.
+
+    # insert a 4 in one vector and a 3 in the other
+    $object_instance->insert( 4, 3 );
+
+=item B<append()> B<ginsert()>
+
+The growing insert inserts new elements, growing the max size of the vector to
+accommodate the new elements (if necessary).  This function must be given
+precisely two arguments and probably shouldn't be undefined values in most
+cases.
+
+    # append a 4 in one vector and a 3 in the other
+    $object_instance->ginsert( 4, 3 );
+
+=item B<query_size()>
+
+The current size of the vectors -- regardless of their max size (as set by
+L</set_size()>).  This function returns a list, i.e.:
+
+    my @s = $obj->query_size; # two values
+    my $s = $obj->query_size; # the right hand value of the list
+
+=item B<set_size()>
+
+Set the maximum size for the underlying L<Statistics::Basic::Vector> objects.
+This function requires two arguments.
+
+=item B<set_vector()>
+
+Set the vector objects used to calculate the object's value.  This function
+takes two arguments -- which can either be arrayrefs or
+L<Statistics::Basic::Vector> objects.  They must have the same number of
+elements.
+
+    my $v1 = vector
+    my $v2 = $v1->copy;
+    $example_correlation->set_vector($v1, $v2);
+
+=back
+
+=head1 OVERLOADS
+
+This class provides overloads.  If evaluated as a string, it will attempt to
+print a pretty value for the object (or C<n/a>, see L</query()> above).  the
+resulting string can be tuned, in terms of precision, see
+L<ipres|Statistics::Basic/ipres> for further information.
+
+If evaluated as a number, it will try to return the raw result of L</query()>,
+possibly turning the resulting C<undef> (if applicable) into a C<0> in the
+process -- note that Perl does this C<0>-izing, not the overload.
+
+The C<eq> and C<==> operators are also overloaded, trying to do the right thing.
+Also see L<toler|Statistics::Basic/toler> for further information.
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::Vector>
+
+=cut

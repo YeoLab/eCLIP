@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+maketrackhubs \
+  --hub $(date -I)_$(basename $(pwd)) \
+  --genome hg19 \
+  --urldomain storage.googleapis.com \
+  --urldir yeolab_trackhubs \
+  ./*.bw ./*.bed
+
+

@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+set -o xtrace
+set -o errexit
+
+
+FASTQGZ1=$1
+FASTQGZ2=$2
+
+INDEXTAR=$3
+FILELISTFILE=$4
+
+
+cp ${FASTQGZ1} ./
+cp ${FASTQGZ2} ./
+
+# get rif of path
+BASENAME1=$(basename ${FASTQGZ1})
+BASENAME2=$(basename ${FASTQGZ2})
+
+# get rid of path and gz extension
+FASTQ1=$(basename ${FASTQGZ1} .gz)
+FASTQ2=$(basename ${FASTQGZ2} .gz)
+
+# get rid of path and fastq.gz extension
+NAMEROOT1=$(basename ${FASTQGZ1} .fastq.gz)
+NAMEROOT2=$(basename ${FASTQGZ2} .fastq.gz)
+
+# find common part between both filenames, to define outputfilename parameter
+#----------------------------------------------------------------------------
+NAMEROOTMERGED=$(namemerge $NAMEROOT1 $NAMEROOT2 "-")
+OUTPUTFILENAME=${NAMEROOTMERGED}_rep.sam
+
+
+# uncompress, keep original
+gunzip ${BASENAME1}
+gunzip ${BASENAME2}
+
+
+mkdir genome
+tar -xf ${INDEXTAR} --strip-components 1 -C ./genome;
+
+
+#INDEXFA=$(basename ${INDEXTAR} .tar).fa
+INDEXFA=genome/*.fa
+echo INDEXFA: $INDEXFA
+
+INDEX=$(basename $INDEXFA .fa)
+echo INDEX: $INDEX
+
+
+ls -l
+
+parse_bowtie2_output_realtime_includemultifamily.pl \
+    ${FASTQ1} \
+    ${FASTQ2} \
+    genome/${INDEX} \
+    ${OUTPUTFILENAME} \
+    ${FILELISTFILE}
+

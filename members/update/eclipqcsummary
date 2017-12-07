@@ -21,4 +21,6 @@ ls -la eclipqc*
 mv eclipqcsummary.csv ../../qc/qc-aggregate.csv
 mv eclipqcsummary.png ../../qc/qc-aggregate.png
 
+
+
 cd -

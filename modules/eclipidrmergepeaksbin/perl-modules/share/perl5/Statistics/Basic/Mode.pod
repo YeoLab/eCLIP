@@ -1,0 +1,109 @@
+=head1 NAME
+
+Statistics::Basic::Mode - find the mode of a list
+
+=head1 SYNOPSIS
+
+Invoke it this way:
+
+    my $mode = mode(1,2,3,3);
+
+Or this way:
+
+    my $v1  = vector(1,2,3,3);
+    my $mod = mode($v1);
+
+And then either query the values or print them like so:
+
+    print "The mod of $v1: $mod\n";
+    my $mq = $mod->query;
+    my $m0 = 0+$mod; # this will croak occasionally, see below
+
+The mode of an array is not necessarily a scalar.  The mode of this vector is a
+vector:
+
+    my $mod = mode(1,2,3);
+    my $v2  = $mod->query;
+
+    print "hrm, there's three elements in this mode: $mod\n"
+        if $mod->is_multimodal;
+
+Create a 20 point "moving" mode like so:
+
+    use Statistics::Basic qw(:all nofill);
+
+    my $sth = $dbh->prepare("select col1 from data where something");
+    my $len = 20;
+    my $mod = mode()->set_size($len);
+
+    $sth->execute or die $dbh->errstr;
+    $sth->bind_columns( my $val ) or die $dbh->errstr;
+
+    while( $sth->fetch ) {
+        $mod->insert( $val );
+        if( defined( my $m = $mod->query ) ) {
+            print "Mode: $m\n";
+        }
+
+        print "Mode: $mod\n" if $mod->query_filled;
+    }
+
+=head1 METHODS
+
+=over 4
+
+=item B<new()>
+
+The constructor takes a list of values, a single array ref, or a single
+L<Statistics::Basic::Vector> as arguments.  It returns a
+L<Statistics::Basic::Mode> object.
+
+Note: normally you'd use the L<mean()|Statistics::Basic/mode()> constructor,
+rather than building these by hand using C<new()>.
+
+=item B<is_multimodal()>
+
+L<Statistics::Basic::Mode> objects sometimes return L<Statistics::Basic::Vector>
+objects instead of numbers.  When C<is_multimodal()> is true, the mode is a
+vector, not a scalar.
+
+=item B<_OVB::import()>
+
+This module also inherits all the overloads and methods from
+L<Statistics::Basic::_OneVectorBase>.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+calculation or the value of the computation in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+If evaluated as a string, L<Statistics::Basic::Mode> will try to format a number
+(like any other L<Statistics::Basic> object), but if the object
+L</is_multimodal()>, it will instead return a L<Statistics::Basic::Vector> for
+stringification.
+
+    $x = mode(1,2,3);
+    $y = mode(1,2,2);
+
+    print "$x, $y\n"; # prints: [1, 2, 3], 2
+
+If evaluated as a number, a L<Statistics::Basic::Mode> will raise an error when
+the object L</is_multimodal()>.
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::_OneVectorBase>, L<Statistics::Basic::Vector>
+
+=cut

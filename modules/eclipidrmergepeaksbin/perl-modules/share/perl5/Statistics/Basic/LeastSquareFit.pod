@@ -1,0 +1,161 @@
+=head1 NAME
+
+Statistics::Basic::LeastSquareFit - find the least square fit for two lists
+
+=head1 SYNOPSIS
+
+A machine to calculate the Least Square Fit of given vectors x and y.
+
+The module returns the alpha and beta filling this formula:
+
+    $y = $beta * $x + $alpha
+
+for a given set of I<x> and I<y> co-ordinate pairs.
+
+Say you have the set of Cartesian coordinates:
+
+    my @points = ( [1,1], [2,2], [3,3], [4,4] );
+
+The simplest way to find the LSF is as follows:
+
+    my $lsf = lsf()->set_size(int @points);
+       $lsf->insert(@$_) for @points;
+
+Or this way:
+
+    my $xv  = vector( map {$_->[0]} @points );
+    my $yv  = vector( map {$_->[1]} @points );
+    my $lsf = lsf($xv, $yv);
+
+And then either query the values or print them like so:
+
+    print "The LSF for $xv and $yv: $lsf\n";
+    my ($yint, $slope) =
+    my ($alpha, $beta) = $lsf->query;
+
+L<LSF|Statistics::Basic::LeastSquareFit> is meant for finding a line of best
+fit.  C<$beta> is the slope of the line and C<$alpha> is the y-offset.  Suppose
+you want to draw the line.  Use these to calculate the C<x> for a given C<y> or
+vice versa:
+
+    my $y = $lsf->y_given_x( 7 );
+    my $x = $lsf->x_given_y( 7 );
+
+(Note that C<x_given_y()> can sometimes produce a divide-by-zero error since it
+has to divide by the C<$beta>.)
+
+Create a 20 point "moving" L<LSF|Statistics::Basic::LeastSquareFit> like so:
+
+    use Statistics::Basic qw(:all nofill);
+
+    my $sth = $dbh->prepare("select x,y from points where something");
+    my $len = 20;
+    my $lsf = lsf()->set_size($len);
+
+    $sth->execute or die $dbh->errstr;
+    $sth->bind_columns( my ($x, $y) ) or die $dbh->errstr;
+
+    my $count = $len;
+    while( $sth->fetch ) {
+        $lsf->insert( $x, $y );
+        if( defined( my ($yint, $slope) = $lsf->query ) {
+            print "LSF: y= $slope*x + $yint\n";
+        }
+
+        # This would also work:
+        # print "$lsf\n" if $lsf->query_filled;
+    }
+
+=head1 METHODS
+
+This list of methods skips the methods inherited from
+L<Statistics::Basic::_TwoVectorBase> (things like
+L<insert()|Statistics::Basic::_TwoVectorBase/insert()>, and
+L<ginsert()|Statistics::Basic::_TwoVectorBase/ginsert()>).
+
+=over 4
+
+=item B<new()>
+
+Create a new L<Statistics::Basic::LeastSquareFit> object.  This function takes
+two arguments -- which can either be arrayrefs or L<Statistics::Basic::Vector>
+objects.  This function is called when the
+L<leastsquarefirt()|Statistics::Basic/leastsquarefit() LSF() lsf()>
+shortcut-function is called.
+
+=item B<query()>
+
+L<LSF|Statistics::Basic::LeastSquareFit> is meant for finding a line of best
+fit.  C<$beta> is the slope of the line and C<$alpha> is the y-offset.
+
+    my ($alpha, $beta) = $lsf->query;
+
+=item B<y_given_x()>
+
+Automatically calculate the y-value on the line for a given x-value.
+
+    my $y = $lsf->y_given_x( 7 );
+
+=item B<x_given_y()>
+
+Automatically calculate the x-value on the line for a given y-value.
+
+    my $x = $lsf->x_given_y( 7 );
+
+C<x_given_y()> can sometimes produce a divide-by-zero error since it
+has to divide by the C<$beta>.  This might be helpful:
+
+    if( defined( my $x = eval { $lsf->x_given_y(7) } ) ) {
+        warn "there is no x value for 7";
+
+    } else {
+        print "x (given y=7): $x\n";
+    }
+
+=item B<query_vector1()>
+
+Return the L<Statistics::Basic::Vector> for the first vector used in the
+computation of alpha and beta.
+
+=item B<query_vector2()>
+
+Return the L<Statistics::Basic::Vector> object for the second vector used in the
+computation of alpha and beta.
+
+=item B<query_mean1()>
+
+Returns the L<Statistics::Basic::Mean> object for the first vector used in the
+computation of alpha and beta.
+
+=item B<query_variance1()>
+
+Returns the L<Statistics::Basic::Variance> object for the first vector used in
+the computation of alpha and beta.
+
+=item B<query_covariance()>
+
+Returns the L<Statistics::Basic::Covariance> object used in the computation of
+alpha and beta.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+calculation, but raises an error in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::_TwoVectorBase>, L<Statistics::Basic::Vector>
+
+=cut

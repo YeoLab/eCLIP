@@ -78,7 +78,7 @@ echo MD5SUM
 echo ======
 echo
 cd results
-md5sum */* > md5sum.txt
+# md5sum */* > md5sum.txt
 cd -
 
 
@@ -90,11 +90,12 @@ echo
 echo
 
 
-#echo Q C SUMMARY
-#echo ===========
-#echo
-#eclipqcsummary
-#ls -1 qc
+echo Q C SUMMARY
+echo ===========
+echo
+ecliplink_ratios.sh $CWLTOOLORCWLTOIL
+eclipqcsummary
+ls -1 qc
 
 
 #ecliplink_metrics.sh
