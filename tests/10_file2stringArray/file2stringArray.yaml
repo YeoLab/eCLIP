@@ -1,0 +1,5 @@
+#!/usr/bin/env file2stringArray.cwl
+
+file:
+  class: File
+  path: inputs/A_adapters.fasta

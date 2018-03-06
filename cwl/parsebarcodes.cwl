@@ -11,17 +11,15 @@ requirements:
     #tmpdirMin: 4000
     #outdirMin: 4000
 
-
-
 baseCommand: [parsebarcodes.sh]
 
 #$namespaces:
 #  ex: http://example.com/
 
 #hints:
-  #- class: FileRequirement
-  #  fileDef:
-  #    - singularityexec: $(inputs.singularityexec)
+#  - class: FileRequirement
+#    fileDef:
+#      - singularityexec: $(inputs.singularityexec)
 #  - class: ex:PackageRequirement
 #    packages:
 #      - name: tree

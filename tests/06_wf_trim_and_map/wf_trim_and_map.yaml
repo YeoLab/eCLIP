@@ -1,0 +1,34 @@
+#!/usr/bin/env wf_trim_and_map.cwl
+
+read1:
+  class: File
+  path: inputs/KBP550.condition1.A01.r1.fq
+read2:
+  class: File
+  path: inputs/KBP550.condition1.A01.r2.fq
+
+trimfirst_overlap_length: "1"
+
+trimagain_overlap_length: "5"
+
+g_adapters:
+  class: File
+  path: inputs/g_adapters.fasta
+g_adapters_default:
+  class: File
+  path: inputs/g_adapters_default.fasta
+a_adapters:
+  class: File
+  path: inputs/a_adapters.fasta
+a_adapters_default:
+  class: File
+  path: inputs/a_adapters_default.fasta
+A_adapters:
+  class: File
+  path: inputs/A_adapters.fasta
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/hg113seqs_repbase_starindex
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19chr19kbp550_starindex

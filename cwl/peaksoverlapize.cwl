@@ -1,91 +1,49 @@
-#!/usr/bin/env cwl-runner
+#!/usr/bin/env cwltool
 
 cwlVersion: v1.0
 
 class: CommandLineTool
 
+baseCommand: [peaksoverlapize.pl]
 
-requirements:
-  - class: ResourceRequirement
-    coresMin: 1
-    ramMin: 8000
-
-
-
-# perl overlap_peakfi_with_bam_PE.pl
-#
-#    Experiment_bam_file         IP1 merged.r2.bam
-#    Input_bam_file              IN1 unassigned.adapterTrim.round2.rmRep.rmDup.sorted.r2.bam
-#
-#    Peak_file                   IP2 .merged.r2.peaks.bed
-#
-#    Mapped_read_num_file
-#    Output_file
-
-
-baseCommand: [peaksoverlapize2]
-
-arguments:
-
-# locations
-
-  - $(inputs.ipbed2.location)     # only change vs normalize is her: this file is here picked from IP2
-  - $(inputs.ipbam1.location)
-  - $(inputs.ipbai1.location)
-
-  - $(inputs.inbam1.location)
-  - $(inputs.inbai1.location)
-
-# basenames
-
-  - $(inputs.ipbed2.basename)
-  - $(inputs.ipbam1.basename)
-  - $(inputs.ipbai1.basename)
-
-  - $(inputs.inbam1.basename)
-  - $(inputs.inbai1.basename)
-
-#
-
-#  - $(inputs.ipbed2.nameroot)No.bed
-#  - $(inputs.ipbed2.nameroot)No.full.bed
-  - $(inputs.ipbed2.nameroot).OVER.$(inputs.ipbed1.basename).bed
-  - $(inputs.ipbed2.nameroot).OVER.$(inputs.ipbed1.basename).full.bed
 
 inputs:
 
-  ipbed1:
+  # IP BAM file
+  clipBamFile:
     type: File
-  ipbam1:
-    type: File
-  ipbai1:
-    type: File
-  inbam1:
-    type: File
-  inbai1:
-    type: File
+    inputBinding:
+      position: -5
 
-  ipbed2:
+  inputBamFile:
     type: File
-  ipbam2:
+    inputBinding:
+      position: -4
+
+  peakFile:
     type: File
-  ipbai2:
+    inputBinding:
+      position: -3
+
+  # mapped_read_num
+  readnum:
     type: File
-  inbam2:
-    type: File
-  inbai2:
-    type: File
+    inputBinding:
+      position: -2
+
+  outputFile:
+    type: string
+    inputBinding:
+      position: -1
 
 outputs:
 
-  output_bed:
+  inputnormedBed:
     type: File
-    format: http://edamontology.org/format_3003
     outputBinding:
-      glob: $(inputs.ipbed2.nameroot).OVER.$(inputs.ipbed1.basename).bed
+      glob: $(inputs.outputFile)
 
-  output_bedfull:
+  inputnormedBedfull:
     type: File
-    format: http://edamontology.org/format_3003
     outputBinding:
-      glob: $(inputs.ipbed2.nameroot).OVER.$(inputs.ipbed1.basename).full.bed
+      glob: $(inputs.outputFile)

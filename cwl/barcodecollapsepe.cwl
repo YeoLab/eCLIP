@@ -13,8 +13,8 @@ requirements:
     #outdirMin: 4000
 
 
-#baseCommand: [barcodecollapsepe.py]
-baseCommand: [fix_ld_library_path, barcodecollapsepe.py]
+baseCommand: [barcodecollapsepe.py]
+# baseCommand: [fix_ld_library_path, barcodecollapsepe.py]
 
 #$namespaces:
 #  ex: http://example.com/

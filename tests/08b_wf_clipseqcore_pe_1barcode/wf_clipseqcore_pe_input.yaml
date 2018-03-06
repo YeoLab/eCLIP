@@ -1,0 +1,34 @@
+#!/usr/bin/env wf_clipseqcore_pe_1barcode.cwl
+
+dataset: kbp550
+
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19chr19kbp550_starindex
+
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/hg113seqs_repbase_starindex
+
+species: hg19
+
+barcodesfasta:
+  class: File
+  path: inputs/KBP550barcodes.fasta
+
+randomer_length: "5"
+
+read:
+  name: condition1
+  barcodeids: [NIL, NIL]
+  read1:
+    class: File
+    path: inputs/chrom19kbp550_input_r1.fastq.gz
+  read2:
+    class: File
+    path: inputs/chrom19kbp550_input_r2.fastq.gz
+
+r2_bam: input.r2.bam
+output_bam: input.bam
+
+

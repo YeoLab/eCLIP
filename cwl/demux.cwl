@@ -72,11 +72,11 @@ baseCommand: [eclipdemux]
 
 
 arguments: ["--metrics",
-  $(inputs.dataset).$(inputs.readsX.name).---.--.metrics,
+  $(inputs.dataset).$(inputs.reads.name).---.--.metrics,
   "--expectedbarcodeida",
-  "$(inputs.readsX.barcodeids[0])",
+  "$(inputs.reads.barcodeids[0])",
   "--expectedbarcodeidb",
-  "$(inputs.readsX.barcodeids[1])"
+  "$(inputs.reads.barcodeids[1])"
   ]
 
 
@@ -102,20 +102,21 @@ inputs:
       position: 5
       prefix: --dataset
 
-  seqdatapath:
-    type: string
+  # TODO: remove when safe
+  # seqdatapath:
+  #   type: string
 
-  readsX:
+  reads:
     type:
       type: record
       #name: reads
       fields:
-        fwd:
+        read1:
           type: File
           inputBinding:
             position: 1
             prefix: --fastq_1
-        rev:
+        read2:
           type: File
           inputBinding:
             position: 2
@@ -145,54 +146,54 @@ outputs:
   name:
     type: string
     outputBinding:
-      glob: $(inputs.readsX.name)
+      glob: $(inputs.reads.name)
       loadContents: true
       outputEval: $(self[0].contents)
   barcodeidA:
     type: string
     outputBinding:
-      glob: $(inputs.readsX.barcodeids[0])
+      glob: $(inputs.reads.barcodeids[0])
       loadContents: true
       outputEval: $(self[0].contents)
   barcodeidB:
     type: string
     outputBinding:
-      glob: $(inputs.readsX.barcodeids[1])
+      glob: $(inputs.reads.barcodeids[1])
       loadContents: true
       outputEval: $(self[0].contents)
 
   demuxedAfwd:
     type: File
     outputBinding:
-      glob: $(inputs.dataset).$(inputs.readsX.name).$(inputs.readsX.barcodeids[0]).r1.fq.gz
+      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[0]).r1.fq.gz
   demuxedArev:
     type: File
     outputBinding:
-      glob: $(inputs.dataset).$(inputs.readsX.name).$(inputs.readsX.barcodeids[0]).r2.fq.gz
+      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[0]).r2.fq.gz
   demuxedBfwd:
     type: File
     outputBinding:
-      glob: $(inputs.dataset).$(inputs.readsX.name).$(inputs.readsX.barcodeids[1]).r1.fq.gz
+      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[1]).r1.fq.gz
   demuxedBrev:
     type: File
     outputBinding:
-      glob: $(inputs.dataset).$(inputs.readsX.name).$(inputs.readsX.barcodeids[1]).r2.fq.gz
+      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[1]).r2.fq.gz
 
   #output_demuxedpairedend_fastq1_all:
   #  type: File[]
   #  outputBinding:
   #    glob: "*_R1.*.f*q.gz"
-  #    #glob: $(inputs.dataset).$(inputs.readsX.name).*.r1.fq.gz
+  #    #glob: $(inputs.dataset).$(inputs.reads.name).*.r1.fq.gz
 
   #output_demuxedpairedend_fastq2_all:
   #  type: File[]
   #  outputBinding:
   #    glob: "*_R2.*.f*q.gz"
-  #    #glob: $(inputs.dataset).$(inputs.readsX.name).*.r2.fq.gz
+  #    #glob: $(inputs.dataset).$(inputs.reads.name).*.r2.fq.gz
 
   output_demuxedpairedend_metrics:
     type: File
     outputBinding:
-      glob: $(inputs.dataset).$(inputs.readsX.name).---.--.metrics
+      glob: $(inputs.dataset).$(inputs.reads.name).---.--.metrics
     label: ""
     doc: "demuxedpairedend metrics"

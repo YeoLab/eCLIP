@@ -1,0 +1,46 @@
+#!/usr/bin/env eCLIP
+
+dataset: 204_01_RBFOX2
+
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19_star_sjdb
+
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/STAR_fixed
+
+species: hg19
+
+barcodesfasta:
+  class: File
+  path: inputs/KBP550barcodes.fasta
+
+randomer_length: "5"
+
+ip_read:
+  name: CLIP
+  barcodeids: [A01, B06]
+  read1:
+    class: File
+    path: inputs/RBFOX2-204-CLIP_S1_R1.fastq.gz
+  read2:
+    class: File
+    path: inputs/RBFOX2-204-CLIP_S1_R2.fastq.gz
+
+input_read:
+  name: INPUT
+  barcodeids: [NIL, NIL]
+  read1:
+    class: File
+    path: inputs/RBFOX2-204-INPUT_S2_R1.fastq.gz
+  read2:
+    class: File
+    path: inputs/RBFOX2-204-INPUT_S2_R1.fastq.gz
+
+ip_bam: 204_01_ip.bam
+ip_r2_bam: 204_01_ip.r2.bam
+input_bam: 204_01_input.bam
+input_r2_bam: 204_01_input.r2.bam
+clipper_bed: 204_01_ip.clipper.bed
+inputnormed_bed: 204_01.inputnormed.bed

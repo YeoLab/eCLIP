@@ -1,0 +1,9 @@
+#!/usr/bin/env file-expression-tool.cwl
+
+INPUT:
+  -
+    class: File
+    path: inputs/trimagain_overlap_length.txt
+  -
+    class: File
+    path: inputs/trimfirst_overlap_length.txt

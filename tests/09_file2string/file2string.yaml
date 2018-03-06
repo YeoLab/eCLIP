@@ -1,0 +1,5 @@
+#!/usr/bin/env file2string.cwl
+
+file:
+  class: File
+  path: inputs/trimfirst_overlap_length.txt

@@ -1,0 +1,9 @@
+#!/usr/bin/env samtools-view.cwl
+
+input:
+  class: File
+  path: inputs/input.r2.bam
+
+readswithoutbits: 4
+count: true
+output_name: input.r2.mappedreadnum

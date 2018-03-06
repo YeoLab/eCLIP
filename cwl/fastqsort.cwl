@@ -1,4 +1,4 @@
-#!/usr/bin/env cwl-runner
+#!/usr/bin/env cwltool
 
 cwlVersion: v1.0
 
@@ -6,11 +6,13 @@ class: CommandLineTool
 
 
 requirements:
+  - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
+    coresMax: 16
     ramMin: 8000
-    #tmpdirMin: 4000
-    #outdirMin: 4000
+    tmpdirMin: 10000
+    outdirMin: 10000
 
 
 
@@ -42,7 +44,19 @@ inputs:
     label: ""
     doc: "input fastq"
 
-stdout: $(inputs.input_fastqsort_fastq.nameroot)So.fq
+  output_fastqsort_fastq:
+    type: string
+    default: ""
+
+# stdout: $(inputs.input_fastqsort_fastq.basename)So.fq
+stdout: ${
+    if (inputs.output_fastqsort_fastq == "") {
+      return inputs.input_fastqsort_fastq.nameroot + ".sorted.fq";
+    }
+  else {
+      return inputs.output_fastqsort_fastq;
+    }
+  }
 
 outputs:
 
@@ -50,7 +64,16 @@ outputs:
     type: File
     format: http://edamontology.org/format_1930
     outputBinding:
-      #glob: $(inputs.output_fastqsort_filename)
-      glob: $(inputs.input_fastqsort_fastq.nameroot)So.fq
+      # glob: $(inputs.output_fastqsort_filename)
+      # glob: $(inputs.input_fastqsort_fastq.basename)So.fq
+      glob: |
+        ${
+          if (inputs.output_fastqsort_fastq == "") {
+            return inputs.input_fastqsort_fastq.nameroot + ".sorted.fq";
+          }
+          else {
+            return inputs.output_fastqsort_fastq;
+          }
+        }
     label: ""
     doc: "sorted fastq"

@@ -1,0 +1,10 @@
+#!/usr/bin/env samtools-view.cwl
+
+input:
+  class: File
+  path: inputs/merged.bam
+
+readswithbits: 128
+samheader: true
+isbam: true
+output_name: merged.r2.bam

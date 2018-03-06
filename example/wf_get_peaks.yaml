@@ -1,0 +1,49 @@
+#!/usr/bin/env eCLIP
+
+### eCLIP ###
+### wf_get_peaks.cwl ###
+
+dataset: kbp550
+
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19chr19kbp550_starindex
+
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/hg113seqs_repbase_starindex
+
+species: hg19chr19
+
+barcodesfasta:
+  class: File
+  path: inputs/KBP550barcodes.fasta
+
+randomer_length: "5"
+
+ip_read:
+  name: INPUT
+  barcodeids: [A01, B06]
+  read1:
+    class: File
+    path: inputs/chrom19kbp550_clip1_r1.fastq.gz
+  read2:
+    class: File
+    path: inputs/chrom19kbp550_clip1_r2.fastq.gz
+
+input_read:
+  name: CLIP
+  barcodeids: [NIL, NIL]
+  read1:
+    class: File
+    path: inputs/chrom19kbp550_input_r1.fastq.gz
+  read2:
+    class: File
+    path: inputs/chrom19kbp550_input_r2.fastq.gz
+
+ip_bam: ip.bam
+ip_r2_bam: ip.r2.bam
+input_bam: input.bam
+input_r2_bam: input.r2.bam
+clipper_bed: ip.clipper.bed
+inputnormed_bed: inputnormed.bed

@@ -1,4 +1,4 @@
-#!/usr/bin/env cwlrunner
+#!/usr/bin/env cwltool
 
 cwlVersion: v1.0
 class: CommandLineTool
@@ -7,6 +7,7 @@ class: CommandLineTool
 #  ex: http://example.com/
 
 requirements:
+  - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 8
     #ramMin: 126000
@@ -58,15 +59,15 @@ requirements:
 
 
 # baseCommand: [clipper, --debug]
-# baseCommand: [clipper]
-baseCommand: [fix_ld_library_path, clipper]
+baseCommand: [clipper]
+# baseCommand: [fix_ld_library_path, clipper]
 
 
-arguments: [
-  #--debug,
-  --outfile,
-  $(inputs.bam.nameroot)Cl.bed
-]
+# arguments: [
+#   #--debug,
+#   --outfile,
+#   $(inputs.bam.nameroot)Cl.bed
+# ]
 
 inputs:
 
@@ -106,12 +107,11 @@ inputs:
       position: 8
       prefix: --maxgenes
 
-#  gene:
-#    type: string
-#    default: "ENSG00000202191.1"
-#    inputBinding:
-#     position: 8
-#     prefix: --gene
+  gene:
+    type: string?
+    inputBinding:
+     position: 8
+     prefix: --gene
 
   savepickle:
     type: boolean
@@ -120,39 +120,59 @@ inputs:
       position: 9
       prefix: --save-pickle
 
+  outfile:
+    type: string
+    default: ""
+    inputBinding:
+      position: 10
+      prefix: --outfile
+      valueFrom: |
+        ${
+          if (inputs.outfile == "") {
+            return inputs.bam.nameroot + "Cl.bed";
+          }
+          else {
+            return inputs.outfile;
+          }
+        }
 
 outputs:
-
-#  output_clipperU_tsv:
-#    type: File
-#    outputBinding:
-#      glob: $(inputs.bam.nameroot)CU.tsv
-#  output_clipperU_bed:
-#    type: File
-#    format: http://edamontology.org/format_3003
-#    outputBinding:
-#      glob: $(inputs.bam.nameroot)CU.bed
-#  output_clipperU_pickle:
-#    type: File
-#    outputBinding:
-#      glob: $(inputs.bam.nameroot)CU.bed.pickle
-
   output_tsv:
     type: File
     outputBinding:
-      glob: $(inputs.bam.nameroot)Cl.bed.tsv
+      glob: |
+        ${
+          if (inputs.outfile == "") {
+            return inputs.bam.nameroot + "Cl.bed.tsv";
+          }
+          else {
+            return inputs.outfile + ".tsv";
+          }
+        }
   output_bed:
     type: File
     format: http://edamontology.org/format_3003
     outputBinding:
-      glob: $(inputs.bam.nameroot)Cl.bed
+      glob: |
+        ${
+          if (inputs.outfile == "") {
+            return inputs.bam.nameroot + "Cl.bed";
+          }
+          else {
+            return inputs.outfile;
+          }
+        }
   output_pickle:
     type: File
     outputBinding:
-      glob: $(inputs.bam.nameroot)Cl.bed.pickle
+      glob: |
+        ${
+          if (inputs.outfile == "") {
+            return inputs.bam.nameroot + "Cl.bed.pickle";
+          }
+          else {
+            return inputs.outfile + ".pickle";
+          }
+        }
 
-  output_log:
-    type: File
-    outputBinding:
-      glob: $(inputs.bam.nameroot)Cl.bed.log
       
