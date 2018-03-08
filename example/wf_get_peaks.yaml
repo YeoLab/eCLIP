@@ -1,4 +1,4 @@
-#!/usr/bin/env eCLIP
+#!/usr/bin/env wf_get_peaks.cwl
 
 ### eCLIP ###
 ### wf_get_peaks.cwl ###
