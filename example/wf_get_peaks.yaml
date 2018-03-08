@@ -17,7 +17,7 @@ species: hg19chr19
 
 barcodesfasta:
   class: File
-  path: inputs/KBP550barcodes.fasta
+  path: inputs/yeolabbarcodes_20170101.fasta
 
 randomer_length: "5"
 
