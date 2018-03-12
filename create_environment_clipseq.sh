@@ -6,7 +6,7 @@ conda create -y --name clip-seq python=2.7;
 source activate clip-seq;
 
 ### conda rollback fixes a gcc link issue with conda (#1392) ###
-CONDA_ROLLBACK_ENABLED=false conda install gcc;
+CONDA_ROLLBACK_ENABLED=false conda install -y gcc;
 
 ### add this repo to path ###
 export PATH=${PWD}/bin/:$PATH;
@@ -33,7 +33,8 @@ rna-seqc \
 picard \
 perl-statistics-basic \
 perl-statistics-r \
-perl-statistics-distributions;
+perl-statistics-distributions \
+fastq-tools=0.8;
 
 ### anaconda channel ###
 conda install -y -c anaconda \
@@ -42,8 +43,7 @@ pycrypto \
 pytest \
 pandas \
 numpy \
-zlib=1.2 \
-gcc=4.9;
+zlib=1.2;
 
 ### Install CWL and helpers ###
 pip install --ignore-installed six;
