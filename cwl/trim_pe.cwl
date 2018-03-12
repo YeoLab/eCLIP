@@ -73,14 +73,14 @@ inputs:
 
   times:
     type: string
-    default: "2"
+    default: "1"
     inputBinding:
       position: 3
       prefix: --times
 
   error_rate:
     type: string
-    default: "0.0"
+    default: "0.1"
     inputBinding:
       position: 4
       prefix: -e

@@ -1,7 +1,7 @@
-#!/usr/bin/env wf_get_peaks.cwl
+#!/usr/bin/env wf_get_peaks_scatter.cwl
 
 ### eCLIP ###
-### wf_get_peaks.cwl ###
+### wf_get_peaks_scatter.cwl ###
 
 dataset: kbp550
 
@@ -21,22 +21,45 @@ barcodesfasta:
 
 randomer_length: "5"
 
-ip_read:
-  name: CLIP
-  barcodeids: [A01, B06]
-  read1:
-    class: File
-    path: inputs/chrom19kbp550_clip1_r1.fastq.gz
-  read2:
-    class: File
-    path: inputs/chrom19kbp550_clip1_r2.fastq.gz
+samples:
+  -
+    - ip_read:
+      name: CLIP
+      barcodeids: [A01, B06]
+      read1:
+        class: File
+        path: inputs/chrom19kbp550_clip1_r1.fastq.gz
+      read2:
+        class: File
+        path: inputs/chrom19kbp550_clip1_r2.fastq.gz
 
-input_read:
-  name: INPUT
-  barcodeids: [NIL, NIL]
-  read1:
-    class: File
-    path: inputs/chrom19kbp550_input_r1.fastq.gz
-  read2:
-    class: File
-    path: inputs/chrom19kbp550_input_r2.fastq.gz
+    - input_read:
+      name: INPUT
+      barcodeids: [NIL, NIL]
+      read1:
+        class: File
+        path: inputs/chrom19kbp550_input_r1.fastq.gz
+      read2:
+        class: File
+        path: inputs/chrom19kbp550_input_r2.fastq.gz
+  -
+    - ip_read:
+      name: CLIP2
+      barcodeids: [A01, B06]
+      read1:
+        class: File
+        path: inputs/chrom19kbp550_clip2_r1.fastq.gz
+      read2:
+        class: File
+        path: inputs/chrom19kbp550_clip2_r2.fastq.gz
+
+    - input_read:
+      name: INPUT2
+      barcodeids: [NIL, NIL]
+      read1:
+        class: File
+        path: inputs/chrom19kbp550_input_r1.fastq.gz
+      read2:
+        class: File
+        path: inputs/chrom19kbp550_input_r2.fastq.gz
+

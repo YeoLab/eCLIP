@@ -5,6 +5,9 @@ conda remove -y --name clip-seq;
 conda create -y --name clip-seq python=2.7;
 source activate clip-seq;
 
+### conda rollback fixes a gcc link issue with conda (#1392) ###
+CONDA_ROLLBACK_ENABLED=false conda install gcc;
+
 ### add this repo to path ###
 export PATH=${PWD}/bin/:$PATH;
 export PATH=${PWD}/cwl/:$PATH;
@@ -17,7 +20,8 @@ export PATH=${PWD}/metadata:$PATH;
 conda install -c r r-essentials;
 
 ### bioconda channel ###
-conda install -y -c bioconda samtools=1.7 \
+conda install -y -c bioconda \
+samtools=1.7 \
 bedtools=2.25.0 \
 pysam \
 pybedtools \
@@ -32,8 +36,14 @@ perl-statistics-r \
 perl-statistics-distributions;
 
 ### anaconda channel ###
-conda install -y -c anaconda cython pytest;
-conda install -y -c anaconda pycrypto;
+conda install -y -c anaconda \
+cython \
+pycrypto \
+pytest \
+pandas \
+numpy \
+zlib=1.2 \
+gcc=4.9;
 
 ### Install CWL and helpers ###
 pip install --ignore-installed six;
