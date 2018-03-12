@@ -1,5 +1,9 @@
 #!/usr/bin/env cwl-runner
 
+### doc: "Indexes input alignments and returns alignment with index." ###
+### Differs from index.cwl in that index.cwl returns just index ###
+### This tool returns alignments with index as secondaryFile    ###
+
 cwlVersion: v1.0
 class: CommandLineTool
 

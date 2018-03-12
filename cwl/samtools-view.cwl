@@ -1,11 +1,19 @@
 #!/usr/bin/env cwl-runner
 
+### doc: "Samtools view tool (https://github.com/common-workflow-language/workflows/blob/master/tools/samtools-view.cwl)" ###
+
 cwlVersion: v1.0
 class: CommandLineTool
 
-# requirements:
+requirements:
 # - $import: samtools-docker.yml
-# - class: InlineJavascriptRequirement
+  - class: InlineJavascriptRequirement
+  - class: ResourceRequirement
+    coresMin: 1
+    coresMax: 16
+    ramMin: 8000
+    tmpdirMin: 4000
+    outdirMin: 4000
 
 inputs:
   isbam:

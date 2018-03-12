@@ -1,9 +1,9 @@
 #!/usr/bin/env cwl-runner
 
+### doc: "collapses eCLIP barcodes to remove PCR duplicates" ###
+
 cwlVersion: v1.0
-
 class: CommandLineTool
-
 
 requirements:
   - class: ResourceRequirement
@@ -11,7 +11,6 @@ requirements:
     ramMin: 8000
     #tmpdirMin: 4000
     #outdirMin: 4000
-
 
 baseCommand: [barcodecollapsepe.py]
 # baseCommand: [fix_ld_library_path, barcodecollapsepe.py]
@@ -44,7 +43,7 @@ inputs:
 
   input_barcodecollapsepe_bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 1
       prefix: -b
@@ -62,7 +61,7 @@ outputs:
 
   output_barcodecollapsepe_bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     outputBinding:
       glob: $(inputs.input_barcodecollapsepe_bam.nameroot)Cp.bam
     label: ""

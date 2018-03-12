@@ -1,11 +1,21 @@
 #!/usr/bin/env cwl-runner
 
+### doc: "Samtools view (just read2) tool" ###
+### Copy of samtools-view.cwl, except for changes due to bugs in TOIL ###
+### readswithbits is by default 128 and NOT optional.                 ###
+
 cwlVersion: v1.0
 class: CommandLineTool
 
-# requirements:
+requirements:
 # - $import: samtools-docker.yml
-# - class: InlineJavascriptRequirement
+  - class: InlineJavascriptRequirement
+  - class: ResourceRequirement
+    coresMin: 1
+    coresMax: 16
+    ramMin: 8000
+    tmpdirMin: 4000
+    outdirMin: 4000
 
 inputs:
   isbam:
@@ -167,14 +177,32 @@ inputs:
       only include reads in library STR [null]
   output_name:
     type: string
+    default: ""
     inputBinding:
       position: 2
       prefix: -o
+      valueFrom: |
+        ${
+          if (inputs.output_name == "") {
+            return inputs.input.nameroot + ".r2.bam";
+          }
+          else {
+            return inputs.output_name;
+          }
+        }
 outputs:
   output:
     type: File
     outputBinding:
-      glob: $(inputs.output_name)
+      glob: |
+        ${
+          if (inputs.output_name == "") {
+            return inputs.input.nameroot + ".r2.bam";
+          }
+          else {
+            return inputs.output_name;
+          }
+        }
 
 baseCommand: [samtools, view]
 

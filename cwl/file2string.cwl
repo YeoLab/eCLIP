@@ -1,7 +1,8 @@
 #!/usr/bin/env cwltool
 
-cwlVersion: v1.0
+### doc: "returns string expression based on file contents" ###
 
+cwlVersion: v1.0
 class: ExpressionTool
 
 requirements:

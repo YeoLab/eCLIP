@@ -1,9 +1,13 @@
 #!/usr/bin/env cwltool
 
+### doc: "samtools sort tool (sort by coordinate)" ###
+
+### This is a copy of namesort.cwl, ###
+### exists in case TOIL mistakes namesorting with regular sorting ###
+### Changes: name_sort flag is FALSE by default ###
+
 cwlVersion: v1.0
-
 class: CommandLineTool
-
 
 requirements:
   - class: InlineJavascriptRequirement
@@ -54,7 +58,7 @@ inputs:
 
   input_sort_bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 3
     label: ""
@@ -70,7 +74,7 @@ outputs:
 
   output_sort_bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     outputBinding:
       glob: |
         ${

@@ -3,7 +3,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-doc: 'STAR Aligner'
+### doc: 'STAR Aligner' ###
 
 ### TSCC requirements ###
 requirements:
@@ -116,15 +116,15 @@ inputs:
       string: prohibit various alignment type
       IndelSoftclipSingleend  ... prohibit indels, soft clipping and single-end alignments - compatible with RSEM
       Singleend               ... prohibit single-end alignments
-  alignSJstitchMismatchNmax:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: --alignSJstitchMismatchNmax
-    doc: |
-      0 -1 0 0
-      4*int>=0: maximum number of mismatches for stitching of the splice junctions (-1: no limit).
-      (1) non-canonical motifs, (2) GT/AG and CT/AC motif, (3) GC/AG and CT/GC motif, (4) AT/AC and GT/AT motif.
+  # alignSJstitchMismatchNmax:
+  #   type: int?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --alignSJstitchMismatchNmax
+  #   doc: |
+  #     0 -1 0 0
+  #     4*int>=0: maximum number of mismatches for stitching of the splice junctions (-1: no limit).
+  #     (1) non-canonical motifs, (2) GT/AG and CT/AC motif, (3) GC/AG and CT/GC motif, (4) AT/AC and GT/AT motif.
   twopassMode:
     type: string?
     inputBinding:
@@ -245,26 +245,26 @@ inputs:
       xxx will be added as RG tag to each output alignment. Any spaces in the tag values have to be double quoted.
       Comma separated RG lines correspons to different (comma separated) input files in --readFilesIn. Commas have to be surrounded by spaces, e.g.
       --outSAMattrRGline ID:xxx , ID:zzz "DS:z z" , ID:yyy DS:yyyy
-  chimOutType:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: --chimOutType
-    doc: |
-      SeparateSAMold
-      string: type of chimeric output
-      SeparateSAMold  ... output old SAM into separate Chimeric.out.sam file
-      WithinBAM       ... output into main aligned BAM files (Aligned.*.bam)
-  runDirPerm:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: --runDirPerm
-    doc: |
-      User_RWX
-      string: permissions for the directories created at the run-time.
-      User_RWX ... user-read/write/execute
-      All_RWX  ... all-read/write/execute (same as chmod 777)
+  # chimOutType:
+  #   type: string?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --chimOutType
+  #   doc: |
+  #     SeparateSAMold
+  #     string: type of chimeric output
+  #     SeparateSAMold  ... output old SAM into separate Chimeric.out.sam file
+  #     WithinBAM       ... output into main aligned BAM files (Aligned.*.bam)
+  # runDirPerm:
+  #   type: string?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --runDirPerm
+  #   doc: |
+  #     User_RWX
+  #     string: permissions for the directories created at the run-time.
+  #     User_RWX ... user-read/write/execute
+  #     All_RWX  ... all-read/write/execute (same as chmod 777)
   outQSconversionAdd:
     type: int?
     inputBinding:
@@ -272,17 +272,17 @@ inputs:
       prefix: --outQSconversionAdd
     doc: |
       int: add this number to the quality score (e.g. to convert from Illumina to Sanger, use -31)
-  outSAMattrIHstart:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: --outSAMattrIHstart
-    doc: '1
+  # outSAMattrIHstart:
+  #   type: int?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --outSAMattrIHstart
+  #   doc: '1
 
-      int>=0:                     start value for the IH attribute. 0 may be required
-      by some downstream software, such as Cufflinks or StringTie.
+  #     int>=0:                     start value for the IH attribute. 0 may be required
+  #     by some downstream software, such as Cufflinks or StringTie.
 
-      '
+  #     '
   chimSegmentMin:
     type: int?
     inputBinding:
@@ -367,16 +367,16 @@ inputs:
     doc: |
       string: path to the directory where genome files are stored (if
       runMode!=generateGenome) or will be generated (if runMode==generateGenome)
-  chimFilter:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: --chimFilter
-    doc: |
-      banGenomicN
-      string(s): different filters for chimeric alignments
-      None ... no filtering
-      banGenomicN ... Ns are not allowed in the genome sequence around the chimeric junction
+  # chimFilter:
+  #   type: string?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --chimFilter
+  #   doc: |
+  #     banGenomicN
+  #     string(s): different filters for chimeric alignments
+  #     None ... no filtering
+  #     banGenomicN ... Ns are not allowed in the genome sequence around the chimeric junction
   outSAMunmapped:
     default: Within
     type: string?
@@ -475,7 +475,7 @@ inputs:
       int(s): number(s) of bases to clip from 3p of each mate. If one value is
       given, it will be assumed the same for both mates.
   outFilterMultimapNmax:
-    default: 1 # Default for RNA SEQ
+    default: 30 # Default for eCLIP repetitive mapping
     type: int
     inputBinding:
       position: 1
@@ -569,15 +569,15 @@ inputs:
       N integers>=0: maximum gap allowed for junctions supported by 1,2,3,,,N reads
       i.e. by default junctions supported by 1 read can have gaps <=50000b, by 2 reads: <=100000b, by 3 reads: <=200000. by >=4 reads any gap <=alignIntronMax
       does not apply to annotated junctions
-  outSAMfilter:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: --outSAMfilter
-    doc: |
-      None
-      string(s): filter the output into main SAM/BAM files
-      KeepOnlyAddedReferences ... only keep the reads for which all alignments are to the extra reference sequences added with --genomeFastaFiles at the mapping stage.
+  # outSAMfilter:
+  #   type: string?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --outSAMfilter
+  #   doc: |
+  #     None
+  #     string(s): filter the output into main SAM/BAM files
+  #     KeepOnlyAddedReferences ... only keep the reads for which all alignments are to the extra reference sequences added with --genomeFastaFiles at the mapping stage.
   outSAMheaderHD:
     type: boolean?
     inputBinding:
@@ -613,15 +613,15 @@ inputs:
       maximum score reduction while searching for SJ boundaries inthe stitching step
 
       '
-  readNameSeparator:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: --readNameSeparator
-    doc: |
-      /
-      string(s): character(s) separating the part of the read names that will be
-      trimmed in output (read name after space is always trimmed)
+  # readNameSeparator:
+  #   type: string?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --readNameSeparator
+  #   doc: |
+  #     /
+  #     string(s): character(s) separating the part of the read names that will be
+  #     trimmed in output (read name after space is always trimmed)
   scoreGapGCAG:
     type: boolean?
     inputBinding:
@@ -679,16 +679,16 @@ inputs:
     doc: |
       -1
       int: penalty for a non-GT/AG chimeric junction
-  sjdbInsertSave:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: --sjdbInsertSave
-    doc: |
-      Basic
-      string: which files to save when sjdb junctions are inserted on the fly at the mapping step
-      Basic ... only small junction / transcript files
-      All   ... all files including big Genome, SA and SAindex - this will create a complete genome directory
+  # sjdbInsertSave:
+  #   type: string?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --sjdbInsertSave
+  #   doc: |
+  #     Basic
+  #     string: which files to save when sjdb junctions are inserted on the fly at the mapping step
+  #     Basic ... only small junction / transcript files
+  #     All   ... all files including big Genome, SA and SAindex - this will create a complete genome directory
   sjdbFileChrStartEnd:
     type: string?
     inputBinding:
@@ -746,18 +746,18 @@ inputs:
       outSAMflagOR. Can be used to unset specific bits that are not set otherwise.
 
       '
-  outSAMmultNmax:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: --outSAMmultNmax
-    doc: '-1
+  # outSAMmultNmax:
+  #   type: int?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --outSAMmultNmax
+  #   doc: '-1
 
-      int: max number of multiple alignments for a read that will be output to the
-      SAM/BAM files. -1 ... all alignments (up to --outFilterMultimapNmax) will be
-      output
+  #     int: max number of multiple alignments for a read that will be output to the
+  #     SAM/BAM files. -1 ... all alignments (up to --outFilterMultimapNmax) will be
+  #     output
 
-      '
+  #     '
   limitGenomeGenerateRAM:
     type: int?
     inputBinding:
@@ -1238,14 +1238,14 @@ inputs:
       int>0: max number of junctions for one read (including all multi-mappers)
 
       '
-  runRNGseed:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: --runRNGseed
-    doc: |
-      777
-      int: random number generator seed.
+  # runRNGseed:
+  #   type: int?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --runRNGseed
+  #   doc: |
+  #     777
+  #     int: random number generator seed.
   outTmpDir:
     type: string?
     inputBinding:
@@ -1323,14 +1323,14 @@ inputs:
       int: alignment will be output only if it has fewer mismatches than this value
 
       '
-  chimSegmentReadGapMax:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: --chimSegmentReadGapMax
-    doc: |
-      0
-      int>=0: maximum gap in the read sequence between chimeric segments
+  # chimSegmentReadGapMax:
+  #   type: int?
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --chimSegmentReadGapMax
+  #   doc: |
+  #     0
+  #     int>=0: maximum gap in the read sequence between chimeric segments
   alignSplicedMateMapLmin:
     type: int?
     inputBinding:
@@ -1388,6 +1388,11 @@ outputs:
     type: File?
     outputBinding:
       glob: "*Unmapped.out.mate2"
+
+  starsettings:
+    type: File
+    outputBinding:
+      glob: "*Log.out"
 
   mappingstats:
     type: File

@@ -1,7 +1,8 @@
 #!/usr/bin/env cwltool
 
-cwlVersion: v1.0
+### doc: "Returns string array expression based on lines in a file" ###
 
+cwlVersion: v1.0
 class: ExpressionTool
 
 requirements:

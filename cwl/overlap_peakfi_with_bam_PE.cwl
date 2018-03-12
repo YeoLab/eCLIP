@@ -1,8 +1,14 @@
 #!/usr/bin/env cwltool
 
 cwlVersion: v1.0
-
 class: CommandLineTool
+
+requirements:
+  - class: InlineJavascriptRequirement
+  - class: ResourceRequirement
+    coresMin: 1
+    coresMax: 16
+    ramMin: 8000
 
 baseCommand: [overlap_peakfi_with_bam_PE.pl]
 
@@ -36,23 +42,45 @@ inputs:
     inputBinding:
       position: -1
 
-
   outputFile:
     type: string
+    default: ""
     inputBinding:
       position: 0
-
+      valueFrom: |
+        ${
+          if (inputs.outputFile == "") {
+            return inputs.peakFile.nameroot + ".normed.bed";
+          }
+          else {
+            return inputs.outputFile;
+          }
+        }
 
 outputs:
 
   inputnormedBed:
     type: File
     outputBinding:
-      glob: $(inputs.outputFile)
-      # glob: $(inputs.outputprefix).$(inputs.inputnormsuffix).bed
+      glob: |
+        ${
+          if (inputs.outputFile == "") {
+            return inputs.peakFile.nameroot + ".normed.bed";
+          }
+          else {
+            return inputs.outputFile;
+          }
+        }
 
   inputnormedBedfull:
     type: File
     outputBinding:
-      glob: "$(inputs.outputFile).full"
-      # glob: $(inputs.outputprefix).$(inputs.inputnormsuffix).bed.full
+      glob: |
+        ${
+          if (inputs.outputFile == "") {
+            return inputs.peakFile.nameroot + ".normed.bed.full";
+          }
+          else {
+            return inputs.outputFile;
+          }
+        }

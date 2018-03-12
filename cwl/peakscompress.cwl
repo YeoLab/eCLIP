@@ -1,6 +1,6 @@
 #!/usr/bin/env cwltool
 
-doc: "Compresses overlapping peaks into a single BED region."
+### doc: "Compresses overlapping peaks into a single BED region." ###
 
 cwlVersion: v1.0
 class: CommandLineTool
@@ -37,13 +37,13 @@ baseCommand: [peakscompress.pl]
 #      - "~/miniconda/bin/conda install -c bcbio pybedtools=0.6.9 pysam=0.8.4pre0"
 #      - ""
 
-arguments: [ $(inputs.input_bed.nameroot)C-.bed ]
+arguments: [ $(inputs.input_bed.nameroot).compressed.bed ]
 
 inputs:
 
   input_bed:
     type: File
-    format: http://edamontology.org/format_3003
+    # format: http://edamontology.org/format_3003
     inputBinding:
       position: -1
 
@@ -51,6 +51,6 @@ outputs:
 
   output_bed:
     type: File
-    format: http://edamontology.org/format_3003
+    # format: http://edamontology.org/format_3003
     outputBinding:
-      glob: $(inputs.input_bed.nameroot)C-.bed
+      glob: $(inputs.input_bed.nameroot).compressed.bed

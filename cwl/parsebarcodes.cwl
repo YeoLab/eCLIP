@@ -1,55 +1,21 @@
 #!/usr/bin/env cwl-runner
 
-cwlVersion: v1.0
+### doc: "cwl wrapper for bash script that parses barcodes based on overlap length" ###
 
+cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    ramMin: 8000
+    coresMax: 16
+    ramMin: 2000
     #tmpdirMin: 4000
     #outdirMin: 4000
 
 baseCommand: [parsebarcodes.sh]
 
-#$namespaces:
-#  ex: http://example.com/
-
-#hints:
-#  - class: FileRequirement
-#    fileDef:
-#      - singularityexec: $(inputs.singularityexec)
-#  - class: ex:PackageRequirement
-#    packages:
-#      - name: tree
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-
-# TODO purpose is NOT hand over to next cwl tool, but merely to log for debug
-# TODO not supported by toil, done instead inside parsebarcodes.sh
-#requirements:
-#
-#  InitialWorkDirRequirement:
-#    listing:
-#      - entryname: $(inputs.barcodeidA)
-#        entry: |
-#          $(inputs.barcodeidA)
-#      - entryname: $(inputs.barcodeidB)
-#        entry: |
-#          $(inputs.barcodeidB)
-
 inputs:
-
-  ####################
-  #bindir:
-  #  type: Directory
-  #  default:
-  #    class: Directory
-  #    location: bin
-  ####################
-
 
 # these are now hard-coded in parser.sh
 #  adapter3prime:
@@ -60,7 +26,6 @@ inputs:
 #     type: string
 #     optional: true
 #     default : CTTCCGATCT
-
 
   randomer_length:
     type: string
@@ -82,7 +47,6 @@ inputs:
     type: string
     inputBinding:
       position: 4
-
 
 outputs:
 

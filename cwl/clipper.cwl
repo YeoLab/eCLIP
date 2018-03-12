@@ -1,5 +1,7 @@
 #!/usr/bin/env cwltool
 
+### doc: "clipper cwl tool (https://github.com/yeolab/clipper)" ###
+
 cwlVersion: v1.0
 class: CommandLineTool
 
@@ -10,7 +12,6 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 8
-    #ramMin: 126000
     ramMin: 30000
     #tmpdirMin: 10000
     #outdirMin: 10000
@@ -73,7 +74,7 @@ inputs:
 
   species:
     type: string
-    default: hg19
+    # default: hg19
     inputBinding:
       position: 0
       prefix: --species
@@ -81,7 +82,7 @@ inputs:
 
   bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 1
       prefix: --bam
@@ -129,7 +130,7 @@ inputs:
       valueFrom: |
         ${
           if (inputs.outfile == "") {
-            return inputs.bam.nameroot + "Cl.bed";
+            return inputs.bam.nameroot + ".peakClusters.bed";
           }
           else {
             return inputs.outfile;
@@ -143,7 +144,7 @@ outputs:
       glob: |
         ${
           if (inputs.outfile == "") {
-            return inputs.bam.nameroot + "Cl.bed.tsv";
+            return inputs.bam.nameroot + ".peakClusters.bed.tsv";
           }
           else {
             return inputs.outfile + ".tsv";
@@ -151,12 +152,12 @@ outputs:
         }
   output_bed:
     type: File
-    format: http://edamontology.org/format_3003
+    # format: http://edamontology.org/format_3003
     outputBinding:
       glob: |
         ${
           if (inputs.outfile == "") {
-            return inputs.bam.nameroot + "Cl.bed";
+            return inputs.bam.nameroot + ".peakClusters.bed";
           }
           else {
             return inputs.outfile;
@@ -168,7 +169,7 @@ outputs:
       glob: |
         ${
           if (inputs.outfile == "") {
-            return inputs.bam.nameroot + "Cl.bed.pickle";
+            return inputs.bam.nameroot + ".peakClusters.bed.pickle";
           }
           else {
             return inputs.outfile + ".pickle";

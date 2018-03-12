@@ -1,16 +1,16 @@
 #!/usr/bin/env cwl-runner
 
-cwlVersion: v1.0
+### doc: "demultiplexes a paired-end eCLIP set of reads acording to the specified barcode and barcode file." ###
 
+cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
   - class: ResourceRequirement
     coresMin: 1
     ramMin: 8000
-    #ramMin: 16000
-    #tmpdirMin: 4000
-    #outdirMin: 4000
+    tmpdirMin: 8000
+    outdirMin: 8000
 
 
 
@@ -78,7 +78,6 @@ arguments: ["--metrics",
   "--expectedbarcodeidb",
   "$(inputs.reads.barcodeids[1])"
   ]
-
 
 inputs:
 

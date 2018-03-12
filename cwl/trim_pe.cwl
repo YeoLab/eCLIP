@@ -19,7 +19,7 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 2
-    ramMin: 16000
+    ramMin: 32000
     tmpdirMin: 4000
     #outdirMin: 4000
   - class: StepInputExpressionRequirement
@@ -181,10 +181,17 @@ inputs:
     inputBinding:
       position: 12
 
+  # cores:
+  #   type: int
+  #   default: 2
+  #   inputBinding:
+  #     position: 13
+  #     prefix: -j
+
   input_trim:
     type: File[]?
     inputBinding:
-      position: 13
+      position: 14
 
 
 stdout: $(inputs.input_trim[0].nameroot)Tr.metrics

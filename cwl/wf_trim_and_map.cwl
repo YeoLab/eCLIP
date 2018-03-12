@@ -51,12 +51,6 @@ inputs:
   trim_error_rate:
     type: string
     default: "0.1"
-  repeatMultimapNmax:
-    type: int
-    default: 30
-  genomeMultimapNmax:
-    type: int
-    default: 1
 
 outputs:
 
@@ -80,6 +74,9 @@ outputs:
   A_output_maprepeats_stats:
     type: File
     outputSource: A_map_repeats/mappingstats
+  A_output_maprepeats_star_settings:
+    type: File
+    outputSource: A_map_repeats/starsettings
   A_output_sort_repunmapped_fastq:
     type: File[]
     outputSource: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
@@ -90,7 +87,9 @@ outputs:
   A_output_mapgenome_stats:
     type: File
     outputSource: A_map_genome/mappingstats
-
+  A_output_mapgenome_star_settings:
+    type: File
+    outputSource: A_map_genome/starsettings
   A_output_sorted_bam:
     type: File
     outputSource: A_sort/output_sort_bam
@@ -191,16 +190,17 @@ steps:
 ###########################################################################
 
   A_map_repeats:
-    run: star.cwl
+    run: star-repeatmapping.cwl
     in:
       # outFileNamePrefix: A_parse_records/repName
-      outFilterMultimapNmax: repeatMultimapNmax
+      # outFilterMultimapNmax: repeatMultimapNmax
       readFilesIn: A_sort_trimmed_fastq/output_fastqsort_sortedfastq
       genomeDir: repeatElementGenomeDir
     out: [
       aligned,
       output_map_unmapped_fwd,
       output_map_unmapped_rev,
+      starsettings,
       mappingstats
     ]
 
@@ -216,16 +216,17 @@ steps:
       [output_fastqsort_sortedfastq]
 
   A_map_genome:
-    run: star.cwl
+    run: star-genome.cwl
     in:
       # outFileNamePrefix: A_parse_records/rmRepName
-      outFilterMultimapNmax: genomeMultimapNmax
+      # outFilterMultimapNmax: genomeMultimapNmax
       readFilesIn: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
       genomeDir: speciesGenomeDir
     out: [
       aligned,
       output_map_unmapped_fwd,
       output_map_unmapped_rev,
+      starsettings,
       mappingstats
     ]
 

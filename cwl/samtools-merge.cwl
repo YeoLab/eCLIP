@@ -5,6 +5,7 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
+  - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
     ramMin: 8000
@@ -29,15 +30,25 @@ inputs:
 
   output_bam:
     type: string
-    format: http://edamontology.org/format_2572
+    default: ""
+    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 1
+      valueFrom: |
+        ${
+          if (inputs.output_bam == "") {
+            return inputs.input_bam_files[0].nameroot + ".merged.bam";
+          }
+          else {
+            return inputs.output_bam;
+          }
+        }
     label: ""
     doc: "output merged bam file name"
 
   input_bam_files:
     type: File[]
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 2
     label: ""
@@ -47,8 +58,16 @@ outputs:
 
   output_bam_file:
     type: File
-    format: http://edamontology.org/format_3327
+    # format: http://edamontology.org/format_3327
     outputBinding:
-      glob: $(inputs.output_bam)
+      glob: |
+        ${
+          if (inputs.output_bam == "") {
+            return inputs.input_bam_files[0].nameroot + ".merged.bam";
+          }
+          else {
+            return inputs.output_bam;
+          }
+        }
     label: ""
     doc: "output merged bam file"

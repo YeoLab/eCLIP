@@ -10,7 +10,7 @@ requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement      # TODO needed?
   - class: MultipleInputFeatureRequirement
-
+  - class: InlineJavascriptRequirement
 
 #hints:
 #  - class: ex:ScriptRequirement
@@ -37,88 +37,161 @@ inputs:
   randomer_length:
     type: string
 
-  ip_read:
+  sample:
     type:
-      type: record
-      fields:
-        read1:
-          type: File
-        read2:
-          type: File
-        barcodeids:
-          type: string[]
-        name:
-          type: string
-
-  input_read:
-    type:
-      type: record
-      fields:
-        read1:
-          type: File
-        read2:
-          type: File
-        barcodeids:
-          type: string[]
-        name:
-          type: string
-
-  ip_bam:
-    type: string
-  ip_r2_bam:
-    type: string
-  input_bam:
-    type: string
-  input_r2_bam:
-    type: string
-  clipper_bed:
-    type: string
-  inputnormed_bed:
-    type: string
-
-  ### Defaults ###
-  unmapped_reads_bits:
-    type: int
-    default: 4
-
-  count_reads:
-    type: boolean
-    default: true
-
-  ip_mapped_readnum:
-    type: string
-    default: "ip_mapped_readnum.txt"
-
-  input_mapped_readnum:
-    type: string
-    default: "input_mapped_readnum.txt"
-
-  # input_norm_output_prefix:
-  #   type: string
-  #   default: "input_normed"
+      # array of 2, one IP one Input
+      type: array
+      items:
+        # record of PE reads, barcode and name
+        type: record
+        fields:
+          read1:
+            type: File
+          read2:
+            type: File
+          barcodeids:
+            type: string[]
+          name:
+            type: string
 
 outputs:
-  output_merged_bam:
+
+
+  ### Demultiplexed outputs ###
+
+  output_ip_b1_demuxed_fastq_r1:
+    type: File
+    outputSource: step_ip_alignment/b1_demuxed_fastq_r1
+  output_ip_b1_demuxed_fastq_r2:
+    type: File
+    outputSource: step_ip_alignment/b1_demuxed_fastq_r2
+
+  output_ip_b2_demuxed_fastq_r1:
+    type: File
+    outputSource: step_ip_alignment/b2_demuxed_fastq_r1
+  output_ip_b2_demuxed_fastq_r2:
+    type: File
+    outputSource: step_ip_alignment/b2_demuxed_fastq_r2
+
+  output_input_b1_demuxed_fastq_r1:
+    type: File
+    outputSource: step_input_alignment/b1_demuxed_fastq_r1
+  output_input_b1_demuxed_fastq_r2:
+    type: File
+    outputSource: step_input_alignment/b1_demuxed_fastq_r2
+
+
+  ### Trimmed outputs ###
+
+  output_ip_b1_trimx2_fastq:
+    type: File[]
+    outputSource: step_ip_alignment/b1_trimx2_fastq
+
+  output_ip_b2_trimx2_fastq:
+    type: File[]
+    outputSource: step_ip_alignment/b2_trimx2_fastq
+
+  output_input_b1_trimx2_fastq:
+    type: File[]
+    outputSource: step_input_alignment/b1_trimx2_fastq
+
+
+  ### Repeat mapping outputs ###
+
+  output_ip_b1_maprepeats_mapped_to_genome:
+    type: File
+    outputSource: step_ip_alignment/b1_maprepeats_mapped_to_genome
+  output_ip_b1_maprepeats_stats:
+    type: File
+    outputSource: step_ip_alignment/b1_maprepeats_stats
+  output_ip_b1_maprepeats_star_settings:
+    type: File
+    outputSource: step_ip_alignment/b1_maprepeats_star_settings
+  output_ip_b1_sorted_unmapped_fastq:
+    type: File[]
+    outputSource: step_ip_alignment/b1_sorted_unmapped_fastq
+
+  output_ip_b2_maprepeats_mapped_to_genome:
+    type: File
+    outputSource: step_ip_alignment/b2_maprepeats_mapped_to_genome
+  output_ip_b2_maprepeats_stats:
+    type: File
+    outputSource: step_ip_alignment/b2_maprepeats_stats
+  output_ip_b2_maprepeats_star_settings:
+    type: File
+    outputSource: step_ip_alignment/b2_maprepeats_star_settings
+  output_ip_b2_sorted_unmapped_fastq:
+    type: File[]
+    outputSource: step_ip_alignment/b2_sorted_unmapped_fastq
+
+  output_input_b1_maprepeats_mapped_to_genome:
+    type: File
+    outputSource: step_input_alignment/b1_maprepeats_mapped_to_genome
+  output_input_b1_maprepeats_stats:
+    type: File
+    outputSource: step_input_alignment/b1_maprepeats_stats
+  output_input_b1_maprepeats_star_settings:
+    type: File
+    outputSource: step_input_alignment/b1_maprepeats_star_settings
+  output_input_b1_sorted_unmapped_fastq:
+    type: File[]
+    outputSource: step_input_alignment/b1_sorted_unmapped_fastq
+
+  ### Genomic mapping outputs ###
+
+  output_ip_b1_mapgenome_mapped_to_genome:
+    type: File
+    outputSource: step_ip_alignment/b1_mapgenome_mapped_to_genome
+  output_ip_b1_mapgenome_stats:
+    type: File
+    outputSource: step_ip_alignment/b1_mapgenome_stats
+  output_ip_b1_mapgenome_star_settings:
+    type: File
+    outputSource: step_ip_alignment/b1_mapgenome_star_settings
+  output_ip_b1_output_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b1_output_sorted_bam
+
+  output_ip_b2_mapgenome_mapped_to_genome:
+    type: File
+    outputSource: step_ip_alignment/b2_mapgenome_mapped_to_genome
+  output_ip_b2_mapgenome_stats:
+    type: File
+    outputSource: step_ip_alignment/b2_mapgenome_stats
+  output_ip_b2_mapgenome_star_settings:
+    type: File
+    outputSource: step_ip_alignment/b2_mapgenome_star_settings
+  output_ip_b2_output_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b2_output_sorted_bam
+
+  output_input_b1_mapgenome_mapped_to_genome:
+    type: File
+    outputSource: step_input_alignment/b1_mapgenome_mapped_to_genome
+  output_input_b1_mapgenome_stats:
+    type: File
+    outputSource: step_input_alignment/b1_mapgenome_stats
+  output_input_b1_mapgenome_star_settings:
+    type: File
+    outputSource: step_input_alignment/b1_mapgenome_star_settings
+  output_input_b1_output_sorted_bam:
+    type: File
+    outputSource: step_input_alignment/b1_output_sorted_bam
+
+  output_ip_merged_bam:
     type: File
     outputSource: step_ip_alignment/output_r2_bam
-
   output_input_bam:
     type: File
     outputSource: step_input_alignment/output_r2_bam
 
+
+  ### Peak outputs ###
   output_clipper_bed:
     type: File
     outputSource: step_clipper/output_bed
 
-  output_ip_mapped_readnum:
-    type: File
-    outputSource: step_ip_mapped_readnum/output
-
-  output_input_mapped_readnum:
-    type: File
-    outputSource: step_input_mapped_readnum/output
-
-  output_inputnormedBed:
+  output_inputnormed_peaks:
     type: File
     outputSource: step_input_normalize_peaks/inputnormedBed
 
@@ -131,35 +204,81 @@ steps:
 ###########################################################################
 # Upstream
 ###########################################################################
+
   step_ip_alignment:
     run: wf_clipseqcore_pe_2barcodes.cwl
     in:
-      read: ip_read
+      read:
+        source: sample
+        valueFrom: |
+          ${
+            return self[0];
+          }
       dataset: dataset
       speciesGenomeDir: speciesGenomeDir
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       barcodesfasta: barcodesfasta
       randomer_length: randomer_length
-      output_bam: ip_bam
-      r2_bam: ip_r2_bam
-    out:
-      [output_r2_bam]
+      # output_bam: ip_bam
+      # r2_bam: ip_r2_bam
+    out: [
+      b1_demuxed_fastq_r1,
+      b1_demuxed_fastq_r2,
+      b1_trimx2_fastq,
+      b1_maprepeats_mapped_to_genome,
+      b1_maprepeats_stats,
+      b1_maprepeats_star_settings,
+      b1_sorted_unmapped_fastq,
+      b1_mapgenome_mapped_to_genome,
+      b1_mapgenome_stats,
+      b1_mapgenome_star_settings,
+      b1_output_sorted_bam,
+      b2_demuxed_fastq_r1,
+      b2_demuxed_fastq_r2,
+      b2_trimx2_fastq,
+      b2_maprepeats_mapped_to_genome,
+      b2_maprepeats_stats,
+      b2_maprepeats_star_settings,
+      b2_sorted_unmapped_fastq,
+      b2_mapgenome_mapped_to_genome,
+      b2_mapgenome_stats,
+      b2_mapgenome_star_settings,
+      b2_output_sorted_bam,
+      output_r2_bam
+    ]
 
   step_input_alignment:
     run: wf_clipseqcore_pe_1barcode.cwl
     in:
-      read: input_read
+      read:
+        source: sample
+        valueFrom: |
+          ${
+            return self[1];
+          }
       dataset: dataset
       speciesGenomeDir: speciesGenomeDir
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       barcodesfasta: barcodesfasta
       randomer_length: randomer_length
-      output_bam: input_bam
-      r2_bam: input_r2_bam
-    out:
-      [output_r2_bam]
+      # output_bam: input_bam
+      # r2_bam: input_r2_bam
+    out: [
+      b1_demuxed_fastq_r1,
+      b1_demuxed_fastq_r2,
+      b1_trimx2_fastq,
+      b1_maprepeats_mapped_to_genome,
+      b1_maprepeats_stats,
+      b1_maprepeats_star_settings,
+      b1_sorted_unmapped_fastq,
+      b1_mapgenome_mapped_to_genome,
+      b1_mapgenome_stats,
+      b1_mapgenome_star_settings,
+      b1_output_sorted_bam,
+      output_r2_bam
+    ]
 
   step_index_ip:
     run: samtools-index.cwl
@@ -178,7 +297,8 @@ steps:
     in:
       species: species
       bam: step_ip_alignment/output_r2_bam
-      outfile: clipper_bed
+      outfile:
+        default: ""
     out:
       [output_tsv, output_bed, output_pickle]
   
@@ -191,39 +311,41 @@ steps:
     run: samtools-mappedreadnum.cwl
     in:
       input: step_ip_alignment/output_r2_bam
-      readswithoutbits: unmapped_reads_bits
-      count: count_reads
-      output_name: ip_mapped_readnum
+      readswithoutbits:
+        default: 4
+      count:
+        default: true
+      output_name:
+        default: ip_mapped_readnum.txt
     out: [output]
 
   step_input_mapped_readnum:
     run: samtools-mappedreadnum.cwl
     in:
       input: step_input_alignment/output_r2_bam
-      readswithoutbits: unmapped_reads_bits
-      count: count_reads
-      output_name: input_mapped_readnum
+      readswithoutbits:
+        default: 4
+      count:
+        default: true
+      output_name:
+        default: input_mapped_readnum.txt
     out: [output]
 
   step_input_normalize_peaks:
     run: overlap_peakfi_with_bam_PE.cwl
-    # run: overlap_peakfi_with_bam_PE_gabesstupidversion.cwl
-    # run: peaksoverlapize.cwl
     in:
       clipBamFile: step_index_ip/alignments_with_index
       inputBamFile: step_index_input/alignments_with_index
       peakFile: step_clipper/output_bed
       clipReadnum: step_ip_mapped_readnum/output
       inputReadnum: step_input_mapped_readnum/output
-      outputFile: inputnormed_bed
-      # outputPrefix: input_norm_output_prefix
     out: [
       inputnormedBed,
       inputnormedBedfull
     ]
 
   step_compress_peaks:
-    run: peakscompressperl.cwl
+    run: peakscompress.cwl
     in:
       input_bed: step_input_normalize_peaks/inputnormedBed
     out: [output_bed]

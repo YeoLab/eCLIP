@@ -3,7 +3,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-doc: 'STAR Aligner'
+### doc: 'STAR Aligner' ###
 
 ### TSCC requirements ###
 requirements:
@@ -1388,6 +1388,11 @@ outputs:
     type: File?
     outputBinding:
       glob: "*Unmapped.out.mate2"
+
+  starsettings:
+    type: File
+    outputBinding:
+      glob: "*Log.out"
 
   mappingstats:
     type: File

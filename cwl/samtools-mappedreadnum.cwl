@@ -1,11 +1,22 @@
 #!/usr/bin/env cwl-runner
 
+### doc: "Returns a file containing the number of mapped reads in a BAM." ###
+### Copy of samtools-view.cwl, except for changes due to bugs in TOIL ###
+### readswithoutbits is by default 4 and NOT optional.                ###
+### count is by default set to true.                                  ###
+
 cwlVersion: v1.0
 class: CommandLineTool
 
-# requirements:
+requirements:
 # - $import: samtools-docker.yml
-# - class: InlineJavascriptRequirement
+  - class: InlineJavascriptRequirement
+  - class: ResourceRequirement
+    coresMin: 1
+    coresMax: 16
+    ramMin: 8000
+    tmpdirMin: 4000
+    outdirMin: 4000
 
 inputs:
   isbam:
@@ -170,6 +181,7 @@ inputs:
     inputBinding:
       position: 2
       prefix: -o
+
 outputs:
   output:
     type: File

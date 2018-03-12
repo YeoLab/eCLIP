@@ -1,10 +1,12 @@
 #!/usr/bin/env cwltool
 
-### This is a copy of sort.cwl (will be samtools-sort.cwl), ###
+### doc: "samtools sort tool (sort by name)" ###
+
+### This is a copy of sort.cwl, ###
 ### exists in case TOIL mistakes namesorting with regular sorting ###
+### Changes: name_sort flag is TRUE by default ###
 
 cwlVersion: v1.0
-
 class: CommandLineTool
 
 requirements:
@@ -56,7 +58,7 @@ inputs:
 
   input_sort_bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 3
     label: ""
@@ -72,7 +74,7 @@ outputs:
 
   output_sort_bam:
     type: File
-    format: http://edamontology.org/format_2572
+    # format: http://edamontology.org/format_2572
     outputBinding:
       glob: |
         ${
