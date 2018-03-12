@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/bin/env python
 
 """
 Converts randomer + barcoded fastq files
@@ -173,6 +173,14 @@ def _barcodedict_from_fastaio(fastaio):
         _assert_legal_barcodeseq(barcodeseq)
         odict[barcodeseq] = barcodeid
     return odict
+
+
+def _barcodedict_longest_barcode_length(barcodedict):
+    """
+    :param barcodedict: a dict with keys/values as barcode seq. / barcode id
+    :return: int, length of longest barcode in barcodedict
+    """
+    return max([len(bcseq) for bcseq in barcodedict if bcseq])
 
 
 def _barcodedict_add_edgecases(barcodedict):
@@ -389,25 +397,25 @@ def assignbarcode(readsequence, barcodedict, allowed_distance=0):
     """
     Checks if fastqread has one of the barcodes in barcodedict and returns it
     Args:
-        fastqread: str, read to check if barcode exists in
+        readsequence: str, read to check if barcode exists in
         barcodedict: dict of barcode sequence / barcode id
         allowed_distance: integer, max hamming distance between given barcode
         and barcode in read, defaults to 0
-    Returns: best barcode match in read and the real barcode sequence,
-    none if none found
+    Returns:
+        if found: returns barcode seq best matching front of readsequence,
+        if no barcode could be matched: returns the empty string ('')
+    Throws error: if readsequence shorter then longest barcode in barcodedict
     """
-
     ###########################################################################
-    # TODO "for each barcode length see if known barcodes appear"   really?
+    # TODO ther approach was used in singke end version of demux
+    # TODO " for each barcode length see if known barcodes appear "
     ###########################################################################
     # see:  (a single end version)
     # https://github.com/YeoLab/gscripts/blob/master/gscripts/clipseq/demultiplex_barcoded_fastq.py
-    #
     # but direct anceestor of this script is actually:
     # https://github.com/YeoLab/gscripts/blob/master/gscripts/clipseq/demux_paired_end.py
     ###########################################################################
-    # assumes larger barcodes are less likely, and searches for them first
-    #
+    # # assumes larger barcodes are less likely, and searches for them first
     # barcode_lengths = {len(barcode) for barcode in barcodes.keys()}
     # for barcode_length in sorted(barcode_lengths, reverse=True):
     # cur_barcode =  bla bla bla
@@ -415,26 +423,17 @@ def assignbarcode(readsequence, barcodedict, allowed_distance=0):
     #         barcode = cur_barcode
     #         break
     ###########################################################################
-
-    # TODO cleanup
-    # print('readsequence: ', readsequence)
-    # print('barcodedict: ', barcodedict)
-    # print('allowed_distance: ', allowed_distance)
-
-    longest_barcode_length = max([len(bcseq)
-                                  for bcseq in barcodedict if bcseq])
-    bcfound = readsequence[:longest_barcode_length]
-
-    # Gets min hamming distance between barcode in read and barcode in list,
-    # assigned barcode non deterministic if tie on min distance
-    distances_to_bcseqs = [(hamming_loose(bcfound, bcseq), bcseq)
+    # Gets min hamming distance between readsequence and barcodes in dict
+    # if tie on min distance, assigned barcode will be first in ordered dict
+    distances_to_bcseqs = [(hamming_loose(readsequence, bcseq),
+                            bcseq)
                            for bcseq in barcodedict]
     closest_dist, closest_bcseq = min(distances_to_bcseqs, key=lambda x: x[0])
     if closest_dist <= allowed_distance:
         assigned_barcode = closest_bcseq
     else:
         assigned_barcode = ''
-    return assigned_barcode  # , barcode_found
+    return assigned_barcode
 
 
 ###############################################################################
@@ -450,8 +449,8 @@ def _assert_same_name(fastqread1, fastqread2):
         fastqread2: fastq dict for other end pairing with fastqread1
     Returns: None
     """
-    print('fastqread1', fastqread1)
-    print('fastqread2', fastqread2)
+    # print('fastqread1', fastqread1)
+    # print('fastqread2', fastqread2)
     fastqread1_name = fastqread1["title"].split()[0]
     fastqread2_name = fastqread2["title"].split()[0]
     if fastqread1_name != fastqread2_name:
@@ -495,15 +494,15 @@ def _fastqread_titleprefix(fastqread, randomersequence):
 
 
 def _pairedreads_reformat(fastqread1, fastqread2,
-                          barcodelength, randomerlength):
+                          bcfoundlength, randomerlength):
     """
-    reformat paired fastqread's r=to include randomesequnece in title
-    and cut barcode from front of read1
-    and cutting randomer from front of read2
+    reformat paired fastqread's to include randomesequence in title
+    and cut barcode seq from front of read1
+    and cut randomer seq from front of read2
     Args:
         fastqread1: fastq dict (with title, sequence and quality properties)
         fastqread2: fastq dict for other end pairing with fastqread1
-        barcodelength: length of matched barcode to trim at front of fastqread1
+        bcfoundlength: length of matched barcode to trim at front of fastqread1
         randomerlength: length of randomer to trim at front of fastqread2
     Returns: 4-tuple of moddigied paired dastqread's re-titled and trimmed
         fastqread1:
@@ -511,24 +510,25 @@ def _pairedreads_reformat(fastqread1, fastqread2,
         barcodesequencefound: actual barcode sequence found at front of read1
         randomersequence: randomer sequence identified
     """
-    bcseqfound = fastqread1["sequence"][0:barcodelength]
+    bcfoundseq = fastqread1["sequence"][0:bcfoundlength]
     randomerseq = fastqread2["sequence"][0:randomerlength]
 
     fastqread1 = _fastqread_titleprefix(fastqread1, randomerseq)
     fastqread2 = _fastqread_titleprefix(fastqread2, randomerseq)
 
-    fastqread1 = _fastqread_trim(fastqread1, barcodelength)
+    fastqread1 = _fastqread_trim(fastqread1, bcfoundlength)
     fastqread2 = _fastqread_trim(fastqread2, randomerlength)
 
     # either read is too short for trimming, and by convention :
     # bcseqfound and bcseqassigned (outside this call) should be set to None
+    # TODO this should not happen, raise an exception instead
     if len(fastqread1["sequence"]) == 0 or len(fastqread2["sequence"]) == 0:
-        bcseqfound = None
+        bcfoundseq = None
 
-    # np barcode sequence assigned:
-    # if barcodelength is 0, bcseqfound will be "" and that is fine
+    # no barcode sequence assigned:
+    # if bcfoundlength is 0, bcseqfound will be "" and that is fine
 
-    return fastqread1, fastqread2, bcseqfound, randomerseq
+    return fastqread1, fastqread2, bcfoundseq, randomerseq
 
 
 ###############################################################################
@@ -570,7 +570,7 @@ def repeatscounter_increment(repeatscounter, barcode, bcfound, umi):
         umi: randomer sequence
     Returns: None
     """
-    print("incrementing", barcode, bcfound, umi)
+    # print("incrementing", barcode, bcfound, umi)
     repeatscounter[(barcode, bcfound, umi)] += 1
     return None
 
@@ -786,6 +786,16 @@ def datastructure_wrapup(datastr, metricsfile):
 #####################
 
 
+def too_short(datastr, fastq1, fastq2, randomer_length):
+   fastq1_tooshort = (
+       len(fastq1["sequence"])
+       <=  _barcodedict_longest_barcode_length(datastr.barcodedict))
+   fastq2_tooshort = (
+       (len(fastq2["sequence"])
+        <= randomer_length))
+   return fastq1_tooshort or fastq2_tooshort
+
+
 def demux(datastr, fastq1, fastq2, randomer_length, allowed_distance):
     """
     demultiplex paired end fastq files named fastq1 and fastq2
@@ -819,35 +829,35 @@ def demux(datastr, fastq1, fastq2, randomer_length, allowed_distance):
 
             _assert_same_name(fastqread1, fastqread2)
 
-            bcassigned = assignbarcode(fastqread1["sequence"],
-                                       datastr.barcodedict,
-                                       allowed_distance)
+            if not too_short(datastr, fastqread1, fastqread2, randomer_length):
+                # legacy "too-short" id, what was bcassigned/bcfound/umi =?
+                bcassigned, bcfound, umi = None, None, None
 
-            bc_length = len(bcassigned) if bcassigned else 0
+            else:
+                bcassigned = assignbarcode(fastqread1["sequence"],
+                                           datastr.barcodedict,
+                                           allowed_distance)
+                # bcassigned should be a string, possibly of length 0 ('')
+                # bcassigned can be shorter then the longest barcode
+                bcfound_length = len(bcassigned)
+                fastqread1, fastqread2, bcfound, umi = _pairedreads_reformat(
+                    fastqread1, fastqread2, bcfound_length, randomer_length)
 
-            fastqread1, fastqread2, bcfound, umi = _pairedreads_reformat(
-                fastqread1, fastqread2, bc_length, randomer_length)
-
-            # unassigned to any barcode
-            # TODO legacy "unassigned" id, but bcassigned/bcfound/umi =?
-            if bcfound == "":
-                bcassigned, bcfound, umi = "", "", umi
-
-            # too short for trimming
-            # TODO legacy "too-short" id, but bcassigned/bcfound/umi =?
-            if bcfound is None:
-                bcassigned, bcfound, umi = None, None, umi
+                # unassigned to any barcode
+                # legacy "unassigned" id, what was bcassigned/bcfound/umi =?
+                if bcfound == '':
+                    bcassigned, bcfound, umi = "", "", umi
 
             repeatscounter_increment(datastr.repeatscounter,
                                      bcassigned, bcfound, umi)
 
-            #  TODO write "tooshort" reads to demuxed "SHO" file ?
-            #  write unassigned reads to demuxed "NIL"/"unassigned" file
+            # write reads with assigned barcode to that barcode demuxed files
+            # write unassigned reads to demuxed "NIL"/"unassigned" files
+            # write "tooshort" reads to demuxed "SHO" files
             _fastqread_to_fastqio(fastqread1,
                                   datastr.demuxeddict1[bcassigned])
             _fastqread_to_fastqio(fastqread2,
                                   datastr.demuxeddict2[bcassigned])
-
 
 
 ###############################################################################
