@@ -252,7 +252,7 @@ steps:
     out: [output_sort_bam]
 
   X_barcodecollapsepe:
-    run: barcodecollapsepe.cwl
+    run: barcodecollapse_pe.cwl
     in:
       input_barcodecollapsepe_bam: X_sortlexico/output_sort_bam
     out: [output_barcodecollapsepe_bam, output_barcodecollapsepe_metrics]

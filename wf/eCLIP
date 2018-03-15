@@ -17,11 +17,11 @@ set -o pipefail
 
 
 
-CWLRUNNER=cwltorq # either: cwltool cwltoil or cwltorq
-WORKFLOW=wf_rnaseqscatter_pe # the prefix of the workflow cwl (without .cwl extension)
+CWLRUNNER=cwltool # either: cwltool cwltoil or cwltorq
+WORKFLOW=wf_get_peaks_scatter # the prefix of the workflow cwl (without .cwl extension)
 
-PIPELINE=RNASEQ  # workflow prefix
-PIPELINEVERSION=0.0.1  # workflow version
+PIPELINE=ECLIP  # workflow prefix
+PIPELINEVERSION=0.2.0  # workflow version
 
 FULLPATHCOMMAND=$0
 JOB_FILE=$1
@@ -167,7 +167,7 @@ then
   if [ $CWLRUNNER == cwltorq ]; then
     BATCHSYSTEM="torque --disableCaching"
     export TOIL_TORQUE_ARGS="-q home-yeo"              # home-yeo
-    export TOIL_TORQUE_REQS="walltime=8:00:00"      # walltime=8:00:00
+    export TOIL_TORQUE_REQS="walltime=12:00:00"      # walltime=8:00:00
   else
     BATCHSYSTEM="single_machine"
   fi
@@ -204,23 +204,22 @@ then
     --clean never \
     --cleanWorkDir never \
     --logInfo \
+    --clusterStats \
+    --realTimeLogging \
+    --stats \
+    --defaultMemory 64.0G \
     ${WORKFLOW_HOME}/cwl/${WORKFLOW}.cwl \
     ${JOB_FILE} \
     2>${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt | tee ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_OUTPUT.json
-
-    #2>&1 | tee ${JOB_HOME}/${JOB_NAME}/ECLIPREPMAP-JOB-LOG.txt
-    # --defaultDisk 20.0G
 fi
 
-#      --defaultCores 1.0 --defaultMemory 8.0G  \
-
+#--defaultCores 1.0 \
+#--defaultMemory 8.0G  \
 #--clusterStats \
 #--logDebug \
 #--realTimeLogging \
 #--stats \
-
-#-maxCores=  --maxMemory=8.0Ei --maxDisk 8.0Ei \
-
+#--maxCores=  --maxMemory=8.0Ei --maxDisk 8.0Ei \
 #--maxLogFileSize -1 \
 
 # error when using option --maxLogFileSize -1
@@ -228,14 +227,6 @@ fi
 #File "/projects/ps-yeolab/software/eclipconda/envs/ecliplesspeakstoil/lib/python2.7/site-packages/bd2k/util/humanize.py", line 111, in human2bytes
 #  num = float(num)
 
-#> >(tee ${JOB_HOME}/${JOB_NAME}/status.txt) \
-#2>${JOB_HOME}/${JOB_NAME}/log.txt
-
-# see : http://stackoverflow.com/questions/692000/how-do-i-write-stderr-to-a-file-while-using-tee-with-a-pipe
-### STDOUT to STATUSFILE and screen, STDERR to LOGFILE
-#exec > >(tee ${STATUSFILE}) 2>${LOGFILE}
-
-# remove leftover intermediateXXXXXX folders   # TODO only needed if cwltool crashed ?
 ############################################
 #rmdir ${JOB_HOME}/${JOB_NAME}/intermediates??????
 
@@ -258,9 +249,14 @@ mv ${OUTDIR}/* ${RESULTSDIR}/
 echo "Moving tmp to outdir done."
 
 cd ${JOB_HOME}/${JOB_NAME}
-# TODO adapt ecliprepmapupdate to this pipeline
-# ecliprepmapupdate $CWLRUNNER
 
+if grep -q "permanentFail" ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt
+then
+    echo "Not good (failures found, check log). Keeping intermediates for now." # code if found
+else
+    echo "All good (no failures)! Removing intermediate tmp folder." # code if not found
+    rm -rf ./.tmp/;
+fi
 
 # TODO this now commented out, so to finish inside job folder
 #cd -

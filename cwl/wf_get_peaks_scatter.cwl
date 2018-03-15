@@ -82,6 +82,36 @@ outputs:
     outputSource: step_get_peaks/output_input_b1_demuxed_fastq_r2
 
   ### TRIMMED OUTPUTS ###
+  output_ip_b1_trimx1_fastq:
+    type:
+      type: array
+      items:
+        type: array
+        items: File
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastq
+  output_ip_b1_trimx1_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_metrics
+  output_ip_b2_trimx1_fastq:
+    type:
+      type: array
+      items:
+        type: array
+        items: File
+    outputSource: step_get_peaks/output_ip_b2_trimx1_fastq
+  output_ip_b2_trimx1_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx1_metrics
+  output_input_b1_trimx1_fastq:
+    type:
+      type: array
+      items:
+        type: array
+        items: File
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastq
+  output_input_b1_trimx1_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_metrics
   output_ip_b1_trimx2_fastq:
     type:
       type: array
@@ -89,6 +119,9 @@ outputs:
         type: array
         items: File
     outputSource: step_get_peaks/output_ip_b1_trimx2_fastq
+  output_ip_b1_trimx2_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_metrics
   output_ip_b2_trimx2_fastq:
     type:
       type: array
@@ -96,6 +129,9 @@ outputs:
         type: array
         items: File
     outputSource: step_get_peaks/output_ip_b2_trimx2_fastq
+  output_ip_b2_trimx2_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx2_metrics
   output_input_b1_trimx2_fastq:
     type:
       type: array
@@ -103,6 +139,9 @@ outputs:
         type: array
         items: File
     outputSource: step_get_peaks/output_input_b1_trimx2_fastq
+  output_input_b1_trimx2_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_metrics
 
   ### REPEAT MAPPING OUTPUTS ###
   output_ip_b1_maprepeats_mapped_to_genome:
@@ -217,7 +256,7 @@ steps:
 # Upstream
 ###########################################################################
   step_get_peaks:
-    run: wf_get_peaks.cwl
+    run: wf_get_peaks_pe.cwl
     scatter: sample
     in:
       dataset: dataset
@@ -234,9 +273,18 @@ steps:
       output_ip_b2_demuxed_fastq_r2,
       output_input_b1_demuxed_fastq_r1,
       output_input_b1_demuxed_fastq_r2,
+      output_ip_b1_trimx1_fastq,
+      output_ip_b1_trimx1_metrics,
+      output_ip_b2_trimx1_fastq,
+      output_ip_b2_trimx1_metrics,
+      output_input_b1_trimx1_fastq,
+      output_input_b1_trimx1_metrics,
       output_ip_b1_trimx2_fastq,
+      output_ip_b1_trimx2_metrics,
       output_ip_b2_trimx2_fastq,
+      output_ip_b2_trimx2_metrics,
       output_input_b1_trimx2_fastq,
+      output_input_b1_trimx2_metrics,
       output_ip_b1_maprepeats_mapped_to_genome,
       output_ip_b1_maprepeats_stats,
       output_ip_b1_maprepeats_star_settings,

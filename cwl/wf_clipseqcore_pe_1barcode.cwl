@@ -76,9 +76,18 @@ outputs:
     type: File
     outputSource: demultiplex/A_output_demuxed_read2
 
+  b1_trimx1_fastq:
+    type: File[]
+    outputSource: b1_trim_and_map/X_output_trim_first
+  b1_trimx1_metrics:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_metrics
   b1_trimx2_fastq:
     type: File[]
     outputSource: b1_trim_and_map/X_output_trim_again
+  b1_trimx2_metrics:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_metrics
 
   b1_maprepeats_mapped_to_genome:
     type: File
@@ -118,7 +127,7 @@ steps:
 ###########################################################################
 
   demultiplex:
-    run: wf_demultiplex.cwl
+    run: wf_demultiplex_pe.cwl
     in:
       dataset: dataset
       randomer_length: randomer_length
@@ -151,7 +160,7 @@ steps:
     out: [output]
 
   b1_trim_and_map:
-    run: wf_trim_and_map.cwl
+    run: wf_trim_and_map_pe.cwl
     in:
       speciesGenomeDir: speciesGenomeDir
       repeatElementGenomeDir: repeatElementGenomeDir
@@ -166,7 +175,9 @@ steps:
       read2: demultiplex/A_output_demuxed_read2
     out: [
       X_output_trim_first,
+      X_output_trim_first_metrics,
       X_output_trim_again,
+      X_output_trim_again_metrics,
       A_output_maprepeats_mapped_to_genome,
       A_output_maprepeats_stats,
       A_output_maprepeats_star_settings,

@@ -8,9 +8,10 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    ramMin: 8000
-    #tmpdirMin: 4000
-    #outdirMin: 4000
+    coresMax: 16
+    ramMin: 32000
+    # tmpdirMin: 4000
+    # outdirMin: 4000
 
 baseCommand: [barcodecollapsepe.py]
 # baseCommand: [fix_ld_library_path, barcodecollapsepe.py]

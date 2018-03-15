@@ -10,7 +10,7 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-    ramMin: 8000
+    ramMin: 16000
     tmpdirMin: 10000
     outdirMin: 10000
 

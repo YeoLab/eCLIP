@@ -8,7 +8,7 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-    ramMin: 8000
+    ramMin: 16000
 
 baseCommand: [overlap_peakfi_with_bam_PE.pl]
 
