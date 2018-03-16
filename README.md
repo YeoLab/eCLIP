@@ -73,29 +73,51 @@ each sample.
 
 <b>Barcode names must match those described in the above barcodes.fasta file!</b>
 
-We're showing two samples described in this space.
+We're showing two samples (2 replicates each) described in this space.
 Each sample will be defined as indicated below each ``` name:``` field.
 
 ```YAML
-ip_read:
-  name: CLIP  # prefixed onto some intermediate outputs
-  barcodeids: []  # these should match fasta headers in barcodesfasta
-  read1:
-    class: File
-    path: /path/to/clip_read1_fastq.gz file
-  read2:
-    class: File
-    path: /path/to/clip_read2_fastq.gz file
+samples:
+  -
+    - ip_read:
+      name: rep1_clip
+      barcodeids: [A01, B06]
+      read1:
+        class: File
+        path: /path/to/clip.fastq.gz
+      read2:
+        class: File
+        path: /path/to/clip.fastq.gz
 
-input_read:
-  name: INPUT  # prefixed onto some intermediate outputs
-  barcodeids: []  # these should match fasta headers in barcodesfasta
-  read1:
-    class: File
-    path: /path/to/input_read1_fastq.gz file
-  read2:
-    class: File
-    path: /path/to/input_read2_fastq.gz file
+    - input_read:
+      name: rep1_input
+      barcodeids: [NIL, NIL]
+      read1:
+        class: File
+        path: /path/to/clip.fastq.gz
+      read2:
+        class: File
+        path: /path/to/clip.fastq.gz
+  -
+    - ip_read:
+      name: rep2_clip
+      barcodeids: [C01, D8f]
+      read1:
+        class: File
+        path: /path/to/clip.fastq.gz
+      read2:
+        class: File
+        path: /path/to/clip.fastq.gz
+
+    - input_read:
+      name: rep2_input
+      barcodeids: [NIL, NIL]
+      read1:
+        class: File
+        path: /path/to/clip.fastq.gz
+      read2:
+        class: File
+        path: /path/to/clip.fastq.gz
 
 ```
 
