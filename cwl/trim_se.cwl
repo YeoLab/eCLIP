@@ -115,22 +115,6 @@ inputs:
         }
     default: ""
 
-  output_r2:
-    type: string?
-    inputBinding:
-      position: 8
-      prefix: -p
-      valueFrom: |
-        ${
-          if (inputs.output_r2 == "") {
-            return inputs.input_trim[1].nameroot + "Tr.fq";
-          }
-          else {
-            return inputs.output_r2;
-          }
-        }
-    default: ""
-
   input_trim_b_adapters:
     default: []
     type:
@@ -145,6 +129,7 @@ inputs:
       position: 9
 
   input_trim_g_adapters:
+    default: []
     type:
       type: array
       items: string
@@ -157,6 +142,7 @@ inputs:
       position: 10
 
   input_trim_A_adapters:
+    default: []
     type:
       type: array
       items: string
@@ -202,19 +188,17 @@ outputs:
     type: File[]?
     outputBinding:
       # glob: "*Tr.fq"
-      # If output_r1 and output_r2 were not specified, look for input basename
+      # If output_r1 wasnt not specified, look for input basename
       glob: |
         ${
           if (inputs.output_r1 == "") {
             return [
-              inputs.input_trim[0].nameroot + "Tr.fq",
-              inputs.input_trim[1].nameroot + "Tr.fq"
+              inputs.input_trim[0].nameroot + "Tr.fq"
             ];
           }
           else {
             return [
-              inputs.output_r1,
-              inputs.output_r2
+              inputs.output_r1
             ];
           }
         }

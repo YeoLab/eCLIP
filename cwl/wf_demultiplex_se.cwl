@@ -31,8 +31,6 @@ inputs:
       fields:
         read1:
           type: File
-        read2:
-          type: File
         barcodeids:
           type: string[]
         name:
@@ -43,15 +41,6 @@ outputs:
   A_output_demuxed_read1:
     type: File
     outputSource: AB_demux/demuxedAfwd
-  A_output_demuxed_read2:
-    type: File
-    outputSource: AB_demux/demuxedArev
-  B_output_demuxed_read1:
-    type: File
-    outputSource: AB_demux/demuxedBfwd
-  B_output_demuxed_read2:
-    type: File
-    outputSource: AB_demux/demuxedBrev
 
   ### TRIM/CUTADAPT PARAMS ###
   AB_output_trimfirst_overlap_length:
@@ -83,29 +72,23 @@ steps:
 # Upstream
 ###########################################################################
   AB_demux:
-    run: demux_pe.cwl
+    run: demux_se.cwl
     in:
-      barcodesfasta: barcodesfasta
-      randomer_length: randomer_length
-      dataset: dataset
-      # seqdatapath: seqdatapath
       reads: read
-    out: [demuxedAfwd, demuxedArev,
-          demuxedBfwd, demuxedBrev,
-          output_demuxedpairedend_metrics,
-          output_dataset,
-          name,
-          barcodeidA,
-          barcodeidB
-         ]
+    out: [
+      demuxedAfwd,
+      output_demuxedsingleend_metrics,
+      output_dataset,
+      name
+    ]
 
   AB_parsebarcodes:
     run: parsebarcodes.cwl
     in:
       randomer_length: randomer_length
-      barcodeidA: AB_demux/barcodeidA
-      barcodeidB: AB_demux/barcodeidB
-      barcodesfasta: barcodesfasta
+      barcodeidA:
+      barcodeidB:
+      barcodesfasta:
     out: [
       trimfirst_overlap_length, trimagain_overlap_length,
       g_adapters_default, a_adapters_default,

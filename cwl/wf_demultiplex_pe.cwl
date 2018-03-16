@@ -1,6 +1,5 @@
 #!/usr/bin/env cwltool
 
-### space to remind me of what the metadata runner is ###
 
 cwlVersion: v1.0
 class: Workflow
@@ -19,14 +18,6 @@ requirements:
 
 
 inputs:
-  # speciesChromSizes:
-  #   type: File
-  # speciesGenomeDir:
-  #   type: Directory
-  # repeatElementGenomeDir:
-  #   type: Directory
-  # species:
-  #   type: string
   dataset:
     type: string
   randomer_length:
@@ -92,7 +83,7 @@ steps:
 # Upstream
 ###########################################################################
   AB_demux:
-    run: demux.cwl
+    run: demux_pe.cwl
     in:
       barcodesfasta: barcodesfasta
       randomer_length: randomer_length

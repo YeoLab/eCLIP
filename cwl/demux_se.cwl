@@ -1,198 +1,113 @@
-#!/usr/bin/env cwl-runner
+#!/usr/bin/env cwltool
 
-### doc: "demultiplexes a paired-end eCLIP set of reads acording to the specified barcode and barcode file." ###
+### doc: "Doesn't actually demultiplex!!!" ###
+### just trims the first 10 bases, but named as such to match the demux_pe step ###
 
 cwlVersion: v1.0
 class: CommandLineTool
 
+#$namespaces:
+#  ex: http://example.com/
+
 requirements:
+  - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
     ramMin: 32000
     tmpdirMin: 8000
     outdirMin: 8000
 
-
-
-
-baseCommand: [eclipdemux]
-
-#baseCommand: [singularityexec, eclip.img, demux_paired_end_test_2.py]
-#baseCommand: [/projects/ps-yeolab/software/eclipdemux-0.0.1/eclipdemux]
-#baseCommand: [singularityexec, eclip.img, echo, $PATH]
-
-
-
-
-#requirements:
-#
-  # TODO purpose is hand over these strings to next cwl tool (parsebarcodes)
-  # TODO not supported by toil, done instead inside demux_paired_end_test_2py
-  #InitialWorkDirRequirement:
-  #  listing:
-  #    - entryname: $(inputs.dataset)
-  #      entry: |
-  #        $(inputs.dataset)
-  #    - entryname: $(inputs.readsX.name)
-  #      entry: |
-  #        $(inputs.readsX.name)
-  #    - entryname: $(inputs.readsX.barcodeids[0])
-  #      entry: |
-  #        $(inputs.readsX.barcodeids[0])
-  #    - entryname: $(inputs.readsX.barcodeids[1])
-  #      entry: |
-  #        $(inputs.readsX.barcodeids[1])
-
-
-
-#$namespaces:
-#  ex: http://example.com/
-
-#hints:
-
-  #- class: ex:PackageRequirement
-  #  packages:
-  #    - name: bedtools
-  #    - name: samtools
-  #    - name: pysam
-  #      package_manager: pip
-  #      version: 0.8.3
-
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-#      - "# Install eclip"
-#      - "###############"
-#      - "~/miniconda/bin/conda install -c anaconda numpy=1.10 pandas=0.17 scipy=0.16"
-#      - "~/miniconda/bin/conda install -c bioconda samtools=1.3.1 bcftools=1.3.1 bedtools=2.25.0"
-#      - "#~/miniconda/bin/conda install cython-0.24.1"
-#      - "~/miniconda/bin/conda install -c bcbio pybedtools=0.6.9 pysam=0.8.4pre0"
-#      - ""
-
-
-
-arguments: ["--metrics",
-  $(inputs.dataset).$(inputs.reads.name).---.--.metrics,
-  "--expectedbarcodeida",
-  "$(inputs.reads.barcodeids[0])",
-  "--expectedbarcodeidb",
-  "$(inputs.reads.barcodeids[1])"
-  ]
+baseCommand: [umi_tools, extract]
 
 inputs:
 
-  barcodesfasta:
-    type: File
-    inputBinding:
-      position: 6
-      prefix: --barcodesfile
+  # stdin:
+  #   type: File
+  #   inputBinding:
+  #     position: 1
+  #     prefix: --stdin
 
-  randomer_length:
+  bc_pattern:
     type: string
-    default: "10"
+    default: "NNNNNNNNNN"
     inputBinding:
-      position: 7
-      prefix: --length
-    doc: "randomer length"
+      position: 2
+      prefix: --bc-pattern
+    doc: "10 nt randomer"
+
+  log:
+    type: string
+    default: ""
+    inputBinding:
+      position: 3
+      prefix: --log
+      valueFrom: |
+        ${
+          if (inputs.log == "") {
+            return inputs.dataset + "." + inputs.reads.name + ".---.--.metrics";
+          }
+          else {
+            return inputs.log;
+          }
+        }
 
   dataset:
     type: string
     inputBinding:
-      position: 5
-      prefix: --dataset
+      position: 4
 
-  # TODO: remove when safe
-  # seqdatapath:
-  #   type: string
+  stdout:
+    type: string
+    default: ""
+    inputBinding:
+      position: 4
+      prefix: --stdout
+      valueFrom: |
+        ${
+          if (inputs.stdout == "") {
+            return inputs.dataset + "." + inputs.reads.name + ".umi.r1.fq";
+          }
+          else {
+            return inputs.stdout;
+          }
+        }
 
   reads:
     type:
       type: record
-      #name: reads
       fields:
         read1:
           type: File
           inputBinding:
             position: 1
-            prefix: --fastq_1
-        read2:
-          type: File
-          inputBinding:
-            position: 2
-            prefix: --fastq_2
-        barcodeids:
-          type: string[]
-          #default: [NIL, NIL]
-          #inputBinding:
-          #  position: 3
-          #  prefix: --expectedbarcodeids
+            prefix: --stdin
         name:
           type: string
-          inputBinding:
-            position: 4
-            prefix: --newname
-
-
 
 outputs:
-
-  output_dataset:
-    type: string
-    outputBinding:
-      glob: $(inputs.dataset)
-      loadContents: true
-      outputEval: $(self[0].contents)
-  name:
-    type: string
-    outputBinding:
-      glob: $(inputs.reads.name)
-      loadContents: true
-      outputEval: $(self[0].contents)
-  barcodeidA:
-    type: string
-    outputBinding:
-      glob: $(inputs.reads.barcodeids[0])
-      loadContents: true
-      outputEval: $(self[0].contents)
-  barcodeidB:
-    type: string
-    outputBinding:
-      glob: $(inputs.reads.barcodeids[1])
-      loadContents: true
-      outputEval: $(self[0].contents)
 
   demuxedAfwd:
     type: File
     outputBinding:
-      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[0]).r1.fq.gz
-  demuxedArev:
-    type: File
-    outputBinding:
-      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[0]).r2.fq.gz
-  demuxedBfwd:
-    type: File
-    outputBinding:
-      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[1]).r1.fq.gz
-  demuxedBrev:
-    type: File
-    outputBinding:
-      glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[1]).r2.fq.gz
+      glob: $(inputs.dataset).$(inputs.reads.name).umi.r1.fq
 
-  #output_demuxedpairedend_fastq1_all:
-  #  type: File[]
-  #  outputBinding:
-  #    glob: "*_R1.*.f*q.gz"
-  #    #glob: $(inputs.dataset).$(inputs.reads.name).*.r1.fq.gz
-
-  #output_demuxedpairedend_fastq2_all:
-  #  type: File[]
-  #  outputBinding:
-  #    glob: "*_R2.*.f*q.gz"
-  #    #glob: $(inputs.dataset).$(inputs.reads.name).*.r2.fq.gz
-
-  output_demuxedpairedend_metrics:
+  output_demuxedsingleend_metrics:
     type: File
     outputBinding:
       glob: $(inputs.dataset).$(inputs.reads.name).---.--.metrics
     label: ""
-    doc: "demuxedpairedend metrics"
+    doc: "demuxed se metrics"
+
+  output_dataset:
+    type: string
+    outputBinding:
+      loadContents: true
+      outputEval: $(inputs.dataset)
+    doc: "just passes output dataset string to output to match with PE demux"
+
+  name:
+    type: string
+    outputBinding:
+      loadContents: true
+      outputEval: $(inputs.reads.name)
+    doc: "just passes output name string to output to match with PE demux"

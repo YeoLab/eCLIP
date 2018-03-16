@@ -39,8 +39,6 @@ inputs:
     type: File
   read1:
     type: File
-  read2:
-    type: File
 
   sort_names:
     type: boolean
@@ -156,7 +154,7 @@ steps:
   X_trim:
     run: trim_pe.cwl
     in:
-      input_trim: [read1, read2]
+      input_trim: [read1]
       input_trim_overlap_length: trimfirst_overlap_length
       input_trim_g_adapters: get_g_adapters/output
       input_trim_a_adapters: get_a_adapters/output
@@ -199,7 +197,6 @@ steps:
     out: [
       aligned,
       output_map_unmapped_fwd,
-      output_map_unmapped_rev,
       starsettings,
       mappingstats
     ]
@@ -210,7 +207,6 @@ steps:
     in:
       input_fastqsort_fastq: [
         A_map_repeats/output_map_unmapped_fwd,
-        A_map_repeats/output_map_unmapped_rev
       ]
     out:
       [output_fastqsort_sortedfastq]
@@ -225,7 +221,6 @@ steps:
     out: [
       aligned,
       output_map_unmapped_fwd,
-      output_map_unmapped_rev,
       starsettings,
       mappingstats
     ]
