@@ -87,3 +87,7 @@ outputs:
         }
     label: ""
     doc: "sorted bam"
+
+doc: |
+  This tool wraps samtools sort by coordinates (namesort flag is False by default).
+    Usage: samtools sort [options...] [in.bam]

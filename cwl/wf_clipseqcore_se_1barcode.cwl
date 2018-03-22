@@ -36,11 +36,11 @@ inputs:
   chrom_sizes:
     type: File
 
-  barcodesfasta:
-    type: File
+  # barcodesfasta:
+  #   type: File
 
-  randomer_length:
-    type: string
+  # randomer_length:
+  #   type: string
 
   read:
     type:
@@ -48,10 +48,10 @@ inputs:
       fields:
         read1:
           type: File
-        read2:
-          type: File
-        barcodeids:
-          type: string[]
+        # read2:
+        #   type: File
+        # barcodeids:
+        #   type: string[]
         name:
           type: string
 
@@ -60,25 +60,27 @@ inputs:
 
   # output_bam:
   #   type: string
+  
+  adapters:
+    type: File
 
   ### Defaults ###
-
+  
   # r2_bits:
   #   type: int
   #   default: 128
   # is_bam:
   #   type: boolean
   #   default: true
-
+  
 outputs:
 
   b1_demuxed_fastq_r1:
     type: File
     outputSource: demultiplex/A_output_demuxed_read1
-    doc: "Barcode 1 Read 1 demultiplexed fastq"
-  b1_demuxed_fastq_r2:
-    type: File
-    outputSource: demultiplex/A_output_demuxed_read2
+  # b1_demuxed_fastq_r2:
+  #   type: File
+  #   outputSource: demultiplex/A_output_demuxed_read2
 
   b1_trimx1_fastq:
     type: File[]
@@ -103,7 +105,7 @@ outputs:
     type: File
     outputSource: b1_trim_and_map/A_output_maprepeats_star_settings
   b1_sorted_unmapped_fastq:
-    type: File[]
+    type: File
     outputSource: b1_trim_and_map/A_output_sort_repunmapped_fastq
 
   b1_mapgenome_mapped_to_genome:
@@ -116,13 +118,21 @@ outputs:
     type: File
     outputSource: b1_trim_and_map/A_output_mapgenome_star_settings
 
-  b1_output_sorted_bam:
+  b1_output_pre_rmdup_sorted_bam:
+    type: File
+    outputSource: b1_trim_and_map/A_output_sorted_bam
+
+  b1_output_barcodecollapsese_metrics:
+    type: File
+    outputSource: b1_trim_and_map/X_output_barcodecollapsese_metrics
+
+  b1_output_rmdup_sorted_bam:
     type: File
     outputSource: b1_trim_and_map/X_output_sorted_bam
 
-  output_r2_bam:
-    type: File
-    outputSource: view_r2/output
+  # output_r2_bam:
+  #   type: File
+  #   outputSource: view_r2/output
 
   output_pos_bw:
     type: File
@@ -138,52 +148,54 @@ steps:
 ###########################################################################
 
   demultiplex:
-    run: wf_demultiplex_pe.cwl
+    run: wf_demultiplex_se.cwl
     in:
       dataset: dataset
-      randomer_length: randomer_length
-      barcodesfasta: barcodesfasta
+      # randomer_length: randomer_length
+      # barcodesfasta: barcodesfasta
       read: read
     out: [
       A_output_demuxed_read1,
-      A_output_demuxed_read2,
-      B_output_demuxed_read1,
-      B_output_demuxed_read2,
-      AB_output_trimfirst_overlap_length,
-      AB_output_trimagain_overlap_length,
-      AB_g_adapters,
-      AB_g_adapters_default,
-      AB_a_adapters,
-      AB_a_adapters_default,
-      AB_A_adapters
+      # A_output_demuxed_read2,
+      # B_output_demuxed_read1,
+      # B_output_demuxed_read2,
+      # AB_output_trimfirst_overlap_length,
+      # AB_output_trimagain_overlap_length,
+      # AB_g_adapters,
+      # AB_g_adapters_default,
+      # AB_a_adapters,
+      # AB_a_adapters_default,
+      # AB_A_adapters
     ]
 
-  trimfirst_file2string:
-    run: file2string.cwl
-    in:
-      file: demultiplex/AB_output_trimfirst_overlap_length
-    out: [output]
+  # trimfirst_file2string:
+  #   run: file2string.cwl
+  #   in:
+  #     file: demultiplex/AB_output_trimfirst_overlap_length
+  #   out: [output]
 
-  trimagain_file2string:
-    run: file2string.cwl
-    in:
-      file: demultiplex/AB_output_trimagain_overlap_length
-    out: [output]
+  # trimagain_file2string:
+  #   run: file2string.cwl
+  #   in:
+  #     file: demultiplex/AB_output_trimagain_overlap_length
+  #   out: [output]
 
   b1_trim_and_map:
-    run: wf_trim_and_map_pe.cwl
+    run: wf_trim_and_map_se.cwl
     in:
       speciesGenomeDir: speciesGenomeDir
       repeatElementGenomeDir: repeatElementGenomeDir
-      trimfirst_overlap_length: trimfirst_file2string/output
-      trimagain_overlap_length: trimagain_file2string/output
-      g_adapters: demultiplex/AB_g_adapters
-      g_adapters_default: demultiplex/AB_g_adapters_default
-      a_adapters: demultiplex/AB_a_adapters
-      a_adapters_default: demultiplex/AB_a_adapters_default
-      A_adapters: demultiplex/AB_A_adapters
+      trimfirst_overlap_length:
+        default: "1"
+      trimagain_overlap_length:
+        default: "5"
+      # g_adapters: demultiplex/AB_g_adapters
+      # g_adapters_default: demultiplex/AB_g_adapters_default
+      a_adapters: adapters
+      # a_adapters_default: demultiplex/AB_a_adapters_default
+      # A_adapters: demultiplex/AB_A_adapters
       read1: demultiplex/A_output_demuxed_read1
-      read2: demultiplex/A_output_demuxed_read2
+      # read2: demultiplex/A_output_demuxed_read2
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,
@@ -197,9 +209,9 @@ steps:
       A_output_mapgenome_stats,
       A_output_mapgenome_star_settings,
       A_output_sorted_bam,
-      A_output_sorted_bam_index,
-      X_output_barcodecollapsepe_bam,
-      X_output_barcodecollapsepe_metrics,
+      # A_output_sorted_bam_index,
+      X_output_barcodecollapsese_bam,
+      X_output_barcodecollapsese_metrics,
       X_output_sorted_bam,
       X_output_index_bai
     ]
@@ -209,21 +221,21 @@ steps:
 # Downstream (candidate for merging with main pipeline)
 ###########################################################################
 
-  view_r2:
-    run: samtools-viewr2.cwl
-    in:
-      input: b1_trim_and_map/X_output_sorted_bam
-      readswithbits:
-        default: 128
-      isbam:
-        default: true
-    out: [output]
+
+  # view_r2:
+  #   run: samtools-viewr2.cwl
+  #   in:
+  #     input: b1_trim_and_map/X_output_sorted_bam
+  #     readswithbits:
+  #       default: 128
+  #     isbam:
+  #       default: true
+  #   out: [output]
 
   make_bigwigs:
     run: makebigwigfiles.cwl
     in:
       chromsizes: chrom_sizes
-      bam: view_r2/output
+      bam: b1_trim_and_map/X_output_sorted_bam
     out:
       [posbw, negbw]
-

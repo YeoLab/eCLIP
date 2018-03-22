@@ -34,6 +34,9 @@ inputs:
   species:
     type: string
 
+  chrom_sizes:
+    type: File
+
   barcodesfasta:
     type: File
 
@@ -170,6 +173,13 @@ outputs:
     type: File
     outputSource: view_r2/output
 
+  output_pos_bw:
+    type: File
+    outputSource: make_bigwigs/posbw
+  output_neg_bw:
+    type: File
+    outputSource: make_bigwigs/negbw
+
 steps:
 
 ###########################################################################
@@ -300,3 +310,10 @@ steps:
         default: true
     out: [output]
 
+  make_bigwigs:
+    run: makebigwigfiles.cwl
+    in:
+      chromsizes: chrom_sizes
+      bam: view_r2/output
+    out:
+      [posbw, negbw]

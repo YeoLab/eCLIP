@@ -196,3 +196,8 @@ outputs:
       glob: $(inputs.dataset).$(inputs.reads.name).---.--.metrics
     label: ""
     doc: "demuxedpairedend metrics"
+
+doc: |
+  demultiplex utility for paired-end eCLIP raw fastq files (process eCLIP barcodes and ramdomers)
+  See: https://github.com/YeoLab/eclipdemux for full code and documentation
+    Usage: eclipdemux --dataset DATASET_ID --metrics METRICS_FILE --fastq_1 READ_1 --fastq_2 READ_2 --expectedbarcodeida BARCODE_A --expectedbarcodeidb BARCODE_B --barcodesfile BARCODES_FASTA --length LENGTH

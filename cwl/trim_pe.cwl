@@ -224,3 +224,7 @@ outputs:
     outputBinding:
       # glob: "*Tr.metrics"
       glob: "*.metrics"
+
+doc: |
+  This tool wraps cutadapt with default parameters set to paired-end eCLIP processing defaults.
+    Usage: cutadapt -a ADAPT1 -A ADAPT2 [options] -o out1.fastq -p out2.fastq in1.fastq in2.fastq

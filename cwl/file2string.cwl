@@ -19,3 +19,6 @@ outputs:
     type: string
 
 expression: "${return {'output':inputs.file.contents}; }"
+
+doc: |
+  Returns string expression based on file contents.

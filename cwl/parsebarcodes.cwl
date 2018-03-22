@@ -84,3 +84,24 @@ outputs:
     type: File
     outputBinding:
       glob: trimagain_overlap_length.txt
+
+doc: |
+  This tool wraps parsebarcodes.sh.
+
+  We have observed occasional double ligation events on the 5’ end of Read1, and we have found
+  that to fix this requires we run cutadapt twice.  Additionally, because two adapters are used for
+  each library (to ensure proper balancing on the Illumina sequencer), two separate barcodes may
+  be ligated to the same Read1 5’ end (often with 5’ truncations).  To fix this we split the barcodes
+  up into 15bp chunks so that cutadapt is able to deconvolute barcode adapters properly (as by
+  default it will not find adapters missing the first N bases of the adapter sequence)
+
+  parsebarcodes.sh writes the following files:
+  trimfirst_overlap_length.txt : file that always contains "1"
+  trimagain_overlap_length.txt : file that contains max((length of longest barcode - 2),5)
+  g_adapters_default.fasta : empty file (to be fed to cutadapt properly)
+  a_adapters_default.fasta : empty file (to be fed to cutadapt properly)
+  g_adapters.fasta :  fasta file containing sequences to be trimmed via cutadapt -g flag
+  a_adapters.fasta : fasta file containing sequences to be trimmed via cutadapt -a flag
+  A_adapters.fasta : fasta file containing sequences to be trimmed via cutadapt -A flag
+
+    Usage: parsebarcodes.sh <randommer_length> <barcodes_fasta> <barcode_A> <barcode_B>

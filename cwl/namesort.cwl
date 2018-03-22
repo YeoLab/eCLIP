@@ -87,3 +87,7 @@ outputs:
         }
     label: ""
     doc: "sorted bam"
+
+doc: |
+  This tool wraps samtools sort, setting the by-name (-n) flag to be True by default.
+    Usage: samtools sort -n <input.bam> <output.bam>

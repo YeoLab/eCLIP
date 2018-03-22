@@ -84,3 +84,7 @@ outputs:
             return inputs.outputFile;
           }
         }
+
+doc: |
+  This tool wraps
+    Usage:

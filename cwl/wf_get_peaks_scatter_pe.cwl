@@ -31,6 +31,9 @@ inputs:
   species:
     type: string
 
+  chrom_sizes:
+    type: File
+
   barcodesfasta:
     type: File
 
@@ -55,11 +58,11 @@ inputs:
               type: string
 
 outputs:
-  output_compressed_peaks:
-    type: File[]
-    outputSource: step_get_peaks/output_compressed_peaks
+
 
   ### DEMULTIPLEXED READ OUTPUTS ###
+
+
   output_ip_b1_demuxed_fastq_r1:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_demuxed_fastq_r1
@@ -81,7 +84,10 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_demuxed_fastq_r2
 
+
   ### TRIMMED OUTPUTS ###
+
+
   output_ip_b1_trimx1_fastq:
     type:
       type: array
@@ -143,7 +149,10 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_trimx2_metrics
 
+
   ### REPEAT MAPPING OUTPUTS ###
+
+
   output_ip_b1_maprepeats_mapped_to_genome:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_maprepeats_mapped_to_genome
@@ -195,7 +204,10 @@ outputs:
         items: File
     outputSource: step_get_peaks/output_input_b1_sorted_unmapped_fastq
 
+
   ### GENOME MAPPING OUTPUTS ###
+
+
   output_ip_b1_mapgenome_mapped_to_genome:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_mapgenome_mapped_to_genome
@@ -235,7 +247,10 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_output_sorted_bam
 
+
   ### READ2 OUTPUTS ###
+
+
   output_ip_merged_bam:
     type: File[]
     outputSource: step_get_peaks/output_ip_merged_bam
@@ -243,13 +258,39 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_input_bam
 
+
+  ### BIGWIG FILES ###
+
+
+  output_ip_pos_bw:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_pos_bw
+  output_ip_neg_bw:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_neg_bw
+  output_input_pos_bw:
+    type: File[]
+    outputSource: step_get_peaks/output_input_pos_bw
+  output_input_neg_bw:
+    type: File[]
+    outputSource: step_get_peaks/output_input_neg_bw
+
+
+
   ### PEAK OUTPUTS ###
+
+
   output_clipper_bed:
     type: File[]
     outputSource: step_get_peaks/output_clipper_bed
   output_inputnormed_peaks:
     type: File[]
     outputSource: step_get_peaks/output_inputnormed_peaks
+  output_compressed_peaks:
+    type: File[]
+    outputSource: step_get_peaks/output_compressed_peaks
+
+
 steps:
 
 ###########################################################################
@@ -263,6 +304,7 @@ steps:
       speciesGenomeDir: speciesGenomeDir
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
+      chrom_sizes: chrom_sizes
       barcodesfasta: barcodesfasta
       randomer_length: randomer_length
       sample: samples
@@ -311,6 +353,10 @@ steps:
       output_input_b1_output_sorted_bam,
       output_ip_merged_bam,
       output_input_bam,
+      output_ip_pos_bw,
+      output_ip_neg_bw,
+      output_input_pos_bw,
+      output_input_neg_bw,
       output_clipper_bed,
       output_inputnormed_peaks,
       output_compressed_peaks

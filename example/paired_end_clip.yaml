@@ -1,0 +1,65 @@
+#!/usr/bin/env eCLIP_pairedend
+
+### eCLIP_pairedend ###
+### wf_get_peaks_scatter.cwl ###
+
+dataset: "204_01"
+
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19_star_sjdb
+
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/hg_repbase_starindex
+
+species: hg19
+
+barcodesfasta:
+  class: File
+  path: inputs/yeolabbarcodes_20170101.fasta
+
+randomer_length: "5"
+
+samples:
+  -
+    - ip_read:
+      name: rep1_clip
+      barcodeids: [A01, B06]
+      read1:
+        class: File
+        path: inputs/RBFOX2-204-CLIP_S1_R1.fastq.gz
+      read2:
+        class: File
+        path: inputs/RBFOX2-204-CLIP_S1_R2.fastq.gz
+
+    - input_read:
+      name: rep1_input
+      barcodeids: [NIL, NIL]
+      read1:
+        class: File
+        path: inputs/RBFOX2-204-INPUT_S2_R1.fastq.gz
+      read2:
+        class: File
+        path: inputs/RBFOX2-204-INPUT_S2_R2.fastq.gz
+  -
+    - ip_read:
+      name: rep2_clip
+      barcodeids: [C01, D8f]
+      read1:
+        class: File
+        path: inputs/RBFOX2-204-CLIP_S1_R1.fastq.gz
+      read2:
+        class: File
+        path: inputs/RBFOX2-204-CLIP_S1_R2.fastq.gz
+
+    - input_read:
+      name: rep2_input
+      barcodeids: [NIL, NIL]
+      read1:
+        class: File
+        path: inputs/RBFOX2-204-INPUT_S2_R1.fastq.gz
+      read2:
+        class: File
+        path: inputs/RBFOX2-204-INPUT_S2_R2.fastq.gz
+

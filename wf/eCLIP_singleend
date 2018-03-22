@@ -17,11 +17,11 @@ set -o pipefail
 
 
 
-CWLRUNNER=cwltool # either: cwltool cwltoil or cwltorq
-WORKFLOW=wf_get_peaks_scatter # the prefix of the workflow cwl (without .cwl extension)
+CWLRUNNER=cwltorq # either: cwltool cwltoil or cwltorq
+WORKFLOW=wf_get_peaks_scatter_se # the prefix of the workflow cwl (without .cwl extension)
 
 PIPELINE=ECLIP  # workflow prefix
-PIPELINEVERSION=0.2.0  # workflow version
+PIPELINEVERSION=0.2.1  # workflow version
 
 FULLPATHCOMMAND=$0
 JOB_FILE=$1
@@ -250,12 +250,13 @@ echo "Moving tmp to outdir done."
 
 cd ${JOB_HOME}/${JOB_NAME}
 
-if grep -q "permanentFail" ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt
+if grep -q "permanentFail" ${PIPELINE}_${JOB_NAME}_LOG.txt
 then
     echo "Not good (failures found, check log). Keeping intermediates for now." # code if found
 else
     echo "All good (no failures)! Removing intermediate tmp folder." # code if not found
     rm -rf ./.tmp/;
+    rm -rf ${RESULTSDIR}/out_tmp* ${RESULTSDIR}/tmp*
 fi
 
 # TODO this now commented out, so to finish inside job folder

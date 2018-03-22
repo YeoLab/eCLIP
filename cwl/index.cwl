@@ -43,3 +43,10 @@ outputs:
       glob: $(inputs.input_index_bam.basename).bai
     label: ""
     doc: "index"
+
+doc: |
+  Indexes a bam file (should be deprecated by samtools-index.cwl so kept for legacy),
+  with the difference being that this tool returns the *.bai index while the other
+  returns a BAM file object containing an index file as a secondaryFile.
+
+  Usage: samtools index <input.bam> <output.bam>

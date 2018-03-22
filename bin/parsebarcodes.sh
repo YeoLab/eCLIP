@@ -171,7 +171,7 @@ printf "%b\n" "sizebarcodeb : ${sizebarcodeb}"
 ####################################################################
 longestbarcodesize=$(( sizebarcodea > sizebarcodeb ? sizebarcodea : sizebarcodeb ))
 trimagain_overlap_length=$((longestbarcodesize - 2))
-trimagain_overlap_length=$(( trimagain_overlap_length > 0 ? trimagain_overlap_length : 1 ))
+trimagain_overlap_length=$(( trimagain_overlap_length > 0 ? trimagain_overlap_length : 5 ))
 printf "%b\n" "trimagain_overlap_length : ${trimagain_overlap_length}"
 
 

@@ -32,3 +32,6 @@ expression: "${var lines=inputs.file.contents.split('\\n');
   }
   return {'output':seqs};
 }"
+
+doc: |
+  Returns string array expression based on lines in a fasta file (SKIPS >).

@@ -66,3 +66,9 @@ outputs:
         }
     label: ""
     doc: "sorted fastq"
+
+doc: |
+  Sorts FASTQ files by their read name. Sorted fastq files are required to keep mapping steps
+  deterministic.
+
+    Usage: fastq-sort --id FASTQ_FILE > STDOUT

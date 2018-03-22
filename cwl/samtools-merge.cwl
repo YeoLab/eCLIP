@@ -71,3 +71,9 @@ outputs:
         }
     label: ""
     doc: "output merged bam file"
+
+doc: |
+  samtools-merge.cwl takes in a list of input_bam_files and
+  returns a merged BAM file.
+
+  Usage: samtools merge [-nurlf] [-h inh.sam] [-b <bamlist.fofn>] <out.bam> <in1.bam> [<in2.bam> ... <inN.bam>]

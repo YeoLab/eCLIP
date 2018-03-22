@@ -6,6 +6,7 @@ cwlVersion: v1.0
 class: Workflow
 
 requirements:
+  - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement      # TODO needed?
@@ -27,16 +28,16 @@ inputs:
     type: string
   trimagain_overlap_length:
     type: string
-  g_adapters:
-    type: File
-  g_adapters_default:
-    type: File
+  # g_adapters:
+  #   type: File
+  # g_adapters_default:
+  #   type: File
   a_adapters:
     type: File
-  a_adapters_default:
-    type: File
-  A_adapters:
-    type: File
+  # a_adapters_default:
+  #   type: File
+  # A_adapters:
+  #   type: File
   read1:
     type: File
 
@@ -76,7 +77,7 @@ outputs:
     type: File
     outputSource: A_map_repeats/starsettings
   A_output_sort_repunmapped_fastq:
-    type: File[]
+    type: File
     outputSource: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
 
   A_output_mapgenome_mapped_to_genome:
@@ -91,16 +92,16 @@ outputs:
   A_output_sorted_bam:
     type: File
     outputSource: A_sort/output_sort_bam
-  A_output_sorted_bam_index:
-    type: File
-    outputSource: A_index/output_index_bai
+  # A_output_sorted_bam_index:
+  #   type: File
+  #   outputSource: A_index/output_index_bai
 
-  X_output_barcodecollapsepe_bam:
+  X_output_barcodecollapsese_bam:
     type: File
-    outputSource: X_barcodecollapsepe/output_barcodecollapsepe_bam
-  X_output_barcodecollapsepe_metrics:
+    outputSource: X_barcodecollapsese/output_barcodecollapsese_bam
+  X_output_barcodecollapsese_metrics:
     type: File
-    outputSource: X_barcodecollapsepe/output_barcodecollapsepe_metrics
+    outputSource: X_barcodecollapsese/output_barcodecollapsese_metrics
 
   X_output_sorted_bam:
     type: File
@@ -116,34 +117,10 @@ steps:
 # Parse adapter files to array inputs
 ###########################################################################
 
-  get_g_adapters:
-    run: file2stringArray.cwl
-    in:
-      file: g_adapters
-    out:
-      [output]
   get_a_adapters:
     run: file2stringArray.cwl
     in:
       file: a_adapters
-    out:
-      [output]
-  get_A_adapters:
-    run: file2stringArray.cwl
-    in:
-      file: A_adapters
-    out:
-      [output]
-  get_a_adapters_default:
-    run: file2stringArray.cwl
-    in:
-      file: a_adapters_default
-    out:
-      [output]
-  get_g_adapters_default:
-    run: file2stringArray.cwl
-    in:
-      file: g_adapters_default
     out:
       [output]
 
@@ -152,25 +129,23 @@ steps:
 ###########################################################################
 
   X_trim:
-    run: trim_pe.cwl
+    run: trim_se.cwl
     in:
-      input_trim: [read1]
+      input_trim: 
+        source: read1
+        valueFrom: ${ return [ self ]; }
       input_trim_overlap_length: trimfirst_overlap_length
-      input_trim_g_adapters: get_g_adapters/output
       input_trim_a_adapters: get_a_adapters/output
-      input_trim_A_adapters: get_A_adapters/output
       times: trim_times
       error_rate: trim_error_rate
     out: [output_trim, output_trim_report]
 
   X_trim_again:
-    run: trim_pe.cwl
+    run: trim_se.cwl
     in:
       input_trim: X_trim/output_trim
       input_trim_overlap_length: trimagain_overlap_length
-      input_trim_g_adapters: get_g_adapters_default/output
-      input_trim_a_adapters: get_a_adapters_default/output
-      input_trim_A_adapters: get_A_adapters/output
+      input_trim_a_adapters: get_a_adapters/output
       times: trim_times
       error_rate: trim_error_rate
     out: [output_trim, output_trim_report]
@@ -203,11 +178,8 @@ steps:
 
   A_sort_repunmapped_fastq:
     run: fastqsort.cwl
-    scatter: input_fastqsort_fastq
     in:
-      input_fastqsort_fastq: [
-        A_map_repeats/output_map_unmapped_fwd,
-      ]
+      input_fastqsort_fastq: A_map_repeats/output_map_unmapped_fwd
     out:
       [output_fastqsort_sortedfastq]
 
@@ -216,7 +188,9 @@ steps:
     in:
       # outFileNamePrefix: A_parse_records/rmRepName
       # outFilterMultimapNmax: genomeMultimapNmax
-      readFilesIn: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
+      readFilesIn: 
+        source: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
+        valueFrom: ${ return [ self ]; }
       genomeDir: speciesGenomeDir
     out: [
       aligned,
@@ -233,29 +207,29 @@ steps:
       [output_sort_bam]
 
   A_index:
-    run: index.cwl
+    run: samtools-index.cwl
     in:
-      input_index_bam: A_sort/output_sort_bam
+      alignments: A_sort/output_sort_bam
     out:
-      [output_index_bai]
+      [alignments_with_index]
 
-  X_sortlexico:
-    run: namesort.cwl
-    in:
-      name_sort: sort_names
-      input_sort_bam: A_map_genome/aligned
-    out: [output_sort_bam]
+  # X_sortlexico:
+  #   run: namesort.cwl
+  #   in:
+  #     name_sort: sort_names
+  #     input_sort_bam: A_map_genome/aligned
+  #   out: [output_sort_bam]
 
-  X_barcodecollapsepe:
-    run: barcodecollapse_pe.cwl
+  X_barcodecollapsese:
+    run: barcodecollapse_se.cwl
     in:
-      input_barcodecollapsepe_bam: X_sortlexico/output_sort_bam
-    out: [output_barcodecollapsepe_bam, output_barcodecollapsepe_metrics]
+      input_barcodecollapsese_bam: A_index/alignments_with_index
+    out: [output_barcodecollapsese_bam, output_barcodecollapsese_metrics]
 
   X_sort:
     run: sort.cwl
     in:
-      input_sort_bam: X_barcodecollapsepe/output_barcodecollapsepe_bam
+      input_sort_bam: X_barcodecollapsese/output_barcodecollapsese_bam
     out: [output_sort_bam]
 
   X_index:
@@ -268,3 +242,6 @@ steps:
 # Downstream
 ###########################################################################
 
+doc: |
+  This workflow takes in appropriate trimming params and demultiplexed reads,
+  and performs the following steps in order: trimx1, trimx2, fastq-sort, filter repeat elements, fastq-sort, genomic mapping, sort alignment, index alignment, namesort, PCR dedup, sort alignment, index alignment

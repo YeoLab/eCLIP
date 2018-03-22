@@ -111,3 +111,11 @@ outputs:
       loadContents: true
       outputEval: $(inputs.reads.name)
     doc: "just passes output name string to output to match with PE demux"
+
+doc: |
+  Extract UMI barcode from a read and add it to the read name, leaving
+  any sample barcode in place. Can deal with paired end reads and UMIs
+  split across the paired ends. For eCLIP single-end processing, this step just
+  trims the first 10 bases, but named as such to match the demux_pe step.
+
+    Usage: umi_tools extract --bc-pattern=[PATTERN] -L extract.log [OPTIONS]

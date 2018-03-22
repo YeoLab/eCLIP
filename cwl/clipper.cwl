@@ -91,23 +91,23 @@ inputs:
     #  - ".bai"
 
   # timeout can not be omitted, default value of None in clipper creates error
-  timeout:
-    type: string
-    # 600 seconds, 10 minutes
-    # default: "600"
-    # 100 hours, > 4 days
-    default: "3600000"
-    inputBinding:
-      position: 7
-      prefix: --timeout
+  # timeout:
+  #   type: string
+  #   # 600 seconds, 10 minutes
+  #   # default: "600"
+  #   # 100 hours, > 4 days
+  #   default: "3600000"
+  #   inputBinding:
+  #     position: 7
+  #     prefix: --timeout
 
-  maxgenes:
-    type: string
-    #default: "2100"
-    default: "1000000"
-    inputBinding:
-      position: 8
-      prefix: --maxgenes
+  # maxgenes:
+  #   type: string
+  #   #default: "2100"
+  #   default: "1000000"
+  #   inputBinding:
+  #     position: 8
+  #     prefix: --maxgenes
 
   gene:
     type: string?
@@ -177,4 +177,7 @@ outputs:
           }
         }
 
-      
+doc: |
+  CLIPper is a tool to define peaks in your CLIP-seq dataset.
+  CLIPper was developed in the Yeo Lab at the University of California, San Diego.
+    Usage: clipper --bam CLIP-seq_reads.srt.bam --species hg19 --outfile CLIP-seq_reads.srt.peaks.bed

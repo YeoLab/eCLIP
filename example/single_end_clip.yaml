@@ -1,0 +1,34 @@
+#!/usr/bin/env eCLIP_singleend
+
+### eCLIP_singleend ###
+### wf_get_peaks_scatter_se.cwl ###
+
+dataset: FUS
+
+species: hg19
+
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19_star_sjdb
+
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/hg_repbase_starindex
+
+samples:
+  - 
+    - ip_read:
+      name: CLIP
+      read1:
+        class: File
+        path: inputs/EY_IP_FUS_H1_S4_L006_R1_001.fastq.gz
+
+    - input_read:
+      name: INPUT
+      read1:
+        class: File
+        path: inputs/EY_INPUT_FUS_H1_S1_L006_R1_001.fastq.gz
+
+adapters:
+  class: File
+  path: inputs/a_adapters.fasta

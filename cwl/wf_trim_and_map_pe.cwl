@@ -273,3 +273,7 @@ steps:
 # Downstream
 ###########################################################################
 
+
+doc: |
+  This workflow takes in appropriate trimming params and demultiplexed reads,
+  and performs the following steps in order: trimx1, trimx2, fastq-sort, filter repeat elements, fastq-sort, genomic mapping, sort alignment, index alignment, namesort, PCR dedup, sort alignment, index alignment

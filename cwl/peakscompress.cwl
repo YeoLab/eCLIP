@@ -11,7 +11,8 @@ requirements:
     coresMax: 16
     ramMin: 16000
 
-baseCommand: [peakscompress.pl]
+# baseCommand: [peakscompress.pl]
+baseCommand: [compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl]
 
 #$namespaces:
 #  ex: http://example.com/
@@ -54,3 +55,8 @@ outputs:
     # format: http://edamontology.org/format_3003
     outputBinding:
       glob: $(inputs.input_bed.nameroot).compressed.bed
+
+doc: |
+  This tool wraps compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl,
+  which merges neighboring or overlapping regions in a BED file.
+    Usage:   perl compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl <in.bed> <out.compressed.bed>

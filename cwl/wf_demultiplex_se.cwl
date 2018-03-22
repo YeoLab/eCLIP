@@ -1,5 +1,8 @@
 #!/usr/bin/env cwltool
 
+### This is kind of a worthless workflow, ###
+### but to keep consistent with the paired-end ###
+### pipeline, I'm keeping it here. ###
 
 cwlVersion: v1.0
 class: Workflow
@@ -20,10 +23,10 @@ requirements:
 inputs:
   dataset:
     type: string
-  randomer_length:
-    type: string
-  barcodesfasta:
-    type: File
+  # randomer_length:
+  #   type: string
+  # barcodesfasta:
+  #   type: File
 
   read:
     type:
@@ -31,8 +34,8 @@ inputs:
       fields:
         read1:
           type: File
-        barcodeids:
-          type: string[]
+        # barcodeids:
+        #   type: string[]
         name:
           type: string
 outputs:
@@ -43,27 +46,6 @@ outputs:
     outputSource: AB_demux/demuxedAfwd
 
   ### TRIM/CUTADAPT PARAMS ###
-  AB_output_trimfirst_overlap_length:
-    type: File
-    outputSource: AB_parsebarcodes/trimfirst_overlap_length
-  AB_output_trimagain_overlap_length:
-    type: File
-    outputSource: AB_parsebarcodes/trimagain_overlap_length
-  AB_g_adapters_default:
-    type: File
-    outputSource: AB_parsebarcodes/g_adapters_default
-  AB_a_adapters_default:
-    type: File
-    outputSource: AB_parsebarcodes/a_adapters_default
-  AB_g_adapters:
-    type: File
-    outputSource: AB_parsebarcodes/g_adapters
-  AB_a_adapters:
-    type: File
-    outputSource: AB_parsebarcodes/a_adapters
-  AB_A_adapters:
-    type: File
-    outputSource: AB_parsebarcodes/A_adapters
 
 
 steps:
@@ -75,6 +57,7 @@ steps:
     run: demux_se.cwl
     in:
       reads: read
+      dataset: dataset
     out: [
       demuxedAfwd,
       output_demuxedsingleend_metrics,
@@ -82,20 +65,10 @@ steps:
       name
     ]
 
-  AB_parsebarcodes:
-    run: parsebarcodes.cwl
-    in:
-      randomer_length: randomer_length
-      barcodeidA:
-      barcodeidB:
-      barcodesfasta:
-    out: [
-      trimfirst_overlap_length, trimagain_overlap_length,
-      g_adapters_default, a_adapters_default,
-      g_adapters, a_adapters, A_adapters
-    ]
-
 ###########################################################################
 # Downstream
 ###########################################################################
 
+doc: |
+  This workflow takes in single-end reads, and performs the following steps in order:
+  demux_se.cwl (does not actually demux for single end, but mirrors the paired-end processing protocol)

@@ -34,28 +34,30 @@ inputs:
   chrom_sizes:
     type: File
 
-  barcodesfasta:
-    type: File
+  # barcodesfasta:
+  #   type: File
 
-  randomer_length:
-    type: string
+  # randomer_length:
+  #   type: string
 
   sample:
     type:
       # array of 2, one IP one Input
       type: array
       items:
-        # record of PE reads, barcode and name
+        # record of SE reads and name
         type: record
         fields:
           read1:
             type: File
-          read2:
-            type: File
-          barcodeids:
-            type: string[]
+          # read2:
+          #   type: File
+          # barcodeids:
+          #   type: string[]
           name:
             type: string
+  adapters:
+    type: File
 
 outputs:
 
@@ -66,23 +68,10 @@ outputs:
   output_ip_b1_demuxed_fastq_r1:
     type: File
     outputSource: step_ip_alignment/b1_demuxed_fastq_r1
-  output_ip_b1_demuxed_fastq_r2:
-    type: File
-    outputSource: step_ip_alignment/b1_demuxed_fastq_r2
-
-  output_ip_b2_demuxed_fastq_r1:
-    type: File
-    outputSource: step_ip_alignment/b2_demuxed_fastq_r1
-  output_ip_b2_demuxed_fastq_r2:
-    type: File
-    outputSource: step_ip_alignment/b2_demuxed_fastq_r2
 
   output_input_b1_demuxed_fastq_r1:
     type: File
     outputSource: step_input_alignment/b1_demuxed_fastq_r1
-  output_input_b1_demuxed_fastq_r2:
-    type: File
-    outputSource: step_input_alignment/b1_demuxed_fastq_r2
 
 
   ### Trimmed outputs ###
@@ -100,19 +89,6 @@ outputs:
   output_ip_b1_trimx2_metrics:
     type: File
     outputSource: step_ip_alignment/b1_trimx2_metrics
-
-  output_ip_b2_trimx1_fastq:
-    type: File[]
-    outputSource: step_ip_alignment/b2_trimx1_fastq
-  output_ip_b2_trimx1_metrics:
-    type: File
-    outputSource: step_ip_alignment/b2_trimx1_metrics
-  output_ip_b2_trimx2_fastq:
-    type: File[]
-    outputSource: step_ip_alignment/b2_trimx2_fastq
-  output_ip_b2_trimx2_metrics:
-    type: File
-    outputSource: step_ip_alignment/b2_trimx2_metrics
 
   output_input_b1_trimx1_fastq:
     type: File[]
@@ -141,21 +117,8 @@ outputs:
     type: File
     outputSource: step_ip_alignment/b1_maprepeats_star_settings
   output_ip_b1_sorted_unmapped_fastq:
-    type: File[]
+    type: File
     outputSource: step_ip_alignment/b1_sorted_unmapped_fastq
-
-  output_ip_b2_maprepeats_mapped_to_genome:
-    type: File
-    outputSource: step_ip_alignment/b2_maprepeats_mapped_to_genome
-  output_ip_b2_maprepeats_stats:
-    type: File
-    outputSource: step_ip_alignment/b2_maprepeats_stats
-  output_ip_b2_maprepeats_star_settings:
-    type: File
-    outputSource: step_ip_alignment/b2_maprepeats_star_settings
-  output_ip_b2_sorted_unmapped_fastq:
-    type: File[]
-    outputSource: step_ip_alignment/b2_sorted_unmapped_fastq
 
   output_input_b1_maprepeats_mapped_to_genome:
     type: File
@@ -167,7 +130,7 @@ outputs:
     type: File
     outputSource: step_input_alignment/b1_maprepeats_star_settings
   output_input_b1_sorted_unmapped_fastq:
-    type: File[]
+    type: File
     outputSource: step_input_alignment/b1_sorted_unmapped_fastq
 
 
@@ -183,22 +146,9 @@ outputs:
   output_ip_b1_mapgenome_star_settings:
     type: File
     outputSource: step_ip_alignment/b1_mapgenome_star_settings
-  output_ip_b1_output_sorted_bam:
-    type: File
-    outputSource: step_ip_alignment/b1_output_sorted_bam
-
-  output_ip_b2_mapgenome_mapped_to_genome:
-    type: File
-    outputSource: step_ip_alignment/b2_mapgenome_mapped_to_genome
-  output_ip_b2_mapgenome_stats:
-    type: File
-    outputSource: step_ip_alignment/b2_mapgenome_stats
-  output_ip_b2_mapgenome_star_settings:
-    type: File
-    outputSource: step_ip_alignment/b2_mapgenome_star_settings
-  output_ip_b2_output_sorted_bam:
-    type: File
-    outputSource: step_ip_alignment/b2_output_sorted_bam
+  # output_ip_b1_output_sorted_bam:
+  #   type: File
+  #   outputSource: step_ip_alignment/b1_output_sorted_bam
 
   output_input_b1_mapgenome_mapped_to_genome:
     type: File
@@ -209,16 +159,33 @@ outputs:
   output_input_b1_mapgenome_star_settings:
     type: File
     outputSource: step_input_alignment/b1_mapgenome_star_settings
-  output_input_b1_output_sorted_bam:
-    type: File
-    outputSource: step_input_alignment/b1_output_sorted_bam
+  # output_input_b1_output_sorted_bam:
+  #   type: File
+  #   outputSource: step_input_alignment/b1_output_sorted_bam
 
-  output_ip_merged_bam:
+
+  ### Duplicate removal outputs ###
+
+
+  output_ip_b1_pre_rmdup_sorted_bam:
     type: File
-    outputSource: step_ip_alignment/output_r2_bam
-  output_input_bam:
+    outputSource: step_ip_alignment/b1_output_pre_rmdup_sorted_bam
+  output_ip_b1_barcodecollapsese_metrics:
     type: File
-    outputSource: step_input_alignment/output_r2_bam
+    outputSource: step_ip_alignment/b1_output_barcodecollapsese_metrics
+  output_ip_b1_rmdup_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b1_output_rmdup_sorted_bam
+
+  output_input_b1_pre_rmdup_sorted_bam:
+    type: File
+    outputSource: step_input_alignment/b1_output_pre_rmdup_sorted_bam
+  output_input_b1_barcodecollapsese_metrics:
+    type: File
+    outputSource: step_input_alignment/b1_output_barcodecollapsese_metrics
+  output_input_b1_rmdup_sorted_bam:
+    type: File
+    outputSource: step_input_alignment/b1_output_rmdup_sorted_bam
 
 
   ### Bigwig files ###
@@ -245,11 +212,9 @@ outputs:
   output_clipper_bed:
     type: File
     outputSource: step_clipper/output_bed
-
   output_inputnormed_peaks:
     type: File
     outputSource: step_input_normalize_peaks/inputnormedBed
-
   output_compressed_peaks:
     type: File
     outputSource: step_compress_peaks/output_bed
@@ -261,7 +226,7 @@ steps:
 ###########################################################################
 
   step_ip_alignment:
-    run: wf_clipseqcore_pe_2barcodes.cwl
+    run: wf_clipseqcore_se_1barcode.cwl
     in:
       read:
         source: sample
@@ -274,13 +239,14 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      barcodesfasta: barcodesfasta
-      randomer_length: randomer_length
+      adapters: adapters
+      # barcodesfasta: barcodesfasta
+      # randomer_length: randomer_length
       # output_bam: ip_bam
       # r2_bam: ip_r2_bam
     out: [
       b1_demuxed_fastq_r1,
-      b1_demuxed_fastq_r2,
+      # b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
       b1_trimx2_fastq,
@@ -292,28 +258,15 @@ steps:
       b1_mapgenome_mapped_to_genome,
       b1_mapgenome_stats,
       b1_mapgenome_star_settings,
-      b1_output_sorted_bam,
-      b2_demuxed_fastq_r1,
-      b2_demuxed_fastq_r2,
-      b2_trimx1_fastq,
-      b2_trimx1_metrics,
-      b2_trimx2_fastq,
-      b2_trimx2_metrics,
-      b2_maprepeats_mapped_to_genome,
-      b2_maprepeats_stats,
-      b2_maprepeats_star_settings,
-      b2_sorted_unmapped_fastq,
-      b2_mapgenome_mapped_to_genome,
-      b2_mapgenome_stats,
-      b2_mapgenome_star_settings,
-      b2_output_sorted_bam,
-      output_r2_bam,
+      b1_output_pre_rmdup_sorted_bam,
+      b1_output_barcodecollapsese_metrics,
+      b1_output_rmdup_sorted_bam,
       output_pos_bw,
       output_neg_bw
     ]
 
   step_input_alignment:
-    run: wf_clipseqcore_pe_1barcode.cwl
+    run: wf_clipseqcore_se_1barcode.cwl
     in:
       read:
         source: sample
@@ -326,13 +279,14 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      barcodesfasta: barcodesfasta
-      randomer_length: randomer_length
+      adapters: adapters
+      # barcodesfasta: barcodesfasta
+      # randomer_length: randomer_length
       # output_bam: input_bam
       # r2_bam: input_r2_bam
     out: [
       b1_demuxed_fastq_r1,
-      b1_demuxed_fastq_r2,
+      # b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
       b1_trimx2_fastq,
@@ -344,8 +298,9 @@ steps:
       b1_mapgenome_mapped_to_genome,
       b1_mapgenome_stats,
       b1_mapgenome_star_settings,
-      b1_output_sorted_bam,
-      output_r2_bam,
+      b1_output_pre_rmdup_sorted_bam,
+      b1_output_barcodecollapsese_metrics,
+      b1_output_rmdup_sorted_bam,
       output_pos_bw,
       output_neg_bw
     ]
@@ -353,20 +308,20 @@ steps:
   step_index_ip:
     run: samtools-index.cwl
     in:
-      alignments: step_ip_alignment/output_r2_bam
+      alignments: step_ip_alignment/b1_output_rmdup_sorted_bam
     out: [alignments_with_index]
 
   step_index_input:
     run: samtools-index.cwl
     in:
-      alignments: step_input_alignment/output_r2_bam
+      alignments: step_input_alignment/b1_output_rmdup_sorted_bam
     out: [alignments_with_index]
 
   step_clipper:
     run: clipper.cwl
     in:
       species: species
-      bam: step_ip_alignment/output_r2_bam
+      bam: step_ip_alignment/b1_output_rmdup_sorted_bam
       outfile:
         default: ""
     out:
@@ -380,7 +335,7 @@ steps:
   step_ip_mapped_readnum:
     run: samtools-mappedreadnum.cwl
     in:
-      input: step_ip_alignment/output_r2_bam
+      input: step_ip_alignment/b1_output_rmdup_sorted_bam
       readswithoutbits:
         default: 4
       count:
@@ -392,7 +347,7 @@ steps:
   step_input_mapped_readnum:
     run: samtools-mappedreadnum.cwl
     in:
-      input: step_input_alignment/output_r2_bam
+      input: step_input_alignment/b1_output_rmdup_sorted_bam
       readswithoutbits:
         default: 4
       count:
