@@ -73,9 +73,9 @@ inputs:
 outputs:
 
   b1_demuxed_fastq_r1:
+    label: "Barcode1 read1 demultiplexed fastq"
     type: File
     outputSource: demultiplex/A_output_demuxed_read1
-    label: Barcode 1 read 1 demuxed fastq
   b1_demuxed_fastq_r2:
     type: File
     outputSource: demultiplex/A_output_demuxed_read2
