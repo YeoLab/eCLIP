@@ -1,6 +1,6 @@
 #!/bin/bash
 
-conda remove -y --name clip-seq;
+conda remove -y --name clip-seq --all;
 
 conda create -y --name clip-seq python=2.7;
 source activate clip-seq;
@@ -11,10 +11,10 @@ CONDA_ROLLBACK_ENABLED=false conda install -y gcc;
 ### add this repo to path ###
 export PATH=${PWD}/bin/:$PATH;
 export PATH=${PWD}/cwl/:$PATH;
-export PATH=${PWD}/members:$PATH;
+# export PATH=${PWD}/members:$PATH;
 export PATH=${PWD}/wf:$PATH;
-export PATH=${PWD}/members/bin/:$PATH;
-export PATH=${PWD}/metadata:$PATH;
+# export PATH=${PWD}/members/bin/:$PATH;
+# export PATH=${PWD}/metadata:$PATH;
 
 ### R channel ###
 conda install -c r r-essentials;
@@ -34,7 +34,10 @@ picard \
 perl-statistics-basic \
 perl-statistics-r \
 perl-statistics-distributions \
-fastq-tools=0.8;
+fastq-tools=0.8 \
+umi_tools \
+ucsc-bedgraphtobigwig=357 \
+ucsc-bedsort=357;
 
 ### anaconda channel ###
 conda install -y -c anaconda \
@@ -44,6 +47,9 @@ pytest \
 pandas \
 numpy \
 zlib=1.2;
+
+### se-CLIP specific UMI tools ###
+conda install -y -c https://conda.anaconda.org/toms umi_tools;
 
 ### Install CWL and helpers ###
 pip install --ignore-installed six;
@@ -62,6 +68,11 @@ cd toil;
 python setup.py install;
 cd ../;
 
+# install this script for demultiplexing paired-end reads
+git clone https://github.com/byee4/eclipdemux;
+cd eclipdemux;
+python setup.py install;
+
 ### Yeolab helpful packages and peak caller ###
 git clone https://github.com/yeolab/gscripts;
 cd gscripts;
@@ -70,6 +81,11 @@ cd ..;
 
 git clone https://github.com/YeoLab/clipper;
 cd clipper;
+python setup.py install;
+cd ..;
+
+git clone https://github.com/YeoLab/makebigwigfiles;
+cd makebigwigfiles;
 python setup.py install;
 cd ..;
 
