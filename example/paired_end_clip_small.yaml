@@ -1,19 +1,19 @@
-#!/usr/bin/env eCLIP
+#!/usr/bin/env eCLIP_pairedend
 
-### eCLIP ###
+### eCLIP_pairedend ###
 ### wf_get_peaks_scatter.cwl ###
 
-dataset: kbp550
+dataset: "204_01"
 
 speciesGenomeDir:
   class: Directory
-  path: inputs/hg19chr19kbp550_starindex
+  path: inputs/hg19_star_sjdb
 
 repeatElementGenomeDir:
   class: Directory
-  path: inputs/hg113seqs_repbase_starindex
+  path: inputs/hg_repbase_starindex
 
-species: hg19chr19
+species: hg19
 
 barcodesfasta:
   class: File
@@ -24,7 +24,7 @@ randomer_length: "5"
 samples:
   -
     - ip_read:
-      name: CLIP
+      name: rep1_clip
       barcodeids: [A01, B06]
       read1:
         class: File
@@ -34,7 +34,7 @@ samples:
         path: inputs/chrom19kbp550_clip1_r2.fastq.gz
 
     - input_read:
-      name: INPUT
+      name: rep1_input
       barcodeids: [NIL, NIL]
       read1:
         class: File
@@ -44,7 +44,7 @@ samples:
         path: inputs/chrom19kbp550_input_r2.fastq.gz
   -
     - ip_read:
-      name: CLIP2
+      name: rep2_clip
       barcodeids: [A01, B06]
       read1:
         class: File
@@ -54,7 +54,7 @@ samples:
         path: inputs/chrom19kbp550_clip2_r2.fastq.gz
 
     - input_read:
-      name: INPUT2
+      name: rep2_input
       barcodeids: [NIL, NIL]
       read1:
         class: File
