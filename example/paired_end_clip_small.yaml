@@ -32,30 +32,30 @@ samples:
       barcodeids: [A01, B06]
       read1:
         class: File
-        path: inputs/chrom19kbp550_clip1_r1.fastq.gz
+        path: inputs/example_fastqs/chrom19kbp550_clip1_r1.fastq.gz
       read2:
         class: File
-        path: inputs/chrom19kbp550_clip1_r2.fastq.gz
+        path: inputs/example_fastqs/chrom19kbp550_clip1_r2.fastq.gz
 
     - input_read:
       name: rep1_input
       barcodeids: [NIL, NIL]
       read1:
         class: File
-        path: inputs/chrom19kbp550_input_r1.fastq.gz
+        path: inputs/example_fastqs/chrom19kbp550_input_r1.fastq.gz
       read2:
         class: File
-        path: inputs/chrom19kbp550_input_r2.fastq.gz
+        path: inputs/example_fastqs/chrom19kbp550_input_r2.fastq.gz
   -
     - ip_read:
       name: rep2_clip
       barcodeids: [A01, B06]
       read1:
         class: File
-        path: inputs/chrom19kbp550_clip2_r1.fastq.gz
+        path: inputs/example_fastqs/chrom19kbp550_clip2_r1.fastq.gz
       read2:
         class: File
-        path: inputs/chrom19kbp550_clip2_r2.fastq.gz
+        path: inputs/example_fastqs/chrom19kbp550_clip2_r2.fastq.gz
 
     - input_read:
       name: rep2_input

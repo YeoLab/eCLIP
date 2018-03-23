@@ -26,8 +26,8 @@ These files contain everything needed to run a small example
 Execute the analysis using the provided example YAML file pointing to the appropriate bundled example files
 ```
 cd example/
-cwl-runner ../cwl/wf_get_peaks_scatter_pe.cwl paired_end_clip.yaml (paired end)
-cwl-runner ../cwl/wf_get_peaks_scatter_se.cwl single_end_clip.yaml (single end *warning*: no small dataset available)
+cwl-runner ../cwl/wf_get_peaks_scatter_pe.cwl paired_end_clip_small.yaml (paired end)
+cwl-runner ../cwl/wf_get_peaks_scatter_se.cwl single_end_clip_small.yaml (single end *warning*: no small dataset available, just using r1 of paired-end for now as a small example...)
 ```
 
 ##### Note:
