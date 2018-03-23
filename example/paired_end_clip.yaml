@@ -17,7 +17,7 @@ species: hg19
 
 chrom_sizes:
   class: File
-  path: inputs/hg19chr19.chrom.sizes
+  path: inputs/hg19.chrom.sizes
 
 barcodesfasta:
   class: File

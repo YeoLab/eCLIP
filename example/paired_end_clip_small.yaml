@@ -7,11 +7,11 @@ dataset: "204_01"
 
 speciesGenomeDir:
   class: Directory
-  path: inputs/hg19_star_sjdb
+  path: inputs/hg19chr19kbp550_starindex
 
 repeatElementGenomeDir:
   class: Directory
-  path: inputs/hg_repbase_starindex
+  path: inputs/hg113seqs_repbase_starindex
 
 species: hg19
 
