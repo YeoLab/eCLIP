@@ -3,7 +3,7 @@
 ### eCLIP_pairedend ###
 ### wf_get_peaks_scatter.cwl ###
 
-dataset: "204_01"
+dataset: "PAIREDEND"
 
 speciesGenomeDir:
   class: Directory
@@ -13,7 +13,7 @@ repeatElementGenomeDir:
   class: Directory
   path: inputs/hg113seqs_repbase_starindex
 
-species: hg19
+species: hg19chr19
 
 chrom_sizes:
   class: File

@@ -3,7 +3,7 @@
 ### eCLIP_singleend ###
 ### wf_get_peaks_scatter_se.cwl ###
 
-dataset: FUS
+dataset: "SINGLEEND"
 
 species: hg19chr19
 

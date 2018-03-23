@@ -71,7 +71,8 @@ cd ../;
 # install this script for demultiplexing paired-end reads
 git clone https://github.com/byee4/eclipdemux;
 cd eclipdemux;
-python setup.py install;
+export PATH=$PATH:${PWD}/bin
+# python setup.py install;
 cd ..;
 
 ### Yeolab helpful packages and peak caller ###
