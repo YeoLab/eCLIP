@@ -1,0 +1,38 @@
+#!/usr/bin/env eCLIP_singleend
+
+### eCLIP_singleend ###
+### wf_get_peaks_scatter_se.cwl ###
+
+dataset: FUS
+
+species: hg19chr19
+
+chrom_sizes:
+  class: File
+  path: inputs/hg19chr19.chrom.sizes 
+
+speciesGenomeDir:
+  class: Directory
+  path: inputs/hg19chr19kbp550_starindex
+
+repeatElementGenomeDir:
+  class: Directory
+  path: inputs/hg113seqs_repbase_starindex
+
+samples:
+  - 
+    - ip_read:
+      name: CLIP
+      read1:
+        class: File
+        path: inputs/example_fastqs/chrom19kbp550_clip1_r1.fastq.gz
+
+    - input_read:
+      name: INPUT
+      read1:
+        class: File
+        path: inputs/example_fastqs/chrom19kbp550_input_r1.fastq.gz
+
+adapters:
+  class: File
+  path: inputs/a_adapters.fasta
