@@ -72,6 +72,7 @@ cd ../;
 git clone https://github.com/byee4/eclipdemux;
 cd eclipdemux;
 python setup.py install;
+cd ..;
 
 ### Yeolab helpful packages and peak caller ###
 git clone https://github.com/yeolab/gscripts;
@@ -86,6 +87,7 @@ cd ..;
 
 git clone https://github.com/YeoLab/makebigwigfiles;
 cd makebigwigfiles;
+export PATH=$PATH:${PWD}/makebigwigfiles
 python setup.py install;
 cd ..;
 
