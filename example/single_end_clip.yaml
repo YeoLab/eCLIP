@@ -7,6 +7,10 @@ dataset: FUS
 
 species: hg19
 
+chrom_sizes:
+  class: File
+  path: inputs/hg19chr19.chrom.sizes
+
 speciesGenomeDir:
   class: Directory
   path: inputs/hg19_star_sjdb

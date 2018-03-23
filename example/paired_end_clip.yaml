@@ -15,6 +15,10 @@ repeatElementGenomeDir:
 
 species: hg19
 
+chrom_sizes:
+  class: File
+  path: inputs/hg19chr19.chrom.sizes
+
 barcodesfasta:
   class: File
   path: inputs/yeolabbarcodes_20170101.fasta
