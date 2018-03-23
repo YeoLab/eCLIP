@@ -16,18 +16,26 @@ These files contain everything needed to run a small example
 
 <b>(make sure to place this in a location with plenty of space!)</b>:
 - (IP sample) Read 1 FASTQ.gz
-- (IP sample) Read 2 FASTQ.gz
+- (IP sample) Read 2 FASTQ.gz (not applicable for single-end)
 - (size-matched input sample) Read 1 FASTQ.gz
-- (size-matched input sample) Read 2 FASTQ.gz
+- (size-matched input sample) Read 2 FASTQ.gz (not applicable for single-end)
 - (chromosome 19 only) STAR index directory
 - (repbase) STAR index directory
-- (barcodes) FASTA file containing barcodes for demultiplexing reads
+- (barcodes) FASTA file containing barcodes for demultiplexing reads (for single-end, use "a_adapters.fasta")
 
 Execute the analysis using the provided example YAML file pointing to the appropriate bundled example files
 ```
-cd example
-./wf_get_peaks.yaml
+cd example/
+./paired_end_clip.yaml (paired end)
+./single_end_clip.yaml (single end *warning*: no small dataset available)
 ```
+
+##### Note:
+- At the top of each YAML file, there will be either:
+  - eCLIP_pairedend: run paired-end pipeline using TOIL batch runner (default)
+  - eCLIP_singleend: run single-end pipeline using TOIL batch runner (default)
+  - wf_get_peaks_scatter_pe.cwl: run paired-end pipeline using cwl reference runner
+  - wf_get_peaks_scatter_se.cwl: run single-end pipeline using cwl reference runner
 
 ### Running the data with required arguments:
 
@@ -41,6 +49,8 @@ These are the minimum required arguments needed to run the pipeline
 ```YAML
 dataset: kbp550  # name prefixed onto outputs
 ```
+## If using the default runner script (wf/eCLIP), do not name your dataset ```out_tmp*``` or ```tmp*```!
+I have a command that removes temporary directories (on success) that start with those prefixes (```rm -rf out_tmp*```)
 
 Add STAR directories:
 ```
@@ -60,11 +70,15 @@ species: hg19  # for supported species, see clipper docs
 
 UMI & barcode params:
 ```YAML
-randomer_length: "5"  # length of the UMI assigned to each read
+randomer_length: "5"  # (Paired-end only) length of the UMI assigned to each read
 
-barcodesfasta:  # The is a FASTA formatted file containing the barcodes we will use to demultiplex our FASTQ's:
+barcodesfasta:  # (Paired-end only) This is a FASTA formatted file containing the barcodes we will use to demultiplex our FASTQ's:
   class: File
   path: /path/to/barcodes
+
+a_adapters:  # (Single-end only) This is a processed Ril19 set of sequences to be trimmed from SE reads
+  class: File
+  path: /path/to/a_adapters.fasta
 ```
 
 The following YAML block describes the location paths of the forward (read1),
@@ -81,13 +95,13 @@ samples:
   -
     - ip_read:
       name: rep1_clip
-      barcodeids: [A01, B06]
+      barcodeids: [A01, B06]  # remove this line if processing single-end data
       read1:
         class: File
         path: /path/to/clip.fastq.gz
-      read2:
-        class: File
-        path: /path/to/clip.fastq.gz
+      read2:  # remove this line if processing single-end data
+        class: File  # remove this line if processing single-end data
+        path: /path/to/clip.fastq.gz  # remove this line if processing single-end data
 
     - input_read:
       name: rep1_input
@@ -123,6 +137,8 @@ samples:
 
 
 # References:
+
+Van Nostrand, Eric L., et al. "Robust, Cost-Effective Profiling of RNA Binding Protein Targets with Single-end Enhanced Crosslinking and Immunoprecipitation (seCLIP)." mRNA Processing. Humana Press, New York, NY, 2017. 177-200.
 
 Van Nostrand, E.L., Pratt, G.A., Shishkin, A.A., Gelboin-Burkhart, C., Fang, M.Y., Sundararaman, B., Blue, S.M., Nguyen, T.B., Surka, C., Elkins, K. and Stanton, R. "Robust transcriptome-wide discovery of RNA-binding protein binding sites with enhanced CLIP (eCLIP)." Nature methods 13.6 (2016): 508-514.
 
