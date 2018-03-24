@@ -183,9 +183,6 @@ outputs:
   output_ip_b1_mapgenome_star_settings:
     type: File
     outputSource: step_ip_alignment/b1_mapgenome_star_settings
-  output_ip_b1_output_sorted_bam:
-    type: File
-    outputSource: step_ip_alignment/b1_output_sorted_bam
 
   output_ip_b2_mapgenome_mapped_to_genome:
     type: File
@@ -196,9 +193,6 @@ outputs:
   output_ip_b2_mapgenome_star_settings:
     type: File
     outputSource: step_ip_alignment/b2_mapgenome_star_settings
-  output_ip_b2_output_sorted_bam:
-    type: File
-    outputSource: step_ip_alignment/b2_output_sorted_bam
 
   output_input_b1_mapgenome_mapped_to_genome:
     type: File
@@ -209,9 +203,61 @@ outputs:
   output_input_b1_mapgenome_star_settings:
     type: File
     outputSource: step_input_alignment/b1_mapgenome_star_settings
+
+
+
+  ### RMDUP BAM OUTPUTS ###
+
+
+  output_ip_b1_prermdup_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b1_output_prermdup_sorted_bam
+  output_ip_b1_barcodecollapsepe_bam:
+    type: File
+    outputSource: step_ip_alignment/b1_output_barcodecollapsepe_bam
+  output_ip_b1_barcodecollapsepe_metrics:
+    type: File
+    outputSource: step_ip_alignment/b1_output_barcodecollapsepe_metrics
+
+
+  output_ip_b2_prermdup_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b2_output_prermdup_sorted_bam
+  output_ip_b2_barcodecollapsepe_bam:
+    type: File
+    outputSource: step_ip_alignment/b2_output_barcodecollapsepe_bam
+  output_ip_b2_barcodecollapsepe_metrics:
+    type: File
+    outputSource: step_ip_alignment/b2_output_barcodecollapsepe_metrics
+
+
+  output_input_b1_prermdup_sorted_bam:
+    type: File
+    outputSource: step_input_alignment/b1_output_prermdup_sorted_bam
+  output_input_b1_barcodecollapsepe_bam:
+    type: File
+    outputSource: step_input_alignment/b1_output_barcodecollapsepe_bam
+  output_input_b1_barcodecollapsepe_metrics:
+    type: File
+    outputSource: step_input_alignment/b1_output_barcodecollapsepe_metrics
+
+
+  ### SORTED RMDUP BAM OUTPUTS ###
+
+
+  output_ip_b1_output_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b1_output_sorted_bam
+  output_ip_b2_output_sorted_bam:
+    type: File
+    outputSource: step_ip_alignment/b2_output_sorted_bam
   output_input_b1_output_sorted_bam:
     type: File
     outputSource: step_input_alignment/b1_output_sorted_bam
+
+
+  ### READ2 MERGED BAM OUTPUTS ###
+
 
   output_ip_merged_bam:
     type: File
@@ -221,7 +267,7 @@ outputs:
     outputSource: step_input_alignment/output_r2_bam
 
 
-  ### Bigwig files ###
+  ### BIGWIG FILES ###
 
 
   output_ip_pos_bw:
@@ -292,6 +338,9 @@ steps:
       b1_mapgenome_mapped_to_genome,
       b1_mapgenome_stats,
       b1_mapgenome_star_settings,
+      b1_output_prermdup_sorted_bam,
+      b1_output_barcodecollapsepe_bam,
+      b1_output_barcodecollapsepe_metrics,
       b1_output_sorted_bam,
       b2_demuxed_fastq_r1,
       b2_demuxed_fastq_r2,
@@ -306,6 +355,9 @@ steps:
       b2_mapgenome_mapped_to_genome,
       b2_mapgenome_stats,
       b2_mapgenome_star_settings,
+      b2_output_prermdup_sorted_bam,
+      b2_output_barcodecollapsepe_bam,
+      b2_output_barcodecollapsepe_metrics,
       b2_output_sorted_bam,
       output_r2_bam,
       output_pos_bw,
@@ -344,6 +396,9 @@ steps:
       b1_mapgenome_mapped_to_genome,
       b1_mapgenome_stats,
       b1_mapgenome_star_settings,
+      b1_output_prermdup_sorted_bam,
+      b1_output_barcodecollapsepe_bam,
+      b1_output_barcodecollapsepe_metrics,
       b1_output_sorted_bam,
       output_r2_bam,
       output_pos_bw,

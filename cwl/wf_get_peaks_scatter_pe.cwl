@@ -248,7 +248,43 @@ outputs:
     outputSource: step_get_peaks/output_input_b1_output_sorted_bam
 
 
-  ### READ2 OUTPUTS ###
+  ### RMDUP BAM OUTPUTS ###
+
+
+  output_ip_b1_prermdup_sorted_bam:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_prermdup_sorted_bam
+  output_ip_b1_barcodecollapsepe_bam:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_barcodecollapsepe_bam
+  output_ip_b1_barcodecollapsepe_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_barcodecollapsepe_metrics
+
+
+  output_ip_b2_prermdup_sorted_bam:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_prermdup_sorted_bam
+  output_ip_b2_barcodecollapsepe_bam:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_barcodecollapsepe_bam
+  output_ip_b2_barcodecollapsepe_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_barcodecollapsepe_metrics
+
+
+  output_input_b1_prermdup_sorted_bam:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_prermdup_sorted_bam
+  output_input_b1_barcodecollapsepe_bam:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_barcodecollapsepe_bam
+  output_input_b1_barcodecollapsepe_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_barcodecollapsepe_metrics
+
+
+  ### READ2 MERGED BAM OUTPUTS ###
 
 
   output_ip_merged_bam:
@@ -342,14 +378,23 @@ steps:
       output_ip_b1_mapgenome_mapped_to_genome,
       output_ip_b1_mapgenome_stats,
       output_ip_b1_mapgenome_star_settings,
+      output_ip_b1_prermdup_sorted_bam,
+      output_ip_b1_barcodecollapsepe_bam,
+      output_ip_b1_barcodecollapsepe_metrics,
       output_ip_b1_output_sorted_bam,
       output_ip_b2_mapgenome_mapped_to_genome,
       output_ip_b2_mapgenome_stats,
       output_ip_b2_mapgenome_star_settings,
+      output_ip_b2_prermdup_sorted_bam,
+      output_ip_b2_barcodecollapsepe_bam,
+      output_ip_b2_barcodecollapsepe_metrics,
       output_ip_b2_output_sorted_bam,
       output_input_b1_mapgenome_mapped_to_genome,
       output_input_b1_mapgenome_stats,
       output_input_b1_mapgenome_star_settings,
+      output_input_b1_prermdup_sorted_bam,
+      output_input_b1_barcodecollapsepe_bam,
+      output_input_b1_barcodecollapsepe_metrics,
       output_input_b1_output_sorted_bam,
       output_ip_merged_bam,
       output_input_bam,

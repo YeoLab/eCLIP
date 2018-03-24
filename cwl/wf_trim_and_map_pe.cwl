@@ -54,6 +54,7 @@ inputs:
 
 outputs:
 
+
   X_output_trim_first:
     type: File[]
     outputSource: X_trim/output_trim

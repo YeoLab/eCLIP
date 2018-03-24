@@ -73,12 +73,26 @@ inputs:
 
 outputs:
 
+
+  ### DEMULTIPLEXED OUTPUTS ###
+
+
   b1_demuxed_fastq_r1:
     type: File
     outputSource: demultiplex/A_output_demuxed_read1
   b1_demuxed_fastq_r2:
     type: File
     outputSource: demultiplex/A_output_demuxed_read2
+
+  b2_demuxed_fastq_r1:
+    type: File
+    outputSource: demultiplex/B_output_demuxed_read1
+  b2_demuxed_fastq_r2:
+    type: File
+    outputSource: demultiplex/B_output_demuxed_read2
+
+
+  ### TRIMMED OUTPUTS ###
 
 
   b1_trimx1_fastq:
@@ -94,40 +108,6 @@ outputs:
     type: File
     outputSource: b1_trim_and_map/X_output_trim_again_metrics
 
-  b1_maprepeats_mapped_to_genome:
-    type: File
-    outputSource: b1_trim_and_map/A_output_maprepeats_mapped_to_genome
-  b1_maprepeats_stats:
-    type: File
-    outputSource: b1_trim_and_map/A_output_maprepeats_stats
-  b1_maprepeats_star_settings:
-    type: File
-    outputSource: b1_trim_and_map/A_output_maprepeats_star_settings
-  b1_sorted_unmapped_fastq:
-    type: File[]
-    outputSource: b1_trim_and_map/A_output_sort_repunmapped_fastq
-
-  b1_mapgenome_mapped_to_genome:
-    type: File
-    outputSource: b1_trim_and_map/A_output_mapgenome_mapped_to_genome
-  b1_mapgenome_stats:
-    type: File
-    outputSource: b1_trim_and_map/A_output_mapgenome_stats
-  b1_mapgenome_star_settings:
-    type: File
-    outputSource: b1_trim_and_map/A_output_mapgenome_star_settings
-
-  b1_output_sorted_bam:
-    type: File
-    outputSource: b1_trim_and_map/X_output_sorted_bam
-
-  b2_demuxed_fastq_r1:
-    type: File
-    outputSource: demultiplex/B_output_demuxed_read1
-  b2_demuxed_fastq_r2:
-    type: File
-    outputSource: demultiplex/B_output_demuxed_read2
-
   b2_trimx1_fastq:
     type: File[]
     outputSource: b2_trim_and_map/X_output_trim_first
@@ -140,6 +120,23 @@ outputs:
   b2_trimx2_metrics:
     type: File
     outputSource: b2_trim_and_map/X_output_trim_again_metrics
+
+
+  ### REPEAT MAPPING OUTPUTS ###
+
+
+  b1_maprepeats_mapped_to_genome:
+    type: File
+    outputSource: b1_trim_and_map/A_output_maprepeats_mapped_to_genome
+  b1_maprepeats_stats:
+    type: File
+    outputSource: b1_trim_and_map/A_output_maprepeats_stats
+  b1_maprepeats_star_settings:
+    type: File
+    outputSource: b1_trim_and_map/A_output_maprepeats_star_settings
+  b1_sorted_unmapped_fastq:
+    type: File[]
+    outputSource: b1_trim_and_map/A_output_sort_repunmapped_fastq
 
   b2_maprepeats_mapped_to_genome:
     type: File
@@ -154,6 +151,20 @@ outputs:
     type: File[]
     outputSource: b2_trim_and_map/A_output_sort_repunmapped_fastq
 
+
+  ### GENOME MAPPING OUTPUTS ###
+
+
+  b1_mapgenome_mapped_to_genome:
+    type: File
+    outputSource: b1_trim_and_map/A_output_mapgenome_mapped_to_genome
+  b1_mapgenome_stats:
+    type: File
+    outputSource: b1_trim_and_map/A_output_mapgenome_stats
+  b1_mapgenome_star_settings:
+    type: File
+    outputSource: b1_trim_and_map/A_output_mapgenome_star_settings
+
   b2_mapgenome_mapped_to_genome:
     type: File
     outputSource: b2_trim_and_map/A_output_mapgenome_mapped_to_genome
@@ -165,13 +176,51 @@ outputs:
     outputSource: b2_trim_and_map/A_output_mapgenome_star_settings
 
 
+  ### RMDUP BAM OUTPUTS ###
+
+
+  b1_output_prermdup_sorted_bam:
+    type: File
+    outputSource: b1_trim_and_map/A_output_sorted_bam
+  b1_output_barcodecollapsepe_bam:
+    type: File
+    outputSource: b1_trim_and_map/X_output_barcodecollapsepe_bam
+  b1_output_barcodecollapsepe_metrics:
+    type: File
+    outputSource: b1_trim_and_map/X_output_barcodecollapsepe_metrics
+
+  b2_output_prermdup_sorted_bam:
+    type: File
+    outputSource: b2_trim_and_map/A_output_sorted_bam
+  b2_output_barcodecollapsepe_bam:
+    type: File
+    outputSource: b2_trim_and_map/X_output_barcodecollapsepe_bam
+  b2_output_barcodecollapsepe_metrics:
+    type: File
+    outputSource: b2_trim_and_map/X_output_barcodecollapsepe_metrics
+
+
+  ### SORTED RMDUP BAM OUTPUTS ###
+
+
+  b1_output_sorted_bam:
+    type: File
+    outputSource: b1_trim_and_map/X_output_sorted_bam
   b2_output_sorted_bam:
     type: File
     outputSource: b2_trim_and_map/X_output_sorted_bam
 
+
+  ### READ2 MERGED BAM OUTPUTS ###
+
+
   output_r2_bam:
     type: File
     outputSource: view_r2/output
+
+
+  ### BIGWIG FILES ###
+
 
   output_pos_bw:
     type: File
