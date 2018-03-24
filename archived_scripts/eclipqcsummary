@@ -1,7 +1,0 @@
-#!/bin/bash
-
-echo
-echo eclipqcsummary
-echo ==============
-cd results/tesxfiles.LKS/*
-qcsummary_eclip

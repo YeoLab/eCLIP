@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-mkdir -p documentation
-
-DOCDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../documentation
-
-cp -r ${DOCDIR}/* ./documentation/
-
-

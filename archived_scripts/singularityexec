@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#tar xzvf ~/bin/singularityimage.tar.gz --directory $HOME
-#tar xzvf $(dirname $BASH_SOURCE)/singularityimage.tar.gz
-
-#source $(dirname $BASH_SOURCE)/add_here_to_path
-#echo and now PATH is $PATH
-
-${@:1}

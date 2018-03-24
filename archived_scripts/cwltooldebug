@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# Debugging settings:
-#####################
-# exit immediately upon any error, output each line as it is executed
-set -ex -o pipefail
-
-cwltool --debug ${@:1}
