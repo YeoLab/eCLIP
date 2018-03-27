@@ -22,6 +22,7 @@ These files contain everything needed to run a small example
 - (chromosome 19 only) STAR index directory
 - (repbase) STAR index directory
 - (barcodes) FASTA file containing barcodes for demultiplexing reads (for single-end, use "a_adapters.fasta")
+- (chrom sizes) chrom.sizes file (tabbed file containing chromosome name and length, can be downloaded from UCSC)
 
 Execute the analysis using the provided example YAML file pointing to the appropriate bundled example files
 ```
@@ -36,6 +37,15 @@ cwl-runner ../cwl/wf_get_peaks_scatter_se.cwl single_end_clip_small.yaml (single
   - eCLIP_singleend: run single-end pipeline using TOIL batch runner (default)
   - wf_get_peaks_scatter_pe.cwl: run paired-end pipeline using cwl reference runner
   - wf_get_peaks_scatter_se.cwl: run single-end pipeline using cwl reference runner
+
+You can change these depending on your need.
+TOIL batch runner will be set by default to submit to a TORQUE cluster with at least
+16 cores per node, and 64Gb memory per node. If you are unsure, best to run this pipeline
+using the ```cwl-runner``` script that should be installed via ```create_environment_clipseq.sh```
+(see example above)
+
+You may run into libstc++ errors. See various online forums for more info, as solutions will vary
+by machine.
 
 ### Running the data with required arguments:
 
@@ -135,6 +145,22 @@ samples:
 
 ```
 
+## Outputs:
+
+Input-normalized peaks will contain regions of binding.
+
+|                                     | eCLIP 0.2.x                                                                                                             | eCLIP GATK                                                                                 | eCLIP 0.1.x                                                 |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| Demuxed + adapter trimmed reads     | ```*.CLIP.barcode.r1TrTr.fq```                                                                                          | ```RBFOX2-204-CLIP_S1_R*.A01_204_01_RBFOX2.adapterTrim.round2.fastq.gz```                  | ```204.01_RBFOX2.A01.r*.fqTrTr.fqgz```                      |
+| Repetitive element filtered reads   | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rep.bamUnmapped.out.mate*``` | ```204.01_RBFOX2.A01.r-.fqTrTrU*.fq```                      |
+| Unique genome aligned reads         | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.bam```                 | ```204.01_RBFOX2.A01.r-.fqTrTrU-SoMaSo.bam```               |
+| PCR duplicate removed aligned reads | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.rmDup.sorted.bam```    | ```204.01_RBFOX2.A01.r-.fqTrTrU-SoMaSoCpSo.bam```           |
+| Barcode merged alignments           | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.merged.r2.bam```                   | ```204_01_RBFOX2.merged.r2.bam```                                                          | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCpSoMeV2.bam```       |
+| CLIPper peaks                       | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   | ```204_01_RBFOX2.merged.r2.peaks.bed```                                                    | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCpSoMeV2Cl.bed```     |
+| Input-normalized peaks              | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` | ```204_01.basedon_204_01.peaks.l2inputnormnew.bed.compressed.bed```                        | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCoSoMeV2ClNpCo.bed``` |
+|                                     |                                                                                                                         |                                                                                            |                                                             |
+
+made with: https://www.tablesgenerator.com/markdown_tables
 
 # References:
 
