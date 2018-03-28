@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-INBEDGRAPH=$1
-GENOMECHROMSIZES=$2
-OUTBIGWIG=$3
-
-LC_COLLATE=C bedSort $INBEDGRAPH $INBEDGRAPH.lexicalsorted
-bedGraphToBigWig $INBEDGRAPH.lexicalsorted $GENOMECHROMSIZES $OUTBIGWIG
