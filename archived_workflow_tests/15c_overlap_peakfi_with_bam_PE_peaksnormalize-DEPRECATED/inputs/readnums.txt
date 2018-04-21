@@ -1,2 +1,0 @@
-merged.r2.bam	4180
-input.r2.bam	986

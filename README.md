@@ -97,8 +97,16 @@ each sample.
 
 <b>Barcode names must match those described in the above barcodes.fasta file!</b>
 
-We're showing two samples (2 replicates each) described in this space.
+(For example, if you are using our standard paired-end barcodes 
+[https://github.com/YeoLab/eclip/blob/master/example/inputs/yeolabbarcodes_20170101.fasta](here), 
+make sure the barcodeids are one of: A01, A03, A04, B06, C01, D8f, F05, G07, X1A, X1B, X2A, X2B, or NIL for "inputs".
+Single-end protocols do not have inline barcodes, and you will use the a_adapters.fasta instead.
+
+We're showing two samples (2 replicates each) for a paired-end experiment described in this space.
 Each sample will be defined as indicated below each ``` name:``` field.
+<b>Make sure these names are unique per sample!</b> They (and dataset name above) 
+are used to determine the filename prefixes.
+
 
 ```YAML
 samples:
@@ -143,6 +151,37 @@ samples:
         class: File
         path: /path/to/clip.fastq.gz
 
+```
+
+For Single-end experiments, the ```samples``` format will look slightly different 
+(although other fields will be the same):
+
+```YAML
+samples:
+  - 
+    - ip_read:
+      name: rep1_clip
+      read1:
+        class: File
+        path: /path/to/fastq.gz
+
+    - input_read:
+      name: rep1_input
+      read1:
+        class: File
+        path: /path/to/fastq.gz
+  - 
+    - ip_read:
+      name: rep2_clip
+      read1:
+        class: File
+        path: /path/to/fastq.gz
+
+    - input_read:
+      name: rep2_input
+      read1:
+        class: File
+        path: /path/to/fastq.gz
 ```
 
 ## Outputs:
