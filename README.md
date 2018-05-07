@@ -191,7 +191,7 @@ Input-normalized peaks will contain regions of binding.
 |                                     | eCLIP 0.2.x                                                                                                             | eCLIP GATK                                                                                 | eCLIP 0.1.x                                                 |
 |-------------------------------------|-------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|-------------------------------------------------------------|
 | Demuxed + adapter trimmed reads     | ```*.CLIP.barcode.r1TrTr.fq```                                                                                          | ```RBFOX2-204-CLIP_S1_R*.A01_204_01_RBFOX2.adapterTrim.round2.fastq.gz```                  | ```204.01_RBFOX2.A01.r*.fqTrTr.fqgz```                      |
-| Repetitive element filtered reads   | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rep.bamUnmapped.out.mate*``` | ```204.01_RBFOX2.A01.r-.fqTrTrU*.fq```                      |
+| Repetitive element filtered reads   | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.fq```                                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rep.bamUnmapped.out.mate*``` | ```204.01_RBFOX2.A01.r-.fqTrTrU*.fq```                      |
 | Unique genome aligned reads         | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.bam```                 | ```204.01_RBFOX2.A01.r-.fqTrTrU-SoMaSo.bam```               |
 | PCR duplicate removed aligned reads | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.rmDup.sorted.bam```    | ```204.01_RBFOX2.A01.r-.fqTrTrU-SoMaSoCpSo.bam```           |
 | Barcode merged alignments           | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.merged.r2.bam```                   | ```204_01_RBFOX2.merged.r2.bam```                                                          | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCpSoMeV2.bam```       |
@@ -200,6 +200,9 @@ Input-normalized peaks will contain regions of binding.
 |                                     |                                                                                                                         |                                                                                            |                                                             |
 
 made with: https://www.tablesgenerator.com/markdown_tables
+
+## Notes regarding outputs (FAQ):
+- When going through the merged BAM file results, I can only find files with only one of the paired barcodes (e.g. A01 of A01/B06). Is this normal? <b>Yes, ```*.merged*.bam``` indicates that both barcodes have been merged, I just use the first as a prefix namespace for the next step.
 
 # References:
 
