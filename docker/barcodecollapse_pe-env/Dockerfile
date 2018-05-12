@@ -19,7 +19,7 @@ LABEL about.tags="Genomics"
 MAINTAINER Brian Yee <brian.alan.yee@gmail.com>
 
 RUN conda install python=2.7
-RUN conda install samtools=1.5 pysam
+RUN conda install -c bioconda samtools=1.5 pysam
 
 WORKDIR /data/
 
