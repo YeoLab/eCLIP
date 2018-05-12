@@ -28,4 +28,4 @@ ENV PATH /opt/:$PATH
 
 WORKDIR /data/
 
-CMD ["samtools"]
+CMD ["barcodecollapsepe.py"]
