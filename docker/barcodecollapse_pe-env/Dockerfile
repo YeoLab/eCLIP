@@ -20,6 +20,11 @@ MAINTAINER Brian Yee <brian.alan.yee@gmail.com>
 
 RUN conda install python=2.7
 RUN conda install -c bioconda samtools=1.5 pysam
+RUN mkdir -p /opt && \
+    cd /opt && \
+    wget https://github.com/YeoLab/eclip/blob/master/bin/barcodecollapsepe.py
+
+ENV PATH /opt/:$PATH
 
 WORKDIR /data/
 
