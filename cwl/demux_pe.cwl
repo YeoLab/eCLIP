@@ -13,63 +13,7 @@ requirements:
     outdirMin: 8000
 
 
-
-
 baseCommand: [eclipdemux]
-
-#baseCommand: [singularityexec, eclip.img, demux_paired_end_test_2.py]
-#baseCommand: [/projects/ps-yeolab/software/eclipdemux-0.0.1/eclipdemux]
-#baseCommand: [singularityexec, eclip.img, echo, $PATH]
-
-
-
-
-#requirements:
-#
-  # TODO purpose is hand over these strings to next cwl tool (parsebarcodes)
-  # TODO not supported by toil, done instead inside demux_paired_end_test_2py
-  #InitialWorkDirRequirement:
-  #  listing:
-  #    - entryname: $(inputs.dataset)
-  #      entry: |
-  #        $(inputs.dataset)
-  #    - entryname: $(inputs.readsX.name)
-  #      entry: |
-  #        $(inputs.readsX.name)
-  #    - entryname: $(inputs.readsX.barcodeids[0])
-  #      entry: |
-  #        $(inputs.readsX.barcodeids[0])
-  #    - entryname: $(inputs.readsX.barcodeids[1])
-  #      entry: |
-  #        $(inputs.readsX.barcodeids[1])
-
-
-
-#$namespaces:
-#  ex: http://example.com/
-
-#hints:
-
-  #- class: ex:PackageRequirement
-  #  packages:
-  #    - name: bedtools
-  #    - name: samtools
-  #    - name: pysam
-  #      package_manager: pip
-  #      version: 0.8.3
-
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-#      - "# Install eclip"
-#      - "###############"
-#      - "~/miniconda/bin/conda install -c anaconda numpy=1.10 pandas=0.17 scipy=0.16"
-#      - "~/miniconda/bin/conda install -c bioconda samtools=1.3.1 bcftools=1.3.1 bedtools=2.25.0"
-#      - "#~/miniconda/bin/conda install cython-0.24.1"
-#      - "~/miniconda/bin/conda install -c bcbio pybedtools=0.6.9 pysam=0.8.4pre0"
-#      - ""
-
-
 
 arguments: ["--metrics",
   $(inputs.dataset).$(inputs.reads.name).---.--.metrics,
@@ -89,7 +33,7 @@ inputs:
 
   randomer_length:
     type: string
-    default: "10"
+    # default: "10"
     inputBinding:
       position: 7
       prefix: --length
@@ -131,7 +75,6 @@ inputs:
           inputBinding:
             position: 4
             prefix: --newname
-
 
 
 outputs:

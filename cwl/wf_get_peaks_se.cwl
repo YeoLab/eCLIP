@@ -170,9 +170,9 @@ outputs:
   output_ip_b1_pre_rmdup_sorted_bam:
     type: File
     outputSource: step_ip_alignment/b1_output_pre_rmdup_sorted_bam
-  output_ip_b1_barcodecollapsese_metrics:
-    type: File
-    outputSource: step_ip_alignment/b1_output_barcodecollapsese_metrics
+  # output_ip_b1_barcodecollapsese_metrics:
+  #   type: File?
+  #   outputSource: step_ip_alignment/b1_output_barcodecollapsese_metrics
   output_ip_b1_rmdup_sorted_bam:
     type: File
     outputSource: step_ip_alignment/b1_output_rmdup_sorted_bam
@@ -180,9 +180,9 @@ outputs:
   output_input_b1_pre_rmdup_sorted_bam:
     type: File
     outputSource: step_input_alignment/b1_output_pre_rmdup_sorted_bam
-  output_input_b1_barcodecollapsese_metrics:
-    type: File
-    outputSource: step_input_alignment/b1_output_barcodecollapsese_metrics
+  # output_input_b1_barcodecollapsese_metrics:
+  #   type: File?
+  #   outputSource: step_input_alignment/b1_output_barcodecollapsese_metrics
   output_input_b1_rmdup_sorted_bam:
     type: File
     outputSource: step_input_alignment/b1_output_rmdup_sorted_bam
@@ -259,7 +259,7 @@ steps:
       b1_mapgenome_stats,
       b1_mapgenome_star_settings,
       b1_output_pre_rmdup_sorted_bam,
-      b1_output_barcodecollapsese_metrics,
+      # b1_output_barcodecollapsese_metrics,
       b1_output_rmdup_sorted_bam,
       output_pos_bw,
       output_neg_bw
@@ -299,7 +299,7 @@ steps:
       b1_mapgenome_stats,
       b1_mapgenome_star_settings,
       b1_output_pre_rmdup_sorted_bam,
-      b1_output_barcodecollapsese_metrics,
+      # b1_output_barcodecollapsese_metrics,
       b1_output_rmdup_sorted_bam,
       output_pos_bw,
       output_neg_bw

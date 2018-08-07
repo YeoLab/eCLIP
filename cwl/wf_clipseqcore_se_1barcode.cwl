@@ -122,9 +122,9 @@ outputs:
     type: File
     outputSource: b1_trim_and_map/A_output_sorted_bam
 
-  b1_output_barcodecollapsese_metrics:
-    type: File
-    outputSource: b1_trim_and_map/X_output_barcodecollapsese_metrics
+  # b1_output_barcodecollapsese_metrics:
+  #   type: File?
+  #   outputSource: b1_trim_and_map/X_output_barcodecollapsese_metrics
 
   b1_output_rmdup_sorted_bam:
     type: File
@@ -211,7 +211,7 @@ steps:
       A_output_sorted_bam,
       # A_output_sorted_bam_index,
       X_output_barcodecollapsese_bam,
-      X_output_barcodecollapsese_metrics,
+      # X_output_barcodecollapsese_metrics,
       X_output_sorted_bam,
       X_output_index_bai
     ]

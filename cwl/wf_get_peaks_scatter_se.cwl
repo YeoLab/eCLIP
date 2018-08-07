@@ -172,9 +172,9 @@ outputs:
   output_ip_b1_pre_rmdup_sorted_bam:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_pre_rmdup_sorted_bam
-  output_ip_b1_barcodecollapsese_metrics:
-    type: File[]
-    outputSource: step_get_peaks/output_ip_b1_barcodecollapsese_metrics
+  # output_ip_b1_barcodecollapsese_metrics:
+  #   type: File[]?
+  #   outputSource: step_get_peaks/output_ip_b1_barcodecollapsese_metrics
   output_ip_b1_rmdup_sorted_bam:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_rmdup_sorted_bam
@@ -182,9 +182,9 @@ outputs:
   output_input_b1_pre_rmdup_sorted_bam:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_pre_rmdup_sorted_bam
-  output_input_b1_barcodecollapsese_metrics:
-    type: File[]
-    outputSource: step_get_peaks/output_input_b1_barcodecollapsese_metrics
+  # output_input_b1_barcodecollapsese_metrics:
+  #   type: File[]?
+  #   outputSource: step_get_peaks/output_input_b1_barcodecollapsese_metrics
   output_input_b1_rmdup_sorted_bam:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_rmdup_sorted_bam
@@ -260,13 +260,13 @@ steps:
       output_ip_b1_mapgenome_stats,
       output_ip_b1_mapgenome_star_settings,
       output_ip_b1_pre_rmdup_sorted_bam,
-      output_ip_b1_barcodecollapsese_metrics,
+      # output_ip_b1_barcodecollapsese_metrics,
       output_ip_b1_rmdup_sorted_bam,
       output_input_b1_mapgenome_mapped_to_genome,
       output_input_b1_mapgenome_stats,
       output_input_b1_mapgenome_star_settings,
       output_input_b1_pre_rmdup_sorted_bam,
-      output_input_b1_barcodecollapsese_metrics,
+      # output_input_b1_barcodecollapsese_metrics,
       output_input_b1_rmdup_sorted_bam,
       output_ip_pos_bw,
       output_ip_neg_bw,

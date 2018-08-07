@@ -5,71 +5,18 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-#$namespaces:
-#  ex: http://example.com/
-
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 8
     coresMax: 16
     ramMin: 32000
-    #tmpdirMin: 10000
-    #outdirMin: 10000
 
-#hints:
-#  - class: ex:SystemRequirement
-#    "*":
-#      # dnanexus instance with 8Gram/20Gdisk * 8 cores = 64G total
-#      instanceType: mem3_ssd1_x16
-#  #- class: ex:PackageRequirement
-#  #  packages:
-#      #- name: libgfortran3
-#      #- name: python-numpy
-#      #- name: python-scipy
-#      #- name: python-tk
-#      #- name: python-tornado
-#      #- name: python-matplotlib
-#      #- name: python-pandas
-#      #- name: python-requests
-#      #- name: bedtools
-#      #- name: samtools
-#      #- name: python-htseq
-#      #- name: Cython3                     #- name: Cython  ?
-#      #  package_manager: pip
-#      #  version: "0.24"
-#      #- name: pysam
-#      #  package_manager: pip
-#      #  version: 0.8.3
-#      #- name: pybedtools
-#      #  package_manager: pip
-#      #  version: 0.7.0
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-#      - "# Install eclip"
-#      - "###############"
-#      - "~/miniconda/bin/conda install libgfortran"
-#      - "~/miniconda/bin/conda install -c anaconda numpy=1.10 pandas=0.17 scipy=0.16"
-#      - "~/miniconda/bin/conda install -c bioconda samtools=1.3.1 bcftools=1.3.1 bedtools=2.25.0"
-#      - "~/miniconda/bin/conda install -c bcbio pybedtools=0.6.9 pysam=0.8.4pre0"
-#      - "# Install clipper"
-#      - "#################"
-#      - "sudo ln -s /usr/lib/x86_64-linux-gnu/libgfortran.so.3 /usr/lib/x86_64-linux-gnu/libgfortran.so.1"
-#      - "~/miniconda/bin/pip install ~/bin/tool/clipper"
-#      - ""
-
-
-# baseCommand: [clipper, --debug]
 baseCommand: [clipper]
-# baseCommand: [fix_ld_library_path, clipper]
 
-
-# arguments: [
-#   #--debug,
-#   --outfile,
-#   $(inputs.bam.nameroot)Cl.bed
-# ]
+# hints:
+#   DockerRequirement:
+#     dockerPull: brianyee/clipper
 
 inputs:
 

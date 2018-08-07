@@ -99,9 +99,9 @@ outputs:
   X_output_barcodecollapsese_bam:
     type: File
     outputSource: X_barcodecollapsese/output_barcodecollapsese_bam
-  X_output_barcodecollapsese_metrics:
-    type: File
-    outputSource: X_barcodecollapsese/output_barcodecollapsese_metrics
+  # X_output_barcodecollapsese_metrics:
+  #   type: File?
+  #   outputSource: X_barcodecollapsese/output_barcodecollapsese_metrics
 
   X_output_sorted_bam:
     type: File
@@ -221,10 +221,12 @@ steps:
   #   out: [output_sort_bam]
 
   X_barcodecollapsese:
-    run: barcodecollapse_se.cwl
+    # run: barcodecollapse_se.cwl
+    run: barcodecollapse_se_nostats.cwl
     in:
       input_barcodecollapsese_bam: A_index/alignments_with_index
-    out: [output_barcodecollapsese_bam, output_barcodecollapsese_metrics]
+    # out: [output_barcodecollapsese_bam, output_barcodecollapsese_metrics]
+    out: [output_barcodecollapsese_bam]
 
   X_sort:
     run: sort.cwl
