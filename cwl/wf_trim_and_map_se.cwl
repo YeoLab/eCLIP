@@ -40,7 +40,13 @@ inputs:
   #   type: File
   read1:
     type: File
+  read_name:
+    type: string
+  dataset_name:
+    type: string
 
+  ## Defaults (don't change unless we have a very good reason) ##
+  
   sort_names:
     type: boolean
     default: true
@@ -51,25 +57,32 @@ inputs:
     type: string
     default: "0.1"
 
+  fastq_suffix:
+    type: string
+    default: ".fq"
+  bam_suffix:
+    type: string
+    default: ".bam"
+    
 outputs:
 
   X_output_trim_first:
     type: File[]
-    outputSource: X_trim/output_trim
+    outputSource: step_gzip_sort_X_trim/gzipped
   X_output_trim_first_metrics:
     type: File
     outputSource: X_trim/output_trim_report
 
   X_output_trim_again:
     type: File[]
-    outputSource: X_trim_again/output_trim
+    outputSource: step_gzip_sort_X_trim_again/gzipped
   X_output_trim_again_metrics:
     type: File
     outputSource: X_trim_again/output_trim_report
 
   A_output_maprepeats_mapped_to_genome:
     type: File
-    outputSource: A_map_repeats/aligned
+    outputSource: rename_mapped_repeats/outfile
   A_output_maprepeats_stats:
     type: File
     outputSource: A_map_repeats/mappingstats
@@ -78,11 +91,11 @@ outputs:
     outputSource: A_map_repeats/starsettings
   A_output_sort_repunmapped_fastq:
     type: File
-    outputSource: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
+    outputSource: step_gzip_sort_repunmapped_fastq/gzipped
 
   A_output_mapgenome_mapped_to_genome:
     type: File
-    outputSource: A_map_genome/aligned
+    outputSource: rename_mapped_genome/outfile
   A_output_mapgenome_stats:
     type: File
     outputSource: A_map_genome/mappingstats
@@ -92,24 +105,17 @@ outputs:
   A_output_sorted_bam:
     type: File
     outputSource: A_sort/output_sort_bam
-  # A_output_sorted_bam_index:
-  #   type: File
-  #   outputSource: A_index/output_index_bai
 
   X_output_barcodecollapsese_bam:
     type: File
     outputSource: X_barcodecollapsese/output_barcodecollapsese_bam
-  # X_output_barcodecollapsese_metrics:
-  #   type: File?
-  #   outputSource: X_barcodecollapsese/output_barcodecollapsese_metrics
+  X_output_barcodecollapsese_metrics:
+    type: File
+    outputSource: X_barcodecollapsese/output_barcodecollapsese_metrics
 
   X_output_sorted_bam:
     type: File
     outputSource: X_sort/output_sort_bam
-
-  X_output_index_bai:
-    type: File
-    outputSource: X_index/output_index_bai
 
 steps:
 
@@ -139,7 +145,15 @@ steps:
       times: trim_times
       error_rate: trim_error_rate
     out: [output_trim, output_trim_report]
-
+  
+  step_gzip_sort_X_trim:
+    run: gzip.cwl
+    scatter: input
+    in:
+      input: X_trim/output_trim
+    out:
+      - gzipped
+      
   X_trim_again:
     run: trim_se.cwl
     in:
@@ -149,7 +163,7 @@ steps:
       times: trim_times
       error_rate: trim_error_rate
     out: [output_trim, output_trim_report]
-
+  
   A_sort_trimmed_fastq:
     run: fastqsort.cwl
     scatter: input_fastqsort_fastq
@@ -157,7 +171,15 @@ steps:
       input_fastqsort_fastq: X_trim_again/output_trim
     out:
       [output_fastqsort_sortedfastq]
-
+      
+  step_gzip_sort_X_trim_again:
+    run: gzip.cwl
+    scatter: input
+    in:
+      input: A_sort_trimmed_fastq/output_fastqsort_sortedfastq
+    out:
+      - gzipped
+      
 ###########################################################################
 # Mapping
 ###########################################################################
@@ -165,8 +187,6 @@ steps:
   A_map_repeats:
     run: star-repeatmapping.cwl
     in:
-      # outFileNamePrefix: A_parse_records/repName
-      # outFilterMultimapNmax: repeatMultimapNmax
       readFilesIn: A_sort_trimmed_fastq/output_fastqsort_sortedfastq
       genomeDir: repeatElementGenomeDir
     out: [
@@ -175,19 +195,47 @@ steps:
       starsettings,
       mappingstats
     ]
-
+  rename_mapped_repeats:
+    run: rename.cwl
+    in:
+      srcfile: A_map_repeats/aligned
+      suffix: 
+        default: ".bam"
+      newname:
+        source: read1
+        valueFrom: ${ return self.nameroot + ".repeat-mapped"; }
+    out: [
+      outfile
+    ]
+  rename_unmapped_repeats:
+    run: rename.cwl
+    in:
+      srcfile: A_map_repeats/output_map_unmapped_fwd
+      suffix: 
+        default: ".fq"
+      newname:
+        source: read1
+        valueFrom: ${ return self.nameroot + ".repeat-unmapped"; }
+    out: [
+      outfile
+    ]
   A_sort_repunmapped_fastq:
     run: fastqsort.cwl
     in:
-      input_fastqsort_fastq: A_map_repeats/output_map_unmapped_fwd
+      input_fastqsort_fastq: rename_unmapped_repeats/outfile
     out:
       [output_fastqsort_sortedfastq]
-
+  
+  step_gzip_sort_repunmapped_fastq:
+    run: gzip.cwl
+    in:
+      input: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
+    out:
+      - gzipped
+      
   A_map_genome:
     run: star-genome.cwl
     in:
-      # outFileNamePrefix: A_parse_records/rmRepName
-      # outFilterMultimapNmax: genomeMultimapNmax
       readFilesIn: 
         source: A_sort_repunmapped_fastq/output_fastqsort_sortedfastq
         valueFrom: ${ return [ self ]; }
@@ -198,47 +246,49 @@ steps:
       starsettings,
       mappingstats
     ]
+  rename_mapped_genome:
+    run: rename.cwl
+    in:
+      srcfile: A_map_genome/aligned
+      suffix: 
+        default: ".bam"
+      newname:
+        source: read1
+        valueFrom: ${ return self.nameroot + ".genome-mapped"; }
+    out: [
+      outfile
+    ]
 
+  X_sortlexico:
+    run: namesort.cwl
+    in:
+      name_sort: sort_names
+      input_sort_bam: rename_mapped_genome/outfile
+    out: [output_sort_bam]
+    
   A_sort:
     run: sort.cwl
     in:
-      input_sort_bam: A_map_genome/aligned
-    out:
-      [output_sort_bam]
-
+      input_sort_bam: X_sortlexico/output_sort_bam
+    out: [output_sort_bam]
+      
   A_index:
     run: samtools-index.cwl
     in:
       alignments: A_sort/output_sort_bam
-    out:
-      [alignments_with_index]
-
-  # X_sortlexico:
-  #   run: namesort.cwl
-  #   in:
-  #     name_sort: sort_names
-  #     input_sort_bam: A_map_genome/aligned
-  #   out: [output_sort_bam]
+    out: [alignments_with_index]
 
   X_barcodecollapsese:
-    # run: barcodecollapse_se.cwl
-    run: barcodecollapse_se_nostats.cwl
+    run: barcodecollapse_se.cwl
     in:
       input_barcodecollapsese_bam: A_index/alignments_with_index
-    # out: [output_barcodecollapsese_bam, output_barcodecollapsese_metrics]
-    out: [output_barcodecollapsese_bam]
+    out: [output_barcodecollapsese_bam, output_barcodecollapsese_metrics]
 
   X_sort:
     run: sort.cwl
     in:
       input_sort_bam: X_barcodecollapsese/output_barcodecollapsese_bam
     out: [output_sort_bam]
-
-  X_index:
-    run: index.cwl
-    in:
-      input_index_bam: X_sort/output_sort_bam
-    out: [output_index_bai]
 
 ###########################################################################
 # Downstream

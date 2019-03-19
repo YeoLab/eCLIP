@@ -18,7 +18,7 @@ requirements:
     outdirMin: 8000
 
 baseCommand: [umi_tools, extract]
-
+arguments: ["--random-seed", "1"]
 inputs:
 
   # stdin:
@@ -111,6 +111,13 @@ outputs:
       loadContents: true
       outputEval: $(inputs.reads.name)
     doc: "just passes output name string to output to match with PE demux"
+
+  # prefix:
+  #   type: string
+  #   outputBinding:
+  #     loadContents: true
+  #     outputEval: $(inputs.dataset).$(inputs.reads.name)
+  #   doc: "added to make the renaming step easier"
 
 doc: |
   Extract UMI barcode from a read and add it to the read name, leaving

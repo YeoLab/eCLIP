@@ -15,10 +15,8 @@ requirements:
     coresMin: 1
     coresMax: 16
     ramMin: 8000
-    tmpdirMin: 4000
-    outdirMin: 4000
-
-# samtools executable in bin folder is v 0.1.18-dev (r982:313)
+    # tmpdirMin: 4000
+    # outdirMin: 4000
 
 baseCommand: [samtools, sort]
 

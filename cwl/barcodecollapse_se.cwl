@@ -16,6 +16,8 @@ requirements:
 
 baseCommand: [umi_tools, dedup]
 
+arguments: ["--random-seed", "1"]
+
 inputs:
 
   input_barcodecollapsese_bam:
@@ -27,23 +29,23 @@ inputs:
     doc: "input bam to barcode collapse. NOTE: no use for a bai index file!"
     secondaryFiles: [.bai]
 
-  # output_stats:
-  #   default: ""
-  #   type: string
-  #   inputBinding:
-  #     position: 1
-  #     prefix: --output-stats
-  #     valueFrom: |
-  #       ${
-  #         if (inputs.output_stats == "") {
-  #           return inputs.input_barcodecollapsese_bam.nameroot;
-  #         }
-  #         else {
-  #           return inputs.output_stats;
-  #         }
-  #       }
-  #   label: ""
-  #   doc: "stats i guess"
+  output_stats:
+    default: ""
+    type: string
+    inputBinding:
+      position: 1
+      prefix: --output-stats
+      valueFrom: |
+        ${
+          if (inputs.output_stats == "") {
+            return inputs.input_barcodecollapsese_bam.nameroot;
+          }
+          else {
+            return inputs.output_stats;
+          }
+        }
+    label: ""
+    doc: "stats i guess"
 
   method:
     default: "unique"
@@ -88,20 +90,20 @@ outputs:
     doc: "barcode collapsed mappings bam "
 
 
-  # output_barcodecollapsese_metrics:
-  #   type: File
-  #   outputBinding:
-  #     glob: |
-  #       ${
-  #         if (inputs.output_stats == "") {
-  #           return inputs.input_barcodecollapsese_bam.nameroot + "_per_umi.tsv";
-  #         }
-  #         else {
-  #           return inputs.output_stats;
-  #         }
-  #       }
-  #   label: ""
-  #   doc: "barcode collapsed mappings stats "
+  output_barcodecollapsese_metrics:
+    type: File
+    outputBinding:
+      glob: |
+        ${
+          if (inputs.output_stats == "") {
+            return inputs.input_barcodecollapsese_bam.nameroot + "_per_umi.tsv";
+          }
+          else {
+            return inputs.output_stats;
+          }
+        }
+    label: ""
+    doc: "barcode collapsed mappings stats "
 
 doc: |
   The purpose of this command is to deduplicate BAM files based

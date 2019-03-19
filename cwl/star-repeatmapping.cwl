@@ -11,7 +11,6 @@ requirements:
     coresMin: 8
     coresMax: 16
     ramMin: 32000
-    ramMax: 64000
     tmpdirMin: 32000
     #outdirMin: 4000
   - class: StepInputExpressionRequirement

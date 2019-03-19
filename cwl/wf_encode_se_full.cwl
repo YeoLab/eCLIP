@@ -34,12 +34,6 @@ inputs:
   chrom_sizes:
     type: File
 
-  # barcodesfasta:
-  #   type: File
-
-  # randomer_length:
-  #   type: string
-
   sample:
     type:
       # array of 2, one IP one Input
@@ -59,6 +53,48 @@ inputs:
   adapters:
     type: File
 
+  ### repeat mapping options ###
+
+  bowtie2_db:
+    type: Directory
+  bowtie2_prefix:
+    type: string
+  fileListFile1:
+    type: File
+  fileListFile2:
+    type: File
+
+  gencodeGTF:
+    type: File
+  gencodeTableBrowser:
+    type: File
+  repMaskBEDFile:
+    type: File
+
+  chrM_genelist_file:
+    type: File
+  mirbase_gff3_file:
+    type: File
+  
+  prefixes:
+    type: string[]
+    default: [
+      "AA","AC","AG","AT","AN",
+      "CA","CC","CG","CT","CN",
+      "GA","GC","GG","GT","GN",
+      "TA","TC","TG","TT","TN",
+      "NA","NC","NG","NT","NN"
+    ]
+    
+  ### region-level options ###
+
+  trna_bed_file:
+    type: File
+  lncrna_table_file:
+    type: File
+  lncrna_full_file:
+    type: File
+  
 outputs:
 
 
@@ -219,6 +255,78 @@ outputs:
     type: File
     outputSource: step_compress_peaks/output_bed
 
+
+  ### Repeat element outputs ###
+
+  output_ip_concatenated_pre_rmDup_sam_file:
+    type: File
+    outputSource: step_rep_element_mapping/output_ip_concatenated_pre_rmDup_sam_file
+  output_input_concatenated_pre_rmDup_sam_file:
+    type: File
+    outputSource: step_rep_element_mapping/output_input_concatenated_pre_rmDup_sam_file
+
+
+  ### RMDUPED SAM FILE FINAL OUTPUTS ###
+
+  output_barcode1_concatenated_rmDup_sam_file:
+    type: File
+    outputSource: step_rep_element_mapping/output_barcode1_concatenated_rmDup_sam_file
+  output_input_concatenated_rmDup_sam_file:
+    type: File
+    outputSource: step_rep_element_mapping/output_input_concatenated_rmDup_sam_file
+
+
+  ### FINAL PARSED STATISTICS FILES ###
+
+  output_ip_parsed:
+    type: File
+    outputSource: step_rep_element_mapping/output_ip_parsed
+  output_input_parsed:
+    type: File
+    outputSource: step_rep_element_mapping/output_input_parsed
+  output_ip_reparsed:
+    type: File
+    outputSource: step_rep_element_mapping/output_ip_reparsed
+  output_input_reparsed:
+    type: File
+    outputSource: step_rep_element_mapping/output_input_reparsed
+  output_nopipes:
+    type: File
+    outputSource: step_rep_element_mapping/output_nopipes
+  output_withpipes:
+    type: File
+    outputSource: step_rep_element_mapping/output_withpipes
+  output_reparsed_nopipes:
+    type: File
+    outputSource: step_rep_element_mapping/output_reparsed_nopipes
+  output_reparsed_withpipes:
+    type: File
+    outputSource: step_rep_element_mapping/output_reparsed_withpipes
+
+
+  ### Region normalization outputs ###
+
+
+  clipBroadFeatureCountsFile:
+    type: File
+    outputSource: step_region_normalization/clipBroadFeatureCountsFile
+
+  inputBroadFeatureCountsFile:
+    type: File
+    outputSource: step_region_normalization/inputBroadFeatureCountsFile
+
+  combinedOutputFile:
+    type: File
+    outputSource: step_region_normalization/combinedOutputFile
+
+  l2fcWithPvalEnrFile:
+    type: File
+    outputSource: step_region_normalization/l2fcWithPvalEnrFile
+  l2fcFile:
+    type: File
+    outputSource: step_region_normalization/l2fcFile
+
+
 steps:
 
 ###########################################################################
@@ -318,10 +426,10 @@ steps:
         default: ""
     out:
       [output_tsv, output_bed, output_pickle]
-  
+
 
 ###########################################################################
-# Downstream
+# Downstream - input normalization
 ###########################################################################
 
   step_ip_mapped_readnum:
@@ -366,3 +474,74 @@ steps:
     in:
       input_bed: step_input_normalize_peaks/inputnormedBed
     out: [output_bed]
+
+###########################################################################
+# Downstream - repeat mapping
+###########################################################################
+
+  step_rep_element_mapping:
+    run:
+      repmap/wf_ecliprepmap_se.cwl
+    in:
+      dataset: dataset
+      barcode1r1FastqGz:
+        source:
+          step_ip_alignment/b1_trimx2_fastq
+        valueFrom: |
+          ${
+            return self[0];
+          }
+      barcode1rmRepBam: step_ip_alignment/b1_mapgenome_mapped_to_genome
+      barcode1Inputr1FastqGz:
+        source:
+          step_input_alignment/b1_trimx2_fastq
+        valueFrom: |
+          ${
+            return self[0];
+          }
+      barcode1InputrmRepBam: step_input_alignment/b1_mapgenome_mapped_to_genome
+      bowtie2_db: bowtie2_db
+      bowtie2_prefix: bowtie2_prefix
+      fileListFile1: fileListFile1
+      fileListFile2: fileListFile2
+      gencodeGTF: gencodeGTF
+      gencodeTableBrowser: gencodeTableBrowser
+      repMaskBEDFile: repMaskBEDFile
+      chrM_genelist_file: chrM_genelist_file
+      mirbase_gff3_file: mirbase_gff3_file
+      prefixes: prefixes
+    out:
+      - output_ip_concatenated_pre_rmDup_sam_file
+      - output_input_concatenated_pre_rmDup_sam_file
+      - output_barcode1_concatenated_rmDup_sam_file
+      - output_input_concatenated_rmDup_sam_file
+      - output_ip_parsed
+      - output_input_parsed
+      - output_ip_reparsed
+      - output_input_reparsed
+      - output_nopipes
+      - output_withpipes
+      - output_reparsed_nopipes
+      - output_reparsed_withpipes
+
+###########################################################################
+# Downstream - region-level normalization
+###########################################################################
+
+  step_region_normalization:
+    run:
+      regionnormalize/wf_region_based_enrichment_SE.cwl
+    in:
+      clipBamFile: step_ip_alignment/b1_output_rmdup_sorted_bam
+      inputBamFile: step_input_alignment/b1_output_rmdup_sorted_bam
+      gencodeGTFFile: gencodeGTF
+      gencodeTableBrowserFile: gencodeTableBrowser
+      trna_bed_file: trna_bed_file
+      lncrna_table_file: lncrna_table_file
+      lncrna_full_file: lncrna_full_file
+    out:
+      - clipBroadFeatureCountsFile
+      - inputBroadFeatureCountsFile
+      - combinedOutputFile
+      - l2fcWithPvalEnrFile
+      - l2fcFile

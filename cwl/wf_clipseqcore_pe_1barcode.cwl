@@ -55,21 +55,6 @@ inputs:
         name:
           type: string
 
-  # r2_bam:
-  #   type: string
-
-  # output_bam:
-  #   type: string
-
-  ### Defaults ###
-
-  # r2_bits:
-  #   type: int
-  #   default: 128
-  # is_bam:
-  #   type: boolean
-  #   default: true
-
 outputs:
 
 
@@ -239,11 +224,9 @@ steps:
       A_output_mapgenome_stats,
       A_output_mapgenome_star_settings,
       A_output_sorted_bam,
-      A_output_sorted_bam_index,
       X_output_barcodecollapsepe_bam,
       X_output_barcodecollapsepe_metrics,
-      X_output_sorted_bam,
-      X_output_index_bai
+      X_output_sorted_bam
     ]
 
 

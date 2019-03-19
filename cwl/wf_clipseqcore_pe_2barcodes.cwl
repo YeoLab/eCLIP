@@ -295,11 +295,9 @@ steps:
       A_output_mapgenome_stats,
       A_output_mapgenome_star_settings,
       A_output_sorted_bam,
-      A_output_sorted_bam_index,
       X_output_barcodecollapsepe_bam,
       X_output_barcodecollapsepe_metrics,
-      X_output_sorted_bam,
-      X_output_index_bai
+      X_output_sorted_bam
     ]
 
   b2_trim_and_map:
@@ -329,11 +327,9 @@ steps:
       A_output_mapgenome_stats,
       A_output_mapgenome_star_settings,
       A_output_sorted_bam,
-      A_output_sorted_bam_index,
       X_output_barcodecollapsepe_bam,
       X_output_barcodecollapsepe_metrics,
-      X_output_sorted_bam,
-      X_output_index_bai
+      X_output_sorted_bam
     ]
 
   merge:

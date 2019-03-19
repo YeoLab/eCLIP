@@ -15,8 +15,8 @@ requirements:
     coresMin: 1
     coresMax: 16
     ramMin: 32000
-    tmpdirMin: 4000
-    outdirMin: 4000
+    tmpdirMin: 8000
+    outdirMin: 8000
 
 # samtools executable in bin folder is v 0.1.18-dev (r982:313)
 
@@ -56,11 +56,18 @@ inputs:
         }
     default: ""
 
+  memory:
+    default: 3G
+    type: string
+    inputBinding:
+      position: 3
+      prefix: -m
+
   input_sort_bam:
     type: File
     # format: http://edamontology.org/format_2572
     inputBinding:
-      position: 3
+      position: 4
     label: ""
     doc: "input bam"
 

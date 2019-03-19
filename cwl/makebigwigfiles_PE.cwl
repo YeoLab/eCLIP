@@ -33,7 +33,14 @@ inputs:
     inputBinding:
       position: 3
       prefix: --genome
-
+  
+  direction:
+    default: r
+    type: string
+    inputBinding:
+      position: 4
+      prefix: --direction
+      
 outputs:
 
   posbw:

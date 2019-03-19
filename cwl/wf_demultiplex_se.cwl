@@ -43,8 +43,13 @@ outputs:
   ### DEMUXED FILES ###
   A_output_demuxed_read1:
     type: File
-    outputSource: AB_demux/demuxedAfwd
-
+    outputSource: gzip_demux/gzipped
+  read_name:
+    type: string
+    outputSource: AB_demux/name
+  dataset_name:
+    type: string
+    outputSource: AB_demux/output_dataset
   ### TRIM/CUTADAPT PARAMS ###
 
 
@@ -68,7 +73,13 @@ steps:
 ###########################################################################
 # Downstream
 ###########################################################################
-
+  gzip_demux:
+    run: gzip.cwl
+    in:
+      input: AB_demux/demuxedAfwd
+    out:
+      - gzipped
+        
 doc: |
   This workflow takes in single-end reads, and performs the following steps in order:
   demux_se.cwl (does not actually demux for single end, but mirrors the paired-end processing protocol)

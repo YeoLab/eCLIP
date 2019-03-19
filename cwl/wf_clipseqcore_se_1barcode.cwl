@@ -122,17 +122,13 @@ outputs:
     type: File
     outputSource: b1_trim_and_map/A_output_sorted_bam
 
-  # b1_output_barcodecollapsese_metrics:
-  #   type: File?
-  #   outputSource: b1_trim_and_map/X_output_barcodecollapsese_metrics
+  b1_output_barcodecollapsese_metrics:
+    type: File
+    outputSource: b1_trim_and_map/X_output_barcodecollapsese_metrics
 
   b1_output_rmdup_sorted_bam:
     type: File
     outputSource: b1_trim_and_map/X_output_sorted_bam
-
-  # output_r2_bam:
-  #   type: File
-  #   outputSource: view_r2/output
 
   output_pos_bw:
     type: File
@@ -151,34 +147,12 @@ steps:
     run: wf_demultiplex_se.cwl
     in:
       dataset: dataset
-      # randomer_length: randomer_length
-      # barcodesfasta: barcodesfasta
       read: read
     out: [
       A_output_demuxed_read1,
-      # A_output_demuxed_read2,
-      # B_output_demuxed_read1,
-      # B_output_demuxed_read2,
-      # AB_output_trimfirst_overlap_length,
-      # AB_output_trimagain_overlap_length,
-      # AB_g_adapters,
-      # AB_g_adapters_default,
-      # AB_a_adapters,
-      # AB_a_adapters_default,
-      # AB_A_adapters
+      read_name,
+      dataset_name
     ]
-
-  # trimfirst_file2string:
-  #   run: file2string.cwl
-  #   in:
-  #     file: demultiplex/AB_output_trimfirst_overlap_length
-  #   out: [output]
-
-  # trimagain_file2string:
-  #   run: file2string.cwl
-  #   in:
-  #     file: demultiplex/AB_output_trimagain_overlap_length
-  #   out: [output]
 
   b1_trim_and_map:
     run: wf_trim_and_map_se.cwl
@@ -189,13 +163,10 @@ steps:
         default: "1"
       trimagain_overlap_length:
         default: "5"
-      # g_adapters: demultiplex/AB_g_adapters
-      # g_adapters_default: demultiplex/AB_g_adapters_default
       a_adapters: adapters
-      # a_adapters_default: demultiplex/AB_a_adapters_default
-      # A_adapters: demultiplex/AB_A_adapters
       read1: demultiplex/A_output_demuxed_read1
-      # read2: demultiplex/A_output_demuxed_read2
+      read_name: demultiplex/read_name
+      dataset_name: demultiplex/dataset_name
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,
@@ -211,26 +182,14 @@ steps:
       A_output_sorted_bam,
       # A_output_sorted_bam_index,
       X_output_barcodecollapsese_bam,
-      # X_output_barcodecollapsese_metrics,
-      X_output_sorted_bam,
-      X_output_index_bai
+      X_output_barcodecollapsese_metrics,
+      X_output_sorted_bam
     ]
 
 
 ###########################################################################
 # Downstream (candidate for merging with main pipeline)
 ###########################################################################
-
-
-  # view_r2:
-  #   run: samtools-viewr2.cwl
-  #   in:
-  #     input: b1_trim_and_map/X_output_sorted_bam
-  #     readswithbits:
-  #       default: 128
-  #     isbam:
-  #       default: true
-  #   out: [output]
 
   make_bigwigs:
     run: makebigwigfiles.cwl
