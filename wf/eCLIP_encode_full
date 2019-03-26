@@ -18,7 +18,7 @@ set -o pipefail
 
 
 CWLRUNNER=cwltorq # either: cwltool cwltoil or cwltorq
-WORKFLOW=wf_get_peaks_scatter_pe # the prefix of the workflow cwl (without .cwl extension)
+WORKFLOW=wf_encode_se_full_scatter # the prefix of the workflow cwl (without .cwl extension)
 
 PIPELINE=ECLIP  # workflow prefix
 PIPELINEVERSION=0.4.0  # workflow version
@@ -167,7 +167,7 @@ then
   if [ $CWLRUNNER == cwltorq ]; then
     BATCHSYSTEM="torque --disableCaching"
     export TOIL_TORQUE_ARGS="-q home-yeo"              # home-yeo
-    export TOIL_TORQUE_REQS="walltime=12:00:00"      # walltime=8:00:00
+    export TOIL_TORQUE_REQS="walltime=24:00:00"      # walltime=8:00:00
   else
     BATCHSYSTEM="single_machine"
   fi
@@ -207,7 +207,7 @@ then
     --clusterStats \
     --realTimeLogging \
     --stats \
-    --defaultMemory 64.0G \
+    --defaultMemory 100.0G \
     ${WORKFLOW_HOME}/cwl/${WORKFLOW}.cwl \
     ${JOB_FILE} \
     2>${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt | tee ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_OUTPUT.json

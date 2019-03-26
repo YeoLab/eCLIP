@@ -50,8 +50,8 @@ inputs:
           type: File
         # read2:
         #   type: File
-        # barcodeids:
-        #   type: string[]
+        adapters:
+          type: File
         name:
           type: string
 
@@ -61,8 +61,8 @@ inputs:
   # output_bam:
   #   type: string
   
-  adapters:
-    type: File
+  # adapters:
+  #   type: File
 
   ### Defaults ###
   
@@ -163,7 +163,12 @@ steps:
         default: "1"
       trimagain_overlap_length:
         default: "5"
-      a_adapters: adapters
+      a_adapters: 
+        source: read
+        valueFrom: |
+          ${
+            return self.adapters;
+          }
       read1: demultiplex/A_output_demuxed_read1
       read_name: demultiplex/read_name
       dataset_name: demultiplex/dataset_name

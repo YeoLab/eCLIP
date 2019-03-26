@@ -46,8 +46,8 @@ inputs:
               type: File
             name:
               type: string
-  adapters:
-    type: File
+            adapters:
+              type: File
 
 outputs:
 
@@ -236,7 +236,6 @@ steps:
       species: species
       chrom_sizes: chrom_sizes
       sample: samples
-      adapters: adapters
     out: [
       output_ip_b1_demuxed_fastq_r1,
       output_input_b1_demuxed_fastq_r1,

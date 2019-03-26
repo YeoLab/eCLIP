@@ -52,12 +52,10 @@ inputs:
             type: File
           # read2:
           #   type: File
-          # barcodeids:
-          #   type: string[]
+          adapters:
+            type: File
           name:
             type: string
-  adapters:
-    type: File
 
 outputs:
 
@@ -239,7 +237,6 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      adapters: adapters
     out: [
       b1_demuxed_fastq_r1,
       # b1_demuxed_fastq_r2,
@@ -275,7 +272,6 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      adapters: adapters
     out: [
       b1_demuxed_fastq_r1,
       # b1_demuxed_fastq_r2,
