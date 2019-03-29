@@ -35,6 +35,7 @@ RUN conda install -y -c bioconda -c r -c conda-forge \
   picard=2.18.27 \
   r=3.5.1 \
   gcc=4.8.5 \
+  nodejs=11.10.0 \
   fastq-tools=0.8 \
   umi_tools \
   ucsc-bedgraphtobigwig=357 \
