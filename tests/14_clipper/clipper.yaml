@@ -1,7 +1,0 @@
-#!/usr/bin/env clipper.cwl
-
-species: hg19chr19
-bam:
-  class: File
-  path: inputs/merged.r2.bam
-outfile: clipper.bed

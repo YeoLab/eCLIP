@@ -1,7 +1,0 @@
-#!/usr/bin/env sort.cwl
-
-input_sort_bam:
-  class: File
-  path: inputs/test_dataset.condition1.A01.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam
-
-name_sort: true

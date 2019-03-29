@@ -1,9 +1,0 @@
-#!/usr/bin/env samtools-merge.cwl
-
-input_bam_files:
-  - class: File
-    path: inputs/kbp550.condition1.A01.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSoCpSo.bam
-  - class: File
-    path: inputs/kbp550.condition1.B06.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSoCpSo.bam
-
-output_bam: merged.bam
