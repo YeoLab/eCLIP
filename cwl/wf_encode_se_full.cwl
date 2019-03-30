@@ -50,8 +50,8 @@ inputs:
           #   type: string[]
           name:
             type: string
-  adapters:
-    type: File
+          adapters:
+            type: File
 
   ### repeat mapping options ###
 
@@ -347,7 +347,6 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      adapters: adapters
     out: [
       b1_demuxed_fastq_r1,
       # b1_demuxed_fastq_r2,
@@ -383,7 +382,6 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      adapters: adapters
     out: [
       b1_demuxed_fastq_r1,
       # b1_demuxed_fastq_r2,
