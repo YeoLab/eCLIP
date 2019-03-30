@@ -43,7 +43,7 @@ RUN conda install -y -c bioconda -c r -c conda-forge \
   seaborn=0.9.0 \
   cython=0.29.6 \
   scipy=0.17.1 \
-  sklearn=0.18 \
+  scikit-learn=0.18 \
   pycrypto=2.6.1 \
   pytest=4.3.0 \
   pandas=0.23.1 \
