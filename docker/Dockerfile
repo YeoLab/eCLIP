@@ -1,6 +1,6 @@
 ################## BASE IMAGE ######################
 
-FROM brianyee/perl
+FROM continuumio/miniconda:latest
 
 ################## METADATA ######################
 
@@ -34,7 +34,6 @@ RUN conda install -y -c bioconda -c r -c conda-forge \
   rna-seqc=1.1.8 \
   picard=2.18.27 \
   r=3.5.1 \
-  gcc=4.8.5 \
   nodejs=11.10.0 \
   fastq-tools=0.8 \
   umi_tools \
@@ -50,6 +49,31 @@ RUN conda install -y -c bioconda -c r -c conda-forge \
   numpy=1.10.2 \
   umi_tools=0.5.0 \
   zlib=1.2;
+
+ENV PATH /opt/eclipdemux/bin:/opt/eclip-${VERSION}/cwl:/opt/eclip-${VERSION}/wf:/opt/eclip-${VERSION}/bin:/opt/eclip-${VERSION}/bin/perl:${PATH}
+
+ENV PERLBREW_ROOT=/perl5 \
+PATH=/perl5/bin:/perl5/perls/perl-5.10.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH} \
+PERLBREW_PERL=perl-5.10.1 \
+PERLBREW_VERSION=0.73 \
+PERLBREW_MANPATH=/perl5/perls/perl-5.10.1/man \
+PERLBREW_PATH=/perl5/bin:/perl5/perls/perl-5.10.1/bin \
+PERLBREW_SKIP_INIT=1
+
+RUN bash -c '\wget -O - http://install.perlbrew.pl | bash' &&\
+    /perl5/bin/perlbrew init
+
+RUN /perl5/bin/perlbrew --notest install perl-5.10.1
+
+RUN /perl5/bin/perlbrew install-cpanm
+
+RUN /perl5/bin/perlbrew switch perl-5.10.1
+
+RUN conda install -y -c bioconda -c r -c anaconda samtools=1.6 openssl=1.0 r=3.3.2 && \
+    cpanm install Statistics::Basic && \
+    cpanm install Statistics::Distributions && \
+    ln -s /opt/conda/lib/libreadline.so.7 /opt/conda/lib/libreadline.so.6 && \
+    cpanm install Statistics::R
 
 ENV VERSION 0.3.99
 
@@ -83,6 +107,6 @@ RUN cd /opt && \
   cd makebigwigfiles &&\
   /opt/conda/bin/python setup.py install;
 
-ENV PATH /opt/eclipdemux/bin:/opt/eclip-/cwl:/opt/eclip-${VERSION}/wf:/opt/eclip-${VERSION}/bin:/opt/eclip-${VERSION}/bin/perl:$PATH
+# ENV PATH /opt/eclipdemux/bin:/opt/eclip-${VERSION}/cwl:/opt/eclip-${VERSION}/wf:/opt/eclip-${VERSION}/bin:/opt/eclip-${VERSION}/bin/perl:${PATH}
 
 CMD cwltool /opt/eclip-${VERSION}/cwl/wf_get_peaks_scatter_pe.cwl $@
