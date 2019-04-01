@@ -1,9 +1,9 @@
-#!/usr/bin/env eCLIP_singleend
+#!/usr/bin/env eCLIP_singleend_singlethreaded
 
 ### eCLIP_singleend ###
 ### wf_get_peaks_scatter_se.cwl ###
 
-dataset: FUS
+dataset: ENCODE4
 
 species: hg19
 
@@ -17,22 +17,25 @@ speciesGenomeDir:
 
 repeatElementGenomeDir:
   class: Directory
-  path: inputs/hg_repbase_starindex
+  path: inputs/homo_sapiens_repbase_v2
 
 samples:
   - 
     - ip_read:
-      name: CLIP
+      name: 4020_CLIP1
       read1:
         class: File
-        path: inputs/EY_IP_FUS_H1_S4_L006_R1_001.fastq.gz
+        path: example_fastqs/4020_CLIP1_S18_L007_R1_001.fastq.gz
+      adapters:
+        class: File
+        path: inputs/InvRNA1_adapters.fasta
 
     - input_read:
-      name: INPUT
+      name: 4020_INPUT1
       read1:
         class: File
-        path: inputs/EY_INPUT_FUS_H1_S1_L006_R1_001.fastq.gz
+        path: example_fastqs/4020_INPUT1_S17_L007_R1_001.fastq.gz
+      adapters:
+        class: File
+        path: inputs/InvRNA5_adapters.fasta
 
-adapters:
-  class: File
-  path: inputs/a_adapters.fasta
