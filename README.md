@@ -46,8 +46,8 @@ singularity build eCLIP.img Singularity
   r=3.5.1 \
   rna-seqc=1.1.8 \
   samtools=1.6 \
-  scikit-learn=0.17.1 \
-  scipy=0.17.1 \
+  scikit-learn=0.19.1 \
+  scipy=0.19.1 \
   seaborn=0.9.0 \
   star=2.4.0 \
   ucsc-bedgraphtobigwig=357 \
