@@ -12,7 +12,9 @@ eCLIP is a pipeline designed to identify genomic locations of RNA-bound proteins
 - Calls enriched peak regions (peak clusters) with CLIPPER
 - Uses size-matched input sample to normalize and calculate fold-change enrichment within enriched peak regions with custom perl scripts (overlap_peakfi_with_bam_PE.pl, peakscompress.pl)
 
-For a full description (including commandline args), please see ```tests/eCLIP-${VERSION}``` (ie. [Repeat mapping](https://raw.githubusercontent.com/YeoLab/eclip/master/tests/eCLIP-0.4.0/05_repeat_mapping_pe/run_star.sh))
+For a full description (including commandline args), please see ```tests/eCLIP-(VERSION)``` (ie. [Repeat mapping](https://raw.githubusercontent.com/YeoLab/eclip/master/tests/eCLIP-0.4.0/05_repeat_mapping_pe/run_star.sh))
+
+Explore the pipeline definition [here](https://view.commonwl.org/workflows/github.com/YeoLab/eclip/blob/master/cwl/wf_get_peaks_scatter_se.cwl):
 
 # Installation:
 
@@ -21,7 +23,7 @@ For human datasets, we recommend at least 8 cores (for Clipper) and 30G memory (
 
 #### Please refer to the [Dockerfile](https://raw.githubusercontent.com/YeoLab/eclip/master/docker/Dockerfile) or [Singularity]() file to build a compatible environment:
 - Install [Singularity](https://singularity.lbl.gov/). You may need an administrator to help install this on your cluster, however we strongly recommend this as this image contains all the software needed to run the pipeline. 
-- Build the singularity image:
+- Build the singularity image (This requires a superuser account, so this may need to be done locally):
 ```
 singularity build eCLIP.img Singularity
 ```
@@ -245,7 +247,7 @@ cwltoil \
   --clean never \
   --cleanWorkDir onSuccess \
   --logFile workDir/toillog.txt \
-  wf_get_peaks_scatter_pe.cwl \
+  /opt/eclip-0.3.99/cwl/wf_get_peaks_scatter_pe.cwl \
   204_RBFOX2.yaml > log.txt 2>&1
 ```
 
@@ -253,30 +255,33 @@ cwltoil \
 
 Input-normalized peaks will contain regions of binding.
 
-|                                     | eCLIP 0.2.x                                                                                                             | eCLIP GATK                                                                                 | eCLIP 0.1.x                                                 |
-|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|-------------------------------------------------------------|
-| Demuxed + adapter trimmed reads     | ```*.CLIP.barcode.r1TrTr.fq```                                                                                          | ```RBFOX2-204-CLIP_S1_R*.A01_204_01_RBFOX2.adapterTrim.round2.fastq.gz```                  | ```204.01_RBFOX2.A01.r*.fqTrTr.fqgz```                      |
-| Repetitive element filtered reads   | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.fq```                                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rep.bamUnmapped.out.mate*``` | ```204.01_RBFOX2.A01.r-.fqTrTrU*.fq```                      |
-| Unique genome aligned reads         | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.bam```                 | ```204.01_RBFOX2.A01.r-.fqTrTrU-SoMaSo.bam```               |
-| PCR duplicate removed aligned reads | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.rmDup.sorted.bam```    | ```204.01_RBFOX2.A01.r-.fqTrTrU-SoMaSoCpSo.bam```           |
-| Barcode merged alignments           | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.merged.r2.bam```                   | ```204_01_RBFOX2.merged.r2.bam```                                                          | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCpSoMeV2.bam```       |
-| CLIPper peaks                       | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   | ```204_01_RBFOX2.merged.r2.peaks.bed```                                                    | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCpSoMeV2Cl.bed```     |
-| Input-normalized peaks              | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` | ```204_01.basedon_204_01.peaks.l2inputnormnew.bed.compressed.bed```                        | ```204.01_RBFOX2.---.r-.fqTrTrU-SoMaSoCoSoMeV2ClNpCo.bed``` |
-|                                     |                                                                                                                         |                                                                                            |                                                             |
 
-For Single-end pipelines, the outputs will be mostly the same (replace "IP" with "IN" to get the size-matched input values).
+For Single-end eCLIP, you can expect outputs to follow this filestructure:
 
-| Sample name: "myRBP"                 | eCLIP-0.2.2+                                                                                                          |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| Demuxed + adapter trimmed reads      | ```myRBP.IP.umi.r1TrTr.fq```                                                                                          |
-| Repetitive element filtered reads    | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.fq```                                                           |
-| Unique genome aligned reads (sorted) | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        |
-| PCR duplicate removed aligned reads  | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                |
-| CLIPper peaks                        | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   |
-| Input-normalized peaks               | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` |
-| RPM-normalized BigWig files          | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.*.bw```                          |
-
+| Sample name: "myRBP"                 | eCLIP-0.2.2                                                                                                           | eCLIP-0.3.0+                                                                          |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| Demuxed + adapter trimmed reads      | ```myRBP.IP.umi.r1TrTr.fq```                                                                                          | ```myRBP.IP.umi.r1TrTr.fq```                                                          |
+| Repetitive element filtered reads    | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.fq```                                                           | ```myRBP.IP.umi.r1.fq.repeat-unmapped.sorted.fq.gz```                                 |
+| Unique genome aligned reads (sorted) | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.bam```                                        |
+| PCR duplicate removed aligned reads  | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.bam```                                |
+| CLIPper peaks                        | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.bed```                   |
+| Input-normalized peaks               | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.normed.compressed.bed``` |
+| RPM-normalized BigWig files          | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.*.bw```                          | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.norm.*.bw```                          |
 made with: https://www.tablesgenerator.com/markdown_tables
+
+For Paired-end eCLIP:
+
+|                                     | eCLIP 0.2.x                                                                                                             | eCLIP GATK                                                                                 | eCLIP 0.3+                                                                                         |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| Demuxed + adapter trimmed reads     | ```*.CLIP.barcode.r1TrTr.fq```                                                                                          | ```RBFOX2-204-CLIP_S1_R*.A01_204_01_RBFOX2.adapterTrim.round2.fastq.gz```                  | ```204.01_RBFOX2.A01.r*.fqTrTr.fqgz```                                                             |
+| Repetitive element filtered reads   | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.fq```                                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rep.bamUnmapped.out.mate*``` | ```204.01_RBFOX2.A01.r*.fqTrTr.repeat-unmapped.sorted.fq.gz```                                     |
+| Unique genome aligned reads         | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.bam```                 | ```204.01_RBFOX2.A01.r1.fq.genome-mappedSo.bam```                                                  |
+| PCR duplicate removed aligned reads | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```RBFOX2-204-CLIP_S1_R1.A01_204_01_RBFOX2.adapterTrim.round2.rmRep.rmDup.sorted.bam```    | ```204.01_RBFOX2.A01.r1.fq.genome-mappedSo.rmDupSo.bam```                                          |
+| Barcode merged alignments           | ```*.CLIP.barcode.r1.fqTrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.merged.r2.bam```                   | ```204_01_RBFOX2.merged.r2.bam```                                                          | ```204.01_RBFOX2.A01.r1.fq.genome-mappedSo.rmDupSo.merged.r2.bam```                                |
+| CLIPper peaks                       | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   | ```204_01_RBFOX2.merged.r2.peaks.bed```                                                    | ```204.01_RBFOX2.A01.r1.fq.genome-mappedSo.rmDupSo.merged.r2.peakClusters.bed```                   |
+| Input-normalized peaks              | ```*.CLIP.barcode.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` | ```204_01.basedon_204_01.peaks.l2inputnormnew.bed.compressed.bed```                        | ```204.01_RBFOX2.A01.r1.fq.genome-mappedSo.rmDupSo.merged.r2.peakClusters.normed.compressed.bed``` |
+|                                     |                                                                                                                         |                                                                                            |                                                                                                    |
+
 
 ## Notes regarding outputs (FAQ):
 - When going through the merged BAM file results, I can only find files with only one of the paired barcodes (e.g. A01 of A01/B06). Is this normal? <b>Yes, ```*.merged*.bam``` indicates that both barcodes have been merged, I just use the first as a prefix namespace for the next step.</b>
