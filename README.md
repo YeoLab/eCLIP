@@ -21,7 +21,7 @@ Explore the pipeline definition [here](https://view.commonwl.org/workflows/githu
 #### Hardware requirements:
 For human datasets, we recommend at least 8 cores (for Clipper) and 30G memory (for STAR). Conservatively, you should expect to have at least 200G in free disk space (this requirement including all inputs, indices, intermediates, and outputs).
 
-#### Please refer to the [Dockerfile](https://raw.githubusercontent.com/YeoLab/eclip/master/docker/Dockerfile) or [Singularity]() file to build a compatible environment:
+#### Please refer to the [Dockerfile](https://raw.githubusercontent.com/YeoLab/eclip/master/docker/Dockerfile) or [Singularity](https://github.com/YeoLab/eclip/blob/master/Singularity) file to build a compatible environment:
 - Install [Singularity](https://singularity.lbl.gov/). You may need an administrator to help install this on your cluster, however we strongly recommend this as this image contains all the software needed to run the pipeline. 
 - Build the singularity image (This requires a superuser account, so this may need to be done locally):
 ```
