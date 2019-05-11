@@ -184,7 +184,7 @@ samples:
         path: /path/to/clip.fastq.gz
 
 ```
-PE Data: 
+SE Data: 
 ```YAML
 samples:
   - 
