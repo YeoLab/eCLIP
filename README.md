@@ -21,57 +21,15 @@ Explore the pipeline definition [here](https://view.commonwl.org/workflows/githu
 #### Hardware requirements:
 For human datasets, we recommend at least 8 cores (for Clipper) and 30G memory (for STAR). Conservatively, you should expect to have at least 200G in free disk space (this requirement including all inputs, indices, intermediates, and outputs).
 
-#### Please refer to the [Dockerfile](https://raw.githubusercontent.com/YeoLab/eclip/master/docker/Dockerfile) or [Singularity]() file to build a compatible environment:
-- Install [Singularity](https://singularity.lbl.gov/). You may need an administrator to help install this on your cluster, however we strongly recommend this as this image contains all the software needed to run the pipeline. 
-- Build the singularity image (This requires a superuser account, so this may need to be done locally):
-```
-singularity build eCLIP.img Singularity
-```
+#### Please refer to the [Dockerfiles](https://github.com/YeoLab/eclip/tree/master/docker) for install instructions for each tool required for this pipeline to run properly.
 
-#### Or, you may install the following packages separately:
-```
-  bedtools=2.27.1 \
-  cutadapt=1.14 \
-  cython=0.29.6 \
-  fastq-tools=0.8 \
-  fastqc=0.11.5 \
-  nodejs=11.10.0 \
-  numpy=1.10.2 \
-  pandas=0.23.1 \
-  picard=2.18.27 \
-  pybedtools=0.8.0 \
-  pybigwig=0.3.12 \
-  pycrypto=2.6.1 \
-  pysam=0.12.0 \
-  pytest=4.3.0 \
-  python=2.7 \
-  r=3.5.1 \
-  rna-seqc=1.1.8 \
-  samtools=1.6 \
-  scikit-learn=0.19.1 \
-  scipy=0.19.1 \
-  seaborn=0.9.0 \
-  star=2.4.0 \
-  ucsc-bedgraphtobigwig=357 \
-  ucsc-bedsort=357 \
-  umi_tools=1.0.0 \
-  zlib=1.2;
-```
 
-#### Non-conda packages:
-
-  - [perl=5.10.1](https://perlbrew.pl/) (perl5.22+ works, but due to changes in perl's hashing algorithm will lead to slightly different results as a result of random ordering of key-value pairs)
-      - with Statistics::Basic
-      - Statistics::Distributions
-      - Statistics::R
+#### Additional pipeline-specific requirements:
   - [cwlref-runner=1.0](https://pypi.org/project/cwlref-runner/1.0/)
   - [cwltool=1.0.20180306140409](https://pypi.org/project/cwltool/1.0.20180306140409/)
   - [cwltest=1.0.20180413145017](https://pypi.org/project/cwltest/1.0.20180413145017/)
   - [galaxy-lib=17.9.3](https://pypi.org/project/galaxy-lib/17.9.3/)
   - [toil=3.15.0a1](https://github.com/DataBiosphere/toil) (or higher, this is the minimum version required for Torque/PBS-based clusters)
-  - [eclipdemux](https://github.com/byee4/eclipdemux)
-  - [clipper](https://github.com/YeoLab/clipper)
-  - [makebigwigfiles](https://github.com/YeoLab/makebigwigfiles)
 
 # Prerequisite files:
 <b>(make sure to place this in a location with plenty of space!)</b>:

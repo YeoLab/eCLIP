@@ -6,11 +6,11 @@ FROM continuumio/miniconda:latest
 
 LABEL base_image="continuumio/miniconda:latest"
 LABEL version="1"
-LABEL software="CLIPper"
-LABEL software.version="0.2.0"
-LABEL about.summary="A tool to detect CLIP-seq peaks."
-LABEL about.home="https://github.com/YeoLab/clipper/"
-LABEL about.documentation="https://github.com/YeoLab/clipper/wiki/CLIPper-Home"
+LABEL software="eCLIP"
+LABEL software.version="0.5.0"
+LABEL about.summary="default environment for custom eCLIP 0.5.0 python scripts"
+LABEL about.home="https://github.com/YeoLab/eclip/"
+LABEL about.documentation="https://github.com/YeoLab/eclip/wiki"
 LABEL about.license_file=""
 LABEL about.license=""
 LABEL about.tags="Genomics"
@@ -18,7 +18,7 @@ LABEL about.tags="Genomics"
 ################## MAINTAINER ######################
 MAINTAINER Brian Yee <brian.alan.yee@gmail.com>
 
-RUN apt-get install -y g++
+RUN apt-get update && apt-get install -y g++
 
 RUN conda install -y -c bioconda \
 python=2.7 \
@@ -33,10 +33,13 @@ cython=0.28.2 \
 libgfortran=1
 
 
-RUN git clone git://github.com/YeoLab/clipper.git && \
-    cd clipper && \
-    python setup.py install
+RUN cd /opt && \
+    git clone https://github.com/YeoLab/eclip
+
+ENV PATH=/opt/eclip/bin/:${PATH}
+
+RUN ln -s /opt/conda/lib/libcrypto.so.1.1 /opt/conda/lib/libcrypto.so.1.0.0
 
 WORKDIR /data/
 
-CMD ["clipper"]
+CMD ["python"]

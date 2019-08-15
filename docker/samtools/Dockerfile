@@ -18,15 +18,10 @@ LABEL about.tags="Genomics"
 ################## MAINTAINER ######################
 MAINTAINER Brian Yee <brian.alan.yee@gmail.com>
 
-RUN conda install python=2.7
-RUN conda install -c bioconda samtools=1.5 pysam
-RUN mkdir -p /opt && \
-    cd /opt && \
-    wget https://raw.githubusercontent.com/YeoLab/eclip/master/bin/barcodecollapsepe.py && \
-    chmod +x barcodecollapsepe.py
+RUN conda install -c bioconda samtools=1.5
 
-ENV PATH /opt/:$PATH
+RUN ln -s /opt/conda/lib/libcrypto.so.1.1 /opt/conda/lib/libcrypto.so.1.0.0
 
 WORKDIR /data/
 
-CMD ["barcodecollapsepe.py"]
+CMD ["samtools"]

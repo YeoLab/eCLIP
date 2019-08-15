@@ -6,11 +6,11 @@ FROM continuumio/miniconda:latest
 
 LABEL base_image="continuumio/miniconda:latest"
 LABEL version="1"
-LABEL software="samtools"
-LABEL software.version="1.5"
-LABEL about.summary="SAM Tools provide various utilities for manipulating alignments in the SAM format, including sorting, merging, indexing and generating alignments in a per-position format."
-LABEL about.home="http://www.htslib.org/"
-LABEL about.documentation="http://www.htslib.org/doc/"
+LABEL software="umi_tools"
+LABEL software.version="1.0.0"
+LABEL about.summary="Tools for handling Unique Molecular Identifiers in NGS data sets"
+LABEL about.home="https://github.com/CGATOxford/UMI-tools"
+LABEL about.documentation="https://github.com/CGATOxford/UMI-tools"
 LABEL about.license_file="https://github.com/samtools/samtools/blob/develop/LICENSE"
 LABEL about.license=""
 LABEL about.tags="Genomics"
@@ -18,8 +18,9 @@ LABEL about.tags="Genomics"
 ################## MAINTAINER ######################
 MAINTAINER Brian Yee <brian.alan.yee@gmail.com>
 
-RUN conda install samtools=1.5
+RUN conda install -y -c bioconda umi_tools=1.0.0
 
 WORKDIR /data/
 
-CMD ["samtools"]
+CMD ["umi_tools"]
+

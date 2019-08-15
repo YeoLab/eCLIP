@@ -7,7 +7,7 @@ FROM continuumio/miniconda:latest
 LABEL base_image="continuumio/miniconda:latest"
 LABEL version="1"
 LABEL software="makebigwigfiles"
-LABEL software.version="0.2.1"
+LABEL software.version="0.0.3"
 LABEL about.summary="A tool that generates strand-specific bigwig files."
 LABEL about.home="https://github.com/yeolab/makebigwigfiles"
 LABEL about.documentation="https://github.com/yeolab/makebigwigfiles"
@@ -39,3 +39,4 @@ ENV PATH /opt/makebigwigfiles:$PATH
 WORKDIR /data/
 
 CMD ["makebigwigfiles"]
+
