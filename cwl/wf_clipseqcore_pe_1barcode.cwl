@@ -245,7 +245,7 @@ steps:
     out: [output]
 
   make_bigwigs:
-    run: makebigwigfiles.cwl
+    run: makebigwigfiles_PE.cwl
     in:
       chromsizes: chrom_sizes
       bam: view_r2/output

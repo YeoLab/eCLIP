@@ -171,7 +171,7 @@ def rnaseq_metrics_df(analysis_dir, num_seps=1, sep="."):
         - combined_df['STAR genome input reads']
     # FIXME: getting error with astype(int), (possibly related no relying on default parameter values?):
     ########################################    
-    # File "/projects/ps-yeolab/software/qcsummary/qcsummary-0.0.3/bin/qcsummary_rnaseq.py", line 188, in rnaseq_metrics_df
+    # File "/projects/ps-yeolab/software/qcsummary/qcsummary-0.0.3/qc/qcsummary_rnaseq.py", line 188, in rnaseq_metrics_df
     # ).astype(int)
     # ValueError: cannot convert float NaN to integer
 

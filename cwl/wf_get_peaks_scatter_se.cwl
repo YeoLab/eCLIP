@@ -48,7 +48,9 @@ inputs:
               type: string
             adapters:
               type: File
-
+  blacklist_file: 
+    type: File
+    
 outputs:
 
 
@@ -220,7 +222,21 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_compressed_peaks
 
-
+  ### Downstream ###
+  
+  output_blacklist_removed_bed:
+    type: File[]
+    outputSource: step_get_peaks/output_blacklist_removed_bed
+  output_narrowpeak:
+    type: File[]
+    outputSource: step_get_peaks/output_narrowpeak
+  output_fixed_bed:
+    type: File[]
+    outputSource: step_get_peaks/output_fixed_bed
+  output_bigbed:
+    type: File[]
+    outputSource: step_get_peaks/output_bigbed
+    
 steps:
 
 ###########################################################################
@@ -236,6 +252,7 @@ steps:
       species: species
       chrom_sizes: chrom_sizes
       sample: samples
+      blacklist_file: blacklist_file
     out: [
       output_ip_b1_demuxed_fastq_r1,
       output_input_b1_demuxed_fastq_r1,
@@ -273,5 +290,9 @@ steps:
       output_input_neg_bw,
       output_clipper_bed,
       output_inputnormed_peaks,
-      output_compressed_peaks
+      output_compressed_peaks,
+      output_blacklist_removed_bed,
+      output_narrowpeak,
+      output_fixed_bed,
+      output_bigbed
     ]

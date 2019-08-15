@@ -56,7 +56,9 @@ inputs:
             type: File
           name:
             type: string
-
+  blacklist_file:
+    type: File
+    
 outputs:
 
 
@@ -217,6 +219,22 @@ outputs:
     type: File
     outputSource: step_compress_peaks/output_bed
 
+  ### Downstream ###
+  
+  output_blacklist_removed_bed:
+    type: File
+    outputSource: step_blacklist_remove/output_blacklist_removed_bed
+  output_narrowpeak:
+    type: File
+    outputSource: step_bed_to_narrowpeak/output_narrowpeak
+  output_fixed_bed:
+    type: File
+    outputSource: step_fix_bed_for_bigbed_conversion/output_fixed_bed
+  output_bigbed:
+    type: File
+    outputSource: step_bed_to_bigbed/output_bigbed
+    
+    
 steps:
 
 ###########################################################################
@@ -362,3 +380,36 @@ steps:
     in:
       input_bed: step_input_normalize_peaks/inputnormedBed
     out: [output_bed]
+  
+  step_sort_bed:
+    run: sort-bed.cwl
+    in:
+      unsorted_bed: step_compress_peaks/output_bed
+    out: [sorted_bed]
+    
+  step_blacklist_remove:
+    run: blacklist-remove.cwl
+    in:
+      input_bed: step_sort_bed/sorted_bed
+      blacklist_file: blacklist_file
+    out: [output_blacklist_removed_bed]
+    
+  step_bed_to_narrowpeak:
+    run: bed_to_narrowpeak.cwl
+    in:
+      input_bed: step_blacklist_remove/output_blacklist_removed_bed
+      species: species
+    out: [output_narrowpeak]
+    
+  step_fix_bed_for_bigbed_conversion:
+    run: fix_bed_for_bigbed_conversion.cwl
+    in:
+      input_bed: step_blacklist_remove/output_blacklist_removed_bed
+    out: [output_fixed_bed]
+    
+  step_bed_to_bigbed:
+    run: bed_to_bigbed.cwl
+    in:
+      input_bed: step_fix_bed_for_bigbed_conversion/output_fixed_bed
+      chrom_sizes: chrom_sizes
+    out: [output_bigbed]

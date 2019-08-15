@@ -10,7 +10,7 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-    # ramMin: 16000
+    ramMin: 16000
 
 # baseCommand: [peakscompress.pl]
 baseCommand: [compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl]

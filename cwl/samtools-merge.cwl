@@ -8,9 +8,9 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    # ramMin: 8000
-    # tmpdirMin: 4000
-    # outdirMin: 4000
+    ramMin: 8000
+    #tmpdirMin: 4000
+    #outdirMin: 4000
 
 
 

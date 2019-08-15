@@ -50,9 +50,8 @@ inputs:
           #   type: string[]
           name:
             type: string
-  adapters:
-    type: File
-
+          adapters:
+            type: File
   ### repeat mapping options ###
 
   bowtie2_db:
@@ -337,7 +336,6 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      adapters: adapters
     out: [
       b1_demuxed_fastq_r1,
       # b1_demuxed_fastq_r2,
@@ -373,7 +371,6 @@ steps:
       repeatElementGenomeDir: repeatElementGenomeDir
       species: species
       chrom_sizes: chrom_sizes
-      adapters: adapters
     out: [
       b1_demuxed_fastq_r1,
       # b1_demuxed_fastq_r2,
@@ -471,7 +468,6 @@ steps:
 
   step_rep_element_mapping:
     run:
-      repmap/wf_ecliprepmap_se.cwl
     in:
       dataset: dataset
       barcode1r1FastqGz:

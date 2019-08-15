@@ -19,9 +19,9 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 2
-    # ramMin: 30000
-    # tmpdirMin: 4000
-    # outdirMin: 4000
+    ramMin: 32000
+    tmpdirMin: 4000
+    #outdirMin: 4000
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
 

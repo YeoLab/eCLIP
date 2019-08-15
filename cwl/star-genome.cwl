@@ -8,11 +8,11 @@ class: CommandLineTool
 ### TSCC requirements ###
 requirements:
   - class: ResourceRequirement
-    coresMin: 4
+    coresMin: 8
     coresMax: 16
-    # ramMin: 30000
-    # tmpdirMin: 32000
-    # outdirMin: 4000
+    #ramMin: 32000
+    #tmpdirMin: 32000
+    #outdirMin: 4000
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
 

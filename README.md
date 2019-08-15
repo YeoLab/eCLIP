@@ -54,7 +54,7 @@ singularity build eCLIP.img Singularity
   star=2.4.0 \
   ucsc-bedgraphtobigwig=357 \
   ucsc-bedsort=357 \
-  umi_tools=0.5.0 \
+  umi_tools=1.0.0 \
   zlib=1.2;
 ```
 
@@ -258,18 +258,26 @@ Input-normalized peaks will contain regions of binding.
 
 For Single-end eCLIP, you can expect outputs to follow this filestructure:
 
-| Sample name: "myRBP"                 | eCLIP-0.2.2                                                                                                           | eCLIP-0.3.0+                                                                          |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
-| Demuxed + adapter trimmed reads      | ```myRBP.IP.umi.r1TrTr.fq```                                                                                          | ```myRBP.IP.umi.r1TrTr.fq```                                                          |
-| Repetitive element filtered reads    | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.fq```                                                           | ```myRBP.IP.umi.r1.fq.repeat-unmapped.sorted.fq.gz```                                 |
-| Unique genome aligned reads (sorted) | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.bam```                                        |
-| PCR duplicate removed aligned reads  | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.bam```                                |
-| CLIPper peaks                        | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.bed```                   |
-| Input-normalized peaks               | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.normed.compressed.bed``` |
-| RPM-normalized BigWig files          | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.*.bw```                          | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.norm.*.bw```                          |
+| Dataset: "myRBP" name: "IP"          | eCLIP-0.2.2                                                                                                           | eCLIP-0.3.0+                                                                                                          |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| Cutadapt x1 metrics                  | ```myRBP.IP.umi.r1Tr.metrics```                                                                                       | ```myRBP.IP.umi.r1.fqTr.metrics```                                                                                    |
+| Cutadapt x2 metrics                  | ```myRBP.IP.umi.r1TrTr.metrics```                                                                                     | ```myRBP.IP.umi.r1.fqTrTr.metrics```                                                                                  |
+| Demuxed + adapter trimmed reads      | ```myRBP.IP.umi.r1TrTr.fq```                                                                                          | ```myRBP.IP.umi.r1TrTr.fq```                                                                                          |
+| Repetitive element filtered reads    | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.fq```                                                           | ```myRBP.IP.umi.r1.fq.repeat-unmapped.sorted.fq.gz```                                                                 |
+| STAR metrics (repeat aligned)        | ```myRBP.IP.umi.r1TrTr.sorted.STARLog.final.out```                                                                    | ```myRBP.IP.umi.r1.fqTrTr.sorted.STARLog.final.out```                                                                 |
+| Unique genome aligned reads (sorted) | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam```                                        | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.bam```                                                                        |
+| STAR metrics (genome aligned)        | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARLog.final.out```                                            | ```myRBP.IP.umi.r1.fq.repeat-unmapped.sorted.STARLog.final.out```                                                     |
+| PCR duplicate removed aligned reads  | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam```                                | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.bam```                                                                |
+| CLIPper peaks                        | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed```                   | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.bed```                                                   |
+| Input-normalized peaks               | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed``` | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.normed.compressed.bed```                                 |
+| RPM-normalized BigWig files          | ```myRBP.IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.*.bw```                          | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.norm.*.bw```                                                          |
+| Blacklist-filtered peaks             |                                                                                                                       | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.normed.compressed.sorted.blacklist-removed.bed```        |
+| Blacklist-filtered bigBeds           |                                                                                                                       | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.normed.compressed.sorted.blacklist-removed.fx.bb```      |
+| Blacklist-filtered narrowPeaks       |                                                                                                                       | ```myRBP.IP.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.normed.compressed.sorted.blacklist-removed.narrowPeak``` |
 made with: https://www.tablesgenerator.com/markdown_tables
 
 For Paired-end eCLIP:
+
 
 |                                     | eCLIP 0.2.x                                                                                                             | eCLIP GATK                                                                                 | eCLIP 0.3+                                                                                         |
 |-------------------------------------|-------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|

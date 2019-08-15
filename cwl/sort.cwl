@@ -14,9 +14,9 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-    # ramMin: 30000
-    # tmpdirMin: 8000
-    # outdirMin: 8000
+    ramMin: 32000
+    tmpdirMin: 8000
+    outdirMin: 8000
 
 # samtools executable in bin folder is v 0.1.18-dev (r982:313)
 

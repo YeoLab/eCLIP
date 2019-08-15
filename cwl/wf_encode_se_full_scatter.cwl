@@ -46,8 +46,8 @@ inputs:
               type: File
             name:
               type: string
-  adapters:
-    type: File
+            adapters:
+              type: File
 
   ### repeat mapping options ###
 
@@ -348,7 +348,6 @@ steps:
       species: species
       chrom_sizes: chrom_sizes
       sample: samples
-      adapters: adapters
       bowtie2_db: bowtie2_db
       bowtie2_prefix: bowtie2_prefix
       fileListFile1: fileListFile1

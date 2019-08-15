@@ -3,7 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [Unreleased]
+## [Unreleased 0.4.99] - 2019-08-13
+### Added
+- Added the following steps to the main single-end pipeline:
+  - sort_bed (sorts input normalized bed file)
+  - blacklist remove (removes blacklisted regions from peak file)
+  - bed to narrowPeak (converts peak bed file to narrowPeak format)
+  - fix bed ("fixes" a peak bed file format such that it is compatible with bedToBigBed)
+  - bed to bigbed (calls bedToBigBed to convert peak bed file to bigBed format)
+- Added a 'nostats' workflow in 'wf/' to optionally run the pipeline without requiring umi_tools stats generation. This dramatically cuts down on runtime/mem reqs
+- Added pre/post processing scripts (annotate_peaks_bedformat_wproxdistal_lncRNA.pl & generate_adaptertrim_fasta.ipynb)
+  - annotate_peaks_bedformat_wproxdistal_lncRNA.pl (perl script that annotates bed files)
+  - generate_adaptertrim_fasta.ipynb (jupyter notebook that generates fasta files w/ partial adapter sequences to trim)
 
 ## [0.4.0] - 2019-03-25
 ### Changed

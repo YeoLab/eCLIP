@@ -8,7 +8,7 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    # ramMin: 30000
+    ramMin: 32000
     tmpdirMin: 8000
     outdirMin: 8000
 

@@ -8,9 +8,9 @@ class: CommandLineTool
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
-    coresMin: 4
+    coresMin: 8
     coresMax: 16
-    # ramMin: 30000
+    ramMin: 32000
 
 baseCommand: [clipper]
 

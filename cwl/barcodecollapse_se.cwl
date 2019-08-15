@@ -8,9 +8,9 @@ class: CommandLineTool
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
-    coresMin: 1
+    coresMin: 8
     coresMax: 16
-    # ramMin: 64000
+    ramMin: 64000
     # tmpdirMin: 4000
     # outdirMin: 4000
 
