@@ -12,7 +12,10 @@ requirements:
     ramMin: 8000
     #tmpdirMin: 4000
     #outdirMin: 4000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/samtools:1.5
+    
 # samtools executable in bin folder is v 0.1.18-dev (r982:313)
 
 baseCommand: [samtools, index]

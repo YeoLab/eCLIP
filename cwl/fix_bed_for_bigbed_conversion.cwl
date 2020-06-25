@@ -9,7 +9,10 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/python:2.7.16
+    
 baseCommand: [fix_bed_for_bigbed_conversion.py]
 
 inputs:

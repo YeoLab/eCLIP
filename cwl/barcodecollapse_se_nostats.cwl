@@ -13,7 +13,10 @@ requirements:
     # ramMin: 64000
     # tmpdirMin: 4000
     # outdirMin: 4000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/umi_tools:1.0.0
+    
 baseCommand: [umi_tools, dedup]
 
 inputs:

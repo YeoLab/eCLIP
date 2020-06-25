@@ -150,6 +150,87 @@ outputs:
     outputSource: step_get_peaks/output_input_b1_trimx2_metrics
 
 
+  ### FASTQC ###
+
+
+  output_ip_b1_trimx1_fastqc_report_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_report_R1
+  output_ip_b1_trimx1_fastqc_stats_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_stats_R1
+  output_ip_b1_trimx1_fastqc_report_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_report_R2
+  output_ip_b1_trimx1_fastqc_stats_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_stats_R2
+
+  output_ip_b1_trimx2_fastqc_report_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_report_R1
+  output_ip_b1_trimx2_fastqc_stats_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_stats_R1
+  output_ip_b1_trimx2_fastqc_report_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_report_R2
+  output_ip_b1_trimx2_fastqc_stats_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_stats_R2
+
+  output_ip_b2_trimx1_fastqc_report_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx1_fastqc_report_R1
+  output_ip_b2_trimx1_fastqc_stats_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx1_fastqc_stats_R1
+  output_ip_b2_trimx1_fastqc_report_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx1_fastqc_report_R2
+  output_ip_b2_trimx1_fastqc_stats_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx1_fastqc_stats_R2
+
+  output_ip_b2_trimx2_fastqc_report_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx2_fastqc_report_R1
+  output_ip_b2_trimx2_fastqc_stats_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx2_fastqc_stats_R1
+  output_ip_b2_trimx2_fastqc_report_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx2_fastqc_report_R2
+  output_ip_b2_trimx2_fastqc_stats_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b2_trimx2_fastqc_stats_R2
+
+  output_input_b1_trimx1_fastqc_report_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_report_R1
+  output_input_b1_trimx1_fastqc_stats_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_stats_R1
+  output_input_b1_trimx1_fastqc_report_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_report_R2
+  output_input_b1_trimx1_fastqc_stats_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_stats_R2
+
+  output_input_b1_trimx2_fastqc_report_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_report_R1
+  output_input_b1_trimx2_fastqc_stats_R1:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_stats_R1
+  output_input_b1_trimx2_fastqc_report_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_report_R2
+  output_input_b1_trimx2_fastqc_stats_R2:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_stats_R2
+
   ### REPEAT MAPPING OUTPUTS ###
 
 
@@ -347,34 +428,22 @@ steps:
     out: [
       output_ip_b1_demuxed_fastq_r1,
       output_ip_b1_demuxed_fastq_r2,
-      output_ip_b2_demuxed_fastq_r1,
-      output_ip_b2_demuxed_fastq_r2,
-      output_input_b1_demuxed_fastq_r1,
-      output_input_b1_demuxed_fastq_r2,
       output_ip_b1_trimx1_fastq,
       output_ip_b1_trimx1_metrics,
-      output_ip_b2_trimx1_fastq,
-      output_ip_b2_trimx1_metrics,
-      output_input_b1_trimx1_fastq,
-      output_input_b1_trimx1_metrics,
+      output_ip_b1_trimx1_fastqc_report_R1,
+      output_ip_b1_trimx1_fastqc_stats_R1,
+      output_ip_b1_trimx1_fastqc_report_R2,
+      output_ip_b1_trimx1_fastqc_stats_R2,
       output_ip_b1_trimx2_fastq,
       output_ip_b1_trimx2_metrics,
-      output_ip_b2_trimx2_fastq,
-      output_ip_b2_trimx2_metrics,
-      output_input_b1_trimx2_fastq,
-      output_input_b1_trimx2_metrics,
+      output_ip_b1_trimx2_fastqc_report_R1,
+      output_ip_b1_trimx2_fastqc_stats_R1,
+      output_ip_b1_trimx2_fastqc_report_R2,
+      output_ip_b1_trimx2_fastqc_stats_R2,
       output_ip_b1_maprepeats_mapped_to_genome,
       output_ip_b1_maprepeats_stats,
       output_ip_b1_maprepeats_star_settings,
       output_ip_b1_sorted_unmapped_fastq,
-      output_ip_b2_maprepeats_mapped_to_genome,
-      output_ip_b2_maprepeats_stats,
-      output_ip_b2_maprepeats_star_settings,
-      output_ip_b2_sorted_unmapped_fastq,
-      output_input_b1_maprepeats_mapped_to_genome,
-      output_input_b1_maprepeats_stats,
-      output_input_b1_maprepeats_star_settings,
-      output_input_b1_sorted_unmapped_fastq,
       output_ip_b1_mapgenome_mapped_to_genome,
       output_ip_b1_mapgenome_stats,
       output_ip_b1_mapgenome_star_settings,
@@ -382,6 +451,24 @@ steps:
       output_ip_b1_barcodecollapsepe_bam,
       output_ip_b1_barcodecollapsepe_metrics,
       output_ip_b1_output_sorted_bam,
+      output_ip_b2_demuxed_fastq_r1,
+      output_ip_b2_demuxed_fastq_r2,
+      output_ip_b2_trimx1_fastq,
+      output_ip_b2_trimx1_metrics,
+      output_ip_b2_trimx1_fastqc_report_R1,
+      output_ip_b2_trimx1_fastqc_stats_R1,
+      output_ip_b2_trimx1_fastqc_report_R2,
+      output_ip_b2_trimx1_fastqc_stats_R2,
+      output_ip_b2_trimx2_fastq,
+      output_ip_b2_trimx2_metrics,
+      output_ip_b2_trimx2_fastqc_report_R1,
+      output_ip_b2_trimx2_fastqc_stats_R1,
+      output_ip_b2_trimx2_fastqc_report_R2,
+      output_ip_b2_trimx2_fastqc_stats_R2,
+      output_ip_b2_maprepeats_mapped_to_genome,
+      output_ip_b2_maprepeats_stats,
+      output_ip_b2_maprepeats_star_settings,
+      output_ip_b2_sorted_unmapped_fastq,
       output_ip_b2_mapgenome_mapped_to_genome,
       output_ip_b2_mapgenome_stats,
       output_ip_b2_mapgenome_star_settings,
@@ -389,6 +476,24 @@ steps:
       output_ip_b2_barcodecollapsepe_bam,
       output_ip_b2_barcodecollapsepe_metrics,
       output_ip_b2_output_sorted_bam,
+      output_input_b1_demuxed_fastq_r1,
+      output_input_b1_demuxed_fastq_r2,
+      output_input_b1_trimx1_fastq,
+      output_input_b1_trimx1_metrics,
+      output_input_b1_trimx1_fastqc_report_R1,
+      output_input_b1_trimx1_fastqc_stats_R1,
+      output_input_b1_trimx1_fastqc_report_R2,
+      output_input_b1_trimx1_fastqc_stats_R2,
+      output_input_b1_trimx2_fastq,
+      output_input_b1_trimx2_metrics,
+      output_input_b1_trimx2_fastqc_report_R1,
+      output_input_b1_trimx2_fastqc_stats_R1,
+      output_input_b1_trimx2_fastqc_report_R2,
+      output_input_b1_trimx2_fastqc_stats_R2,
+      output_input_b1_maprepeats_mapped_to_genome,
+      output_input_b1_maprepeats_stats,
+      output_input_b1_maprepeats_star_settings,
+      output_input_b1_sorted_unmapped_fastq,
       output_input_b1_mapgenome_mapped_to_genome,
       output_input_b1_mapgenome_stats,
       output_input_b1_mapgenome_star_settings,

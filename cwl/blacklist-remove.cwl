@@ -10,7 +10,10 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/bedtools:2.27.1
+    
 baseCommand: [bedtools, intersect]
 
 inputs:

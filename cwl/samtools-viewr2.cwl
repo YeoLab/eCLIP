@@ -8,7 +8,6 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
-# - $import: samtools-docker.yml
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
@@ -16,7 +15,10 @@ requirements:
     ramMin: 8000
     tmpdirMin: 4000
     outdirMin: 4000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/samtools:1.5
+    
 inputs:
   isbam:
     type: boolean

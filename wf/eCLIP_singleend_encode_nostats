@@ -1,0 +1,276 @@
+#!/usr/bin/env bash
+
+
+#set -o xtrace
+
+
+# # Debugging settings
+# ####################
+# Print commands and their arguments as they are executed.
+#set -o xtrace
+#Exit immediately if a command exits with a non-zero status.
+set -o errexit
+#the return value of a pipeline is the status of
+#the last command to exit with a non-zero status,
+#or zero if no command exited with a non-zero status
+set -o pipefail
+
+
+
+CWLRUNNER=cwltorq # either: cwltool cwltoil or cwltorq
+WORKFLOW=wf_encode_se_full_scatter_nostats # the prefix of the workflow cwl (without .cwl extension)
+
+PIPELINE=ECLIP  # workflow prefix
+PIPELINEVERSION=0.6.0  # workflow version
+
+FULLPATHCOMMAND=$0
+JOB_FILE=$1
+
+# get the ecliprepmap yaml file name without extension
+JOB_BASENAME=${JOB_FILE##*/}
+JOB_NAME="${JOB_BASENAME%.*}"
+# TODO the same could be achieved with:  JOB_NAME=$(basename "${JOB_FILE}" ".rnaseq")
+
+# if no parameter, initialize current directory with template files and show help
+#################
+# FIXME following this usage for * instead of *.cwl does not work
+if [[ -z ${JOB_FILE} ]]; then
+  echo "welcome to rnaseq (torque version)"
+  #
+  wf_rnaseqse.usage
+  exit 0
+fi
+
+
+# from now on, parameter was given (jobfile):
+#############################################
+
+# get the cwlrunner and workflow type
+#####################################
+
+# TODO: harcoded in CWLRUNNER and WORKFLOW vars above
+
+# remove the path at the beginning of full path command
+# CWLRUNNER_WORKFLOW=${FULLPATHCOMMAND##*/}
+# echo "FULL PATH COMMAND"
+# echo $CWLRUNNER_WORKFLOW;
+
+# if command was 'rnaseqse' then will use the default cwlrunner and the default workflow
+# if [  $CWLRUNNER_WORKFLOW = 'rnaseqse' ]
+# then
+#   #echo default cwlrunner and workflow
+#   CWLRUNNER=cwltool
+#   WORKFLOW=wf_rnaseqcore_se
+# else
+#   # remove cwlto+6 chars from beginning
+#   # WORKFLOW=${CWLRUNNER_WORKFLOW#cwlto??}         # ?? matches either OL or IL or RQ  # TODO caution: no .cwl extension !
+#   WORKFLOW=wf_rnaseqcore_se_cwltoil
+#   # get those cwl+6 chars that were removed above
+#   # CWLRUNNER=${CWLRUNNER_WORKFLOW%$WORKFLOW}  # FIXME: don't know what this does
+#   CWLRUNNER=cwltorq  # FIXME: hardcoded for now...
+#   if [ -z $WORKFLOW ]
+#   then
+#     WORKFLOW=wf_rnaseqcore_se_cwltorq
+#   fi
+# fi
+
+
+
+# initialize directories
+########################
+
+# get this script full directory name no matter where it is called from
+WORKFLOW_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"                 # TODO move this one level up (include final /../)
+
+
+#export ECLIPREPMAP_DOCUMENTATION=${WORKFLOW_HOME}/../documentation
+#export WORKFLOW_HOME=${WORKFLOW_HOME}/../init
+# get the eclipjob.yaml full directory name
+JOB_HOME="$( cd "$( dirname "${BASH_SOURCE[1]}" )" && pwd )"
+
+# create temporary intermediates directory # TODO only needed for cwltool
+INTERM=${JOB_HOME}/${JOB_NAME}/.tmp/cwltool_interm
+mkdir -p ${INTERM}
+
+# create temp work directory    # TODO should be absolute path for toil, is it ?
+WORKDIR=${JOB_HOME}/${JOB_NAME}/.tmp/workdir
+mkdir -p ${WORKDIR}
+echo "WORKDIR: ${WORKDIR}"
+
+# define jobstore directory, but do not create it
+JOBSTORE=${JOB_HOME}/${JOB_NAME}/.tmp/cwltoil_jobstore
+#mkdir -p ${JOBSTORE};
+JOBSTOREEXITSLETSRESTART=
+# if jobstore exists set arguments to restart toil
+if [ -d $JOBSTORE ]
+then echo jobstore exists; JOBSTOREEXITSLETSRESTART="--restart"
+fi
+
+# create outdir directory
+OUTDIR=${JOB_HOME}/${JOB_NAME}/.tmp/outdir
+mkdir -p ${OUTDIR}
+
+# create toillogs directory
+TOILLOGS=${JOB_HOME}/${JOB_NAME}/.tmp/toillogs
+mkdir -p ${TOILLOGS}
+
+# create results directory
+RESULTSDIR=${JOB_HOME}/${JOB_NAME}/results
+mkdir -p ${RESULTSDIR}
+
+
+# copy job file and log ecliprepmap version in output directory
+#########################################################
+# TODO softcode version nb
+JOBCOPYFILEPATH="${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_INPUT.yaml"
+cp ${JOB_FILE} ${JOBCOPYFILEPATH}
+chmod -x ${JOBCOPYFILEPATH}
+touch ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_VERSION-${PIPELINEVERSION}
+# TODO: does not do anything
+# touch ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_PIPELINE-rnaseqse
+touch ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_WORKFLOW-${WORKFLOW}
+
+echo
+echo ========================================================================
+echo PATHS
+echo ========================================================================
+echo
+echo "PATH:" $PATH
+echo "which conda:" `which conda`
+# echo "which rnaseqse:" `which rnaseqse`
+echo "JOB_HOME:" $JOB_HOME
+echo "OUTDIR:" $OUTDIR
+echo "RESULTSDIR:" $RESULTSDIR
+
+
+# execute
+##########
+echo
+echo ========================================================================
+echo EXECUTING CWL JOB
+echo ========================================================================
+echo
+
+if [ $CWLRUNNER == cwltool ]
+then
+  cwltool --debug \
+    --outdir ${OUTDIR} \
+    --cachedir ${INTERM} \
+    ${WORKFLOW_HOME}/cwl/${WORKFLOW}.cwl \
+    ${JOB_FILE} \
+    2>${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt | tee ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_OUTPUT.json
+
+    #2>&1 | tee ${JOB_HOME}/${JOB_NAME}/ECLIPREPMAP-JOB-LOG.txt
+
+elif [ $CWLRUNNER == cwltoil -o $CWLRUNNER == cwltorq ]
+then
+  if [ $CWLRUNNER == cwltorq ]; then
+    BATCHSYSTEM="torque --disableCaching"
+    export TOIL_TORQUE_ARGS="-q home-yeo"              # home-yeo
+    export TOIL_TORQUE_REQS="walltime=40:00:00"      # walltime=8:00:00
+  else
+    BATCHSYSTEM="single_machine"
+  fi
+  echo
+  echo CWLRUNNER :      $CWLRUNNER
+  echo BATCHSYSTEM:     $BATCHSYSTEM
+  echo
+  # For more robust logging options (default is INFO),
+  # use --logDebug
+  # or more generally, use --logLevel=, which may be set to either
+  # OFF (or CRITICAL), ERROR, WARN (or WARNING), INFO or DEBUG.
+  # Logs can be directed to a file with --logFile=.
+  # --logLevel DEBUG \
+  # --logLevel=critical \
+  # --logLevel=error \
+  # --logLevel=warning \
+  # --logLevel=info \
+  # --logLevel=debug \
+  #
+  # The defaults for cores (1), disk (2G), and memory (2G), can all be changed
+  # using --defaultCores, --defaultDisk, and --defaultMemory.
+  # Standard suffixes like K, Ki, M, Mi, G or Gi are supported.
+
+
+#  ${WORKFLOW_HOME}/repo/cwl/${WORKFLOW}.cwl \
+
+  cwltoil ${JOBSTOREEXITSLETSRESTART}  \
+    --batchSystem ${BATCHSYSTEM} \
+    --stats \
+    --writeLogs ${TOILLOGS} \
+    --jobStore file:${JOBSTORE} \
+    --workDir ${WORKDIR} \
+    --outdir ${OUTDIR} \
+    --clean never \
+    --cleanWorkDir onSuccess \
+    --logInfo \
+    --clusterStats \
+    --realTimeLogging \
+    --stats \
+    --defaultMemory 100.0G \
+    --no-container \
+    --retryCount 3 \
+    ${WORKFLOW_HOME}/cwl/${WORKFLOW}.cwl \
+    ${JOB_FILE} \
+    2>${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt | tee ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_OUTPUT.json
+fi
+
+#--defaultCores 1.0 \
+#--defaultMemory 8.0G  \
+#--clusterStats \
+#--logDebug \
+#--realTimeLogging \
+#--stats \
+#--maxCores=  --maxMemory=8.0Ei --maxDisk 8.0Ei \
+#--maxLogFileSize -1 \
+
+# error when using option --maxLogFileSize -1
+#  h2b = lambda x : human2bytes(str(x))
+#File "/projects/ps-yeolab/software/eclipconda/envs/ecliplesspeakstoil/lib/python2.7/site-packages/bd2k/util/humanize.py", line 111, in human2bytes
+#  num = float(num)
+
+############################################
+#rmdir ${JOB_HOME}/${JOB_NAME}/intermediates??????
+
+
+# Stop printing commands and their arguments as they are executed.
+set +x
+
+
+
+echo
+echo ========================================================================
+echo UPDATING RESULTS
+echo ========================================================================
+echo
+echo tmp output dir: ${OUTDIR}
+echo results dir: ${RESULTSDIR}
+
+mv ${OUTDIR}/* ${RESULTSDIR}/
+
+echo "Moving tmp to outdir done."
+
+cd ${JOB_HOME}/${JOB_NAME}
+
+if grep -q "permanentFail" ${PIPELINE}_${JOB_NAME}_LOG.txt
+then
+    echo "Not good (failures found, check log). Keeping intermediates for now." # code if found
+else
+    echo "All good (no failures)! Removing intermediate tmp folder." # code if not found
+    rm -rf ./.tmp/;
+    rm -rf ${RESULTSDIR}/out_tmp* ${RESULTSDIR}/tmp*
+fi
+
+# TODO this now commented out, so to finish inside job folder
+#cd -
+
+# Stop printing commands and their arguments as they are executed.
+
+echo
+echo "*********************************************************************"
+echo "*          SUCCESS: ${JOB_NAME} PROCESSED WITH ${PIPELINEVERSION}      *"
+echo "*********************************************************************"
+echo
+echo Bye!
+echo
+

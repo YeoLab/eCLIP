@@ -11,7 +11,7 @@ requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement      # TODO needed?
   - class: MultipleInputFeatureRequirement
-
+  - class: InlineJavascriptRequirement
 
 #hints:
 #  - class: ex:ScriptRequirement
@@ -88,13 +88,25 @@ outputs:
   b1_trimx1_metrics:
     type: File
     outputSource: b1_trim_and_map/X_output_trim_first_metrics
+  b1_trimx1_fastqc_report:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_fastqc_report
+  b1_trimx1_fastqc_stats: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_fastqc_stats
   b1_trimx2_fastq:
     type: File[]
     outputSource: b1_trim_and_map/X_output_trim_again
   b1_trimx2_metrics:
     type: File
     outputSource: b1_trim_and_map/X_output_trim_again_metrics
-
+  b1_trimx2_fastqc_report:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_report
+  b1_trimx2_fastqc_stats: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats
+    
   b1_maprepeats_mapped_to_genome:
     type: File
     outputSource: b1_trim_and_map/A_output_maprepeats_mapped_to_genome
@@ -175,8 +187,12 @@ steps:
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,
+      X_output_trim_first_fastqc_report,
+      X_output_trim_first_fastqc_stats,
       X_output_trim_again,
       X_output_trim_again_metrics,
+      X_output_trim_again_fastqc_report,
+      X_output_trim_again_fastqc_stats,
       A_output_maprepeats_mapped_to_genome,
       A_output_maprepeats_stats,
       A_output_maprepeats_star_settings,

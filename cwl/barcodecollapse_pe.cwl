@@ -12,7 +12,10 @@ requirements:
     # ramMin: 32000
     # tmpdirMin: 4000
     # outdirMin: 4000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/python:2.7.16
+    
 baseCommand: [barcodecollapsepe.py]
 
 inputs:

@@ -94,12 +94,36 @@ outputs:
   output_ip_b1_trimx1_metrics:
     type: File
     outputSource: step_ip_alignment/b1_trimx1_metrics
+  output_ip_b1_trimx1_fastqc_report_R1:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_report_R1
+  output_ip_b1_trimx1_fastqc_stats_R1:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_stats_R1
+  output_ip_b1_trimx1_fastqc_report_R2:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_report_R2
+  output_ip_b1_trimx1_fastqc_stats_R2:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_stats_R2
   output_ip_b1_trimx2_fastq:
     type: File[]
     outputSource: step_ip_alignment/b1_trimx2_fastq
   output_ip_b1_trimx2_metrics:
     type: File
     outputSource: step_ip_alignment/b1_trimx2_metrics
+  output_ip_b1_trimx2_fastqc_report_R1:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_report_R1
+  output_ip_b1_trimx2_fastqc_stats_R1:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_stats_R1
+  output_ip_b1_trimx2_fastqc_report_R2:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_report_R2
+  output_ip_b1_trimx2_fastqc_stats_R2:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_stats_R2
 
   output_ip_b2_trimx1_fastq:
     type: File[]
@@ -107,12 +131,36 @@ outputs:
   output_ip_b2_trimx1_metrics:
     type: File
     outputSource: step_ip_alignment/b2_trimx1_metrics
+  output_ip_b2_trimx1_fastqc_report_R1:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx1_fastqc_report_R1
+  output_ip_b2_trimx1_fastqc_stats_R1:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx1_fastqc_stats_R1
+  output_ip_b2_trimx1_fastqc_report_R2:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx1_fastqc_report_R2
+  output_ip_b2_trimx1_fastqc_stats_R2:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx1_fastqc_stats_R2
   output_ip_b2_trimx2_fastq:
     type: File[]
     outputSource: step_ip_alignment/b2_trimx2_fastq
   output_ip_b2_trimx2_metrics:
     type: File
     outputSource: step_ip_alignment/b2_trimx2_metrics
+  output_ip_b2_trimx2_fastqc_report_R1:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx2_fastqc_report_R1
+  output_ip_b2_trimx2_fastqc_stats_R1:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx2_fastqc_stats_R1
+  output_ip_b2_trimx2_fastqc_report_R2:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx2_fastqc_report_R2
+  output_ip_b2_trimx2_fastqc_stats_R2:
+    type: File
+    outputSource: step_ip_alignment/b2_trimx2_fastqc_stats_R2
 
   output_input_b1_trimx1_fastq:
     type: File[]
@@ -120,13 +168,36 @@ outputs:
   output_input_b1_trimx1_metrics:
     type: File
     outputSource: step_input_alignment/b1_trimx1_metrics
+  output_input_b1_trimx1_fastqc_report_R1:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_report_R1
+  output_input_b1_trimx1_fastqc_stats_R1:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_stats_R1
+  output_input_b1_trimx1_fastqc_report_R2:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_report_R2
+  output_input_b1_trimx1_fastqc_stats_R2:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_stats_R2
   output_input_b1_trimx2_fastq:
     type: File[]
     outputSource: step_input_alignment/b1_trimx2_fastq
   output_input_b1_trimx2_metrics:
     type: File
     outputSource: step_input_alignment/b1_trimx2_metrics
-
+  output_input_b1_trimx2_fastqc_report_R1:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_report_R1
+  output_input_b1_trimx2_fastqc_stats_R1:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_stats_R1
+  output_input_b1_trimx2_fastqc_report_R2:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_report_R2
+  output_input_b1_trimx2_fastqc_stats_R2:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_stats_R2
 
   ### Repeat mapping outputs ###
 
@@ -183,7 +254,6 @@ outputs:
   output_ip_b1_mapgenome_star_settings:
     type: File
     outputSource: step_ip_alignment/b1_mapgenome_star_settings
-
   output_ip_b2_mapgenome_mapped_to_genome:
     type: File
     outputSource: step_ip_alignment/b2_mapgenome_mapped_to_genome
@@ -205,8 +275,8 @@ outputs:
     outputSource: step_input_alignment/b1_mapgenome_star_settings
 
 
+  ### Duplicate removal outputs ###
 
-  ### RMDUP BAM OUTPUTS ###
 
 
   output_ip_b1_prermdup_sorted_bam:
@@ -291,11 +361,9 @@ outputs:
   output_clipper_bed:
     type: File
     outputSource: step_clipper/output_bed
-
   output_inputnormed_peaks:
     type: File
     outputSource: step_input_normalize_peaks/inputnormedBed
-
   output_compressed_peaks:
     type: File
     outputSource: step_compress_peaks/output_bed
@@ -329,8 +397,16 @@ steps:
       b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
+      b1_trimx1_fastqc_report_R1,
+      b1_trimx1_fastqc_stats_R1,
+      b1_trimx1_fastqc_report_R2,
+      b1_trimx1_fastqc_stats_R2,
       b1_trimx2_fastq,
       b1_trimx2_metrics,
+      b1_trimx2_fastqc_report_R1,
+      b1_trimx2_fastqc_stats_R1,
+      b1_trimx2_fastqc_report_R2,
+      b1_trimx2_fastqc_stats_R2,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,
@@ -346,8 +422,16 @@ steps:
       b2_demuxed_fastq_r2,
       b2_trimx1_fastq,
       b2_trimx1_metrics,
+      b2_trimx1_fastqc_report_R1,
+      b2_trimx1_fastqc_stats_R1,
+      b2_trimx1_fastqc_report_R2,
+      b2_trimx1_fastqc_stats_R2,
       b2_trimx2_fastq,
       b2_trimx2_metrics,
+      b2_trimx2_fastqc_report_R1,
+      b2_trimx2_fastqc_stats_R1,
+      b2_trimx2_fastqc_report_R2,
+      b2_trimx2_fastqc_stats_R2,
       b2_maprepeats_mapped_to_genome,
       b2_maprepeats_stats,
       b2_maprepeats_star_settings,
@@ -380,15 +464,21 @@ steps:
       chrom_sizes: chrom_sizes
       barcodesfasta: barcodesfasta
       randomer_length: randomer_length
-      # output_bam: input_bam
-      # r2_bam: input_r2_bam
     out: [
       b1_demuxed_fastq_r1,
       b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
+      b1_trimx1_fastqc_report_R1,
+      b1_trimx1_fastqc_stats_R1,
+      b1_trimx1_fastqc_report_R2,
+      b1_trimx1_fastqc_stats_R2,
       b1_trimx2_fastq,
       b1_trimx2_metrics,
+      b1_trimx2_fastqc_report_R1,
+      b1_trimx2_fastqc_stats_R1,
+      b1_trimx2_fastqc_report_R2,
+      b1_trimx2_fastqc_stats_R2,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,

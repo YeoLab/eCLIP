@@ -11,7 +11,10 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 16
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/bedtoola:2.27.1
+    
 baseCommand: [sort]
 
 inputs:

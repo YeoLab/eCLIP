@@ -11,7 +11,7 @@ requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement      # TODO needed?
   - class: MultipleInputFeatureRequirement
-
+  - class: InlineJavascriptRequirement
 
 #hints:
 #  - class: ex:ScriptRequirement
@@ -79,13 +79,36 @@ outputs:
   b1_trimx1_metrics:
     type: File
     outputSource: b1_trim_and_map/X_output_trim_first_metrics
+  b1_trimx1_fastqc_report_R1:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_fastqc_report_R1
+  b1_trimx1_fastqc_stats_R1: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_fastqc_stats_R1
+  b1_trimx1_fastqc_report_R2:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_fastqc_report_R2
+  b1_trimx1_fastqc_stats_R2: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_first_fastqc_stats_R2
   b1_trimx2_fastq:
     type: File[]
     outputSource: b1_trim_and_map/X_output_trim_again
   b1_trimx2_metrics:
     type: File
     outputSource: b1_trim_and_map/X_output_trim_again_metrics
-
+  b1_trimx2_fastqc_report_R1:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_report_R1
+  b1_trimx2_fastqc_stats_R1: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats_R1
+  b1_trimx2_fastqc_report_R2:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_report_R2
+  b1_trimx2_fastqc_stats_R2: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats_R2
 
   ### REPEAT MAPPING OUTPUTS ###
 
@@ -140,7 +163,7 @@ outputs:
     outputSource: b1_trim_and_map/X_output_sorted_bam
 
 
-  ### READ2 BAM OUTPUTS ###
+  ### READ2 MERGED BAM OUTPUTS ###
 
 
   output_r2_bam:
@@ -214,8 +237,16 @@ steps:
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,
+      X_output_trim_first_fastqc_report_R1,
+      X_output_trim_first_fastqc_stats_R1,
+      X_output_trim_first_fastqc_report_R2,
+      X_output_trim_first_fastqc_stats_R2,
       X_output_trim_again,
       X_output_trim_again_metrics,
+      X_output_trim_again_fastqc_report_R1,
+      X_output_trim_again_fastqc_stats_R1,
+      X_output_trim_again_fastqc_report_R2,
+      X_output_trim_again_fastqc_stats_R2,
       A_output_maprepeats_mapped_to_genome,
       A_output_maprepeats_stats,
       A_output_maprepeats_star_settings,
@@ -251,4 +282,3 @@ steps:
       bam: view_r2/output
     out:
       [posbw, negbw]
-

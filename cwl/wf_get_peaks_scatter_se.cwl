@@ -50,7 +50,7 @@ inputs:
               type: File
   blacklist_file: 
     type: File
-    
+
 outputs:
 
 
@@ -101,7 +101,7 @@ outputs:
   output_ip_b1_trimx2_metrics:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_trimx2_metrics
-
+  
   output_input_b1_trimx2_fastq:
     type:
       type: array
@@ -114,9 +114,39 @@ outputs:
     outputSource: step_get_peaks/output_input_b1_trimx2_metrics
 
 
+  ### FASTQC ###
+  
+  
+  output_ip_b1_trimx1_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_report
+  output_ip_b1_trimx1_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_stats
+  output_ip_b1_trimx2_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_report
+  output_ip_b1_trimx2_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_stats
+  
+  output_input_b1_trimx1_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_report
+  output_input_b1_trimx1_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_stats
+  output_input_b1_trimx2_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_report
+  output_input_b1_trimx2_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_stats
+    
+    
   ### REPEAT MAPPING OUTPUTS ###
-
-
+  
+  
   output_ip_b1_maprepeats_mapped_to_genome:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_maprepeats_mapped_to_genome
@@ -258,12 +288,20 @@ steps:
       output_input_b1_demuxed_fastq_r1,
       output_ip_b1_trimx1_fastq,
       output_ip_b1_trimx1_metrics,
+      output_ip_b1_trimx1_fastqc_report,
+      output_ip_b1_trimx1_fastqc_stats,
       output_input_b1_trimx1_fastq,
       output_input_b1_trimx1_metrics,
+      output_input_b1_trimx1_fastqc_report,
+      output_input_b1_trimx1_fastqc_stats,
       output_ip_b1_trimx2_fastq,
       output_ip_b1_trimx2_metrics,
+      output_ip_b1_trimx2_fastqc_report,
+      output_ip_b1_trimx2_fastqc_stats,
       output_input_b1_trimx2_fastq,
       output_input_b1_trimx2_metrics,
+      output_input_b1_trimx2_fastqc_report,
+      output_input_b1_trimx2_fastqc_stats,
       output_ip_b1_maprepeats_mapped_to_genome,
       output_ip_b1_maprepeats_stats,
       output_ip_b1_maprepeats_star_settings,

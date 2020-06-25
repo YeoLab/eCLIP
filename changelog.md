@@ -3,7 +3,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [Unreleased 0.4.99] - 2019-08-13
+## [Unreleased 0.5.99] - 2020-06-24
+### Added
+- Added docker requirement definitions to most commandlinetools.
+- Added the following companion workflows:
+  - wf_encode_se_full_nostats "full encode workflow (eCLIP + repeat mapping + region normalization)" minus umi_tools --stats (to save memory)
+  - wf_encode_se_full_scatter_nostats "full encode workflow" minus umi_tools --nostats (multiple samples)
+- Added the following commandlinetools:
+  - fastqc.cwl
+- Added the following subworkflows to the main workflow:
+  - wf_fastqc.cwl essentially fastqc.cwl + rename.cwl (so fastqc files won't override each other)
+- Added a 'blacklist_file' required param to the following workflows
+  - wf_get_peaks_scatter_se_nostats.cwl
+  - wf_get_peaks_trim_partial_scatter_se.cwl
+  - wf_get_peaks_trim_partial_se.cwl
+### Fixed
+- Updated workflows to report uniquely-named fastqc reports so they don't override each other.
+- (unused in main pipeline) convert_ReadsByLoc_combined_significancecalls.pl now matches current region normalization script
+- (unused in main pipeline) duplicate_removal_inline_paired_count_region_other_reads_SE.pl now matches current repeat element scripts
+- (unused in main pipeline) split_bam_to_subfiles_SE.pl now matches current repeat element scripts
+
+## [Unreleased 0.5.0] - 2020-02-21
+### Changed
+- Version bumped to 0.5.0
+
 ### Added
 - Added the following steps to the main single-end pipeline:
   - sort_bed (sorts input normalized bed file)

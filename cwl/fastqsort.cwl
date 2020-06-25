@@ -13,7 +13,10 @@ requirements:
     ramMin: 16000
     tmpdirMin: 10000
     outdirMin: 10000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/fastq-tools:0.8
+    
 baseCommand: [fastq-sort]
 
 #hints:

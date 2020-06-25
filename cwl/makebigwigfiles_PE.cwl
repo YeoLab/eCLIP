@@ -8,7 +8,9 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     ramMin: 16000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/makebigwigfiles:0.0.3
 
 baseCommand: [makebigwigfiles]
 

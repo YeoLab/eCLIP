@@ -72,14 +72,26 @@ outputs:
   X_output_trim_first_metrics:
     type: File
     outputSource: X_trim/output_trim_report
-
+  X_output_trim_first_fastqc_report:
+    type: File
+    outputSource: step_fastqc_trim/output_qc_report
+  X_output_trim_first_fastqc_stats:
+    type: File
+    outputSource: step_fastqc_trim/output_qc_stats
+    
   X_output_trim_again:
     type: File[]
     outputSource: step_gzip_sort_X_trim_again/gzipped
   X_output_trim_again_metrics:
     type: File
     outputSource: X_trim_again/output_trim_report
-
+  X_output_trim_again_fastqc_report:
+    type: File
+    outputSource: step_fastqc_trim_again/output_qc_report
+  X_output_trim_again_fastqc_stats:
+    type: File
+    outputSource: step_fastqc_trim_again/output_qc_stats
+    
   A_output_maprepeats_mapped_to_genome:
     type: File
     outputSource: rename_mapped_repeats/outfile
@@ -171,7 +183,7 @@ steps:
       input_fastqsort_fastq: X_trim_again/output_trim
     out:
       [output_fastqsort_sortedfastq]
-      
+  
   step_gzip_sort_X_trim_again:
     run: gzip.cwl
     scatter: input
@@ -179,6 +191,35 @@ steps:
       input: A_sort_trimmed_fastq/output_fastqsort_sortedfastq
     out:
       - gzipped
+      
+###########################################################################
+# FastQC
+###########################################################################
+  step_fastqc_trim:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim/gzipped
+        valueFrom: |
+          ${
+            return self[0];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
+      
+  step_fastqc_trim_again:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim_again/gzipped
+        valueFrom: |
+          ${
+            return self[0];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
       
 ###########################################################################
 # Mapping
@@ -199,7 +240,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_repeats/aligned
-      suffix: 
+      suffix:
         default: ".bam"
       newname:
         source: read1
@@ -211,7 +252,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_repeats/output_map_unmapped_fwd
-      suffix: 
+      suffix:
         default: ".fq"
       newname:
         source: read1

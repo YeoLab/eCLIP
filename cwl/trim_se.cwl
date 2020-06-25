@@ -24,18 +24,9 @@ requirements:
     #outdirMin: 4000
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
-
-#hints:
-#  - class: ex:PackageRequirement
-#    packages:
-#      - name: cutadapt
-#        package_manager: pip
-#        version: "1.10"
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-#  - class: ShellCommandRequirement
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/cutadapt:1.14
 
 baseCommand: [cutadapt]
 

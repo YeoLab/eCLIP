@@ -304,12 +304,12 @@ sub fisher_or_chisq {
 
 
     if ($expa < 5 || $expb < 5 || $expc < 5 || $expd < 5 || $a < 5 || $b < 5 || $c < 5 || $d < 5) {
-        if (exists $precalculated_fisher{$a."|".$b}) {
-            return($precalculated_fisher{$a."|".$b}{p},$precalculated_fisher{$a."|".$b}{v},"F",$direction);
+        if (exists $precalculated_fisher{$a."|".$b."|".$c."|".$d}) {
+            return($precalculated_fisher{$a."|".$b."|".$c."|".$d}{p},$precalculated_fisher{$a."|".$b."|".$c."|".$d}{v},"F",$direction);
         } else {
             my ($pval,$val) = &fisher_exact($a,$b,$c,$d);
-            $precalculated_fisher{$a."|".$b}{p} = $pval;
-            $precalculated_fisher{$a."|".$b}{v} = $val;
+            $precalculated_fisher{$a."|".$b."|".$c."|".$d}{p} = $pval;
+            $precalculated_fisher{$a."|".$b."|".$c."|".$d}{v} = $val;
             return($pval,$val,"F",$direction);
         }
     } else {

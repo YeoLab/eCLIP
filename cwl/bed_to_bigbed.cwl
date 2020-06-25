@@ -10,7 +10,10 @@ requirements:
     coresMin: 1
     coresMax: 16
   - class: InlineJavascriptRequirement
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/ucsc-tools:377
+    
 baseCommand: [bedToBigBed]
 
 inputs:

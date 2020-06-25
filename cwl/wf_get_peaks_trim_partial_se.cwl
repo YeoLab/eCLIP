@@ -56,7 +56,9 @@ inputs:
             type: File
           name:
             type: string
-
+  blacklist_file:
+    type: File
+    
 outputs:
 
 
@@ -81,26 +83,49 @@ outputs:
   output_ip_b1_trimx1_metrics:
     type: File
     outputSource: step_ip_alignment/b1_trimx1_metrics
+  output_ip_b1_trimx1_fastqc_report:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_report
+  output_ip_b1_trimx1_fastqc_stats:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_stats
   # output_ip_b1_trimx2_fastq:
   #   type: File[]
   #   outputSource: step_ip_alignment/b1_trimx2_fastq
   # output_ip_b1_trimx2_metrics:
   #   type: File
   #   outputSource: step_ip_alignment/b1_trimx2_metrics
-
+  # output_ip_b1_trimx2_fastqc_report:
+  #   type: File
+  #   outputSource: step_ip_alignment/b1_trimx2_fastqc_report
+  # output_ip_b1_trimx2_fastqc_stats:
+  #   type: File
+  #   outputSource: step_ip_alignment/b1_trimx2_fastqc_stats
+    
   output_input_b1_trimx1_fastq:
     type: File[]
     outputSource: step_input_alignment/b1_trimx1_fastq
   output_input_b1_trimx1_metrics:
     type: File
     outputSource: step_input_alignment/b1_trimx1_metrics
+  output_input_b1_trimx1_fastqc_report:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_report
+  output_input_b1_trimx1_fastqc_stats:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_stats
   # output_input_b1_trimx2_fastq:
   #   type: File[]
   #   outputSource: step_input_alignment/b1_trimx2_fastq
   # output_input_b1_trimx2_metrics:
   #   type: File
   #   outputSource: step_input_alignment/b1_trimx2_metrics
-
+  # output_input_b1_trimx2_fastqc_report:
+  #   type: File
+  #   outputSource: step_input_alignment/b1_trimx2_fastqc_report
+  # output_input_b1_trimx2_fastqc_stats:
+  #   type: File
+  #   outputSource: step_input_alignment/b1_trimx2_fastqc_stats
 
   ### Repeat mapping outputs ###
 
@@ -217,6 +242,22 @@ outputs:
     type: File
     outputSource: step_compress_peaks/output_bed
 
+  ### Downstream ###
+  
+  output_blacklist_removed_bed:
+    type: File
+    outputSource: step_blacklist_remove/output_blacklist_removed_bed
+  output_narrowpeak:
+    type: File
+    outputSource: step_bed_to_narrowpeak/output_narrowpeak
+  output_fixed_bed:
+    type: File
+    outputSource: step_fix_bed_for_bigbed_conversion/output_fixed_bed
+  output_bigbed:
+    type: File
+    outputSource: step_bed_to_bigbed/output_bigbed
+    
+    
 steps:
 
 ###########################################################################
@@ -224,7 +265,7 @@ steps:
 ###########################################################################
 
   step_ip_alignment:
-    run: wf_clipseqcore_se_1barcode.cwl
+    run: wf_clipseqcore_trim_partial_se_1barcode.cwl
     in:
       read:
         source: sample
@@ -242,8 +283,12 @@ steps:
       # b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
+      b1_trimx1_fastqc_report,
+      b1_trimx1_fastqc_stats,
       # b1_trimx2_fastq,
       # b1_trimx2_metrics,
+      # b1_trimx2_fastqc_report,
+      # b1_trimx2_fastqc_stats,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,
@@ -259,7 +304,7 @@ steps:
     ]
 
   step_input_alignment:
-    run: wf_clipseqcore_se_1barcode.cwl
+    run: wf_clipseqcore_trim_partial_se_1barcode.cwl
     in:
       read:
         source: sample
@@ -277,8 +322,12 @@ steps:
       # b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
+      b1_trimx1_fastqc_report,
+      b1_trimx1_fastqc_stats,
       # b1_trimx2_fastq,
       # b1_trimx2_metrics,
+      # b1_trimx2_fastqc_report,
+      # b1_trimx2_fastqc_stats,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,

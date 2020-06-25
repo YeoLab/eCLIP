@@ -48,7 +48,9 @@ inputs:
               type: string
             adapters:
               type: File
-
+  blacklist_file: 
+    type: File
+    
 outputs:
 
 
@@ -99,7 +101,7 @@ outputs:
   output_ip_b1_trimx2_metrics:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_trimx2_metrics
-
+  
   output_input_b1_trimx2_fastq:
     type:
       type: array
@@ -112,9 +114,39 @@ outputs:
     outputSource: step_get_peaks/output_input_b1_trimx2_metrics
 
 
+  ### FASTQC ###
+  
+  
+  output_ip_b1_trimx1_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_report
+  output_ip_b1_trimx1_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_stats
+  output_ip_b1_trimx2_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_report
+  output_ip_b1_trimx2_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_stats
+  
+  output_input_b1_trimx1_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_report
+  output_input_b1_trimx1_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_stats
+  output_input_b1_trimx2_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_report
+  output_input_b1_trimx2_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_stats
+    
+    
   ### REPEAT MAPPING OUTPUTS ###
-
-
+  
+  
   output_ip_b1_maprepeats_mapped_to_genome:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_maprepeats_mapped_to_genome
@@ -220,7 +252,21 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_compressed_peaks
 
-
+  ### Downstream ###
+  
+  output_blacklist_removed_bed:
+    type: File[]
+    outputSource: step_get_peaks/output_blacklist_removed_bed
+  output_narrowpeak:
+    type: File[]
+    outputSource: step_get_peaks/output_narrowpeak
+  output_fixed_bed:
+    type: File[]
+    outputSource: step_get_peaks/output_fixed_bed
+  output_bigbed:
+    type: File[]
+    outputSource: step_get_peaks/output_bigbed
+    
 steps:
 
 ###########################################################################
@@ -236,17 +282,26 @@ steps:
       species: species
       chrom_sizes: chrom_sizes
       sample: samples
+      blacklist_file: blacklist_file
     out: [
       output_ip_b1_demuxed_fastq_r1,
       output_input_b1_demuxed_fastq_r1,
       output_ip_b1_trimx1_fastq,
       output_ip_b1_trimx1_metrics,
+      output_ip_b1_trimx1_fastqc_report,
+      output_ip_b1_trimx1_fastqc_stats,
       output_input_b1_trimx1_fastq,
       output_input_b1_trimx1_metrics,
+      output_input_b1_trimx1_fastqc_report,
+      output_input_b1_trimx1_fastqc_stats,
       output_ip_b1_trimx2_fastq,
       output_ip_b1_trimx2_metrics,
+      output_ip_b1_trimx2_fastqc_report,
+      output_ip_b1_trimx2_fastqc_stats,
       output_input_b1_trimx2_fastq,
       output_input_b1_trimx2_metrics,
+      output_input_b1_trimx2_fastqc_report,
+      output_input_b1_trimx2_fastqc_stats,
       output_ip_b1_maprepeats_mapped_to_genome,
       output_ip_b1_maprepeats_stats,
       output_ip_b1_maprepeats_star_settings,
@@ -273,5 +328,9 @@ steps:
       output_input_neg_bw,
       output_clipper_bed,
       output_inputnormed_peaks,
-      output_compressed_peaks
+      output_compressed_peaks,
+      output_blacklist_removed_bed,
+      output_narrowpeak,
+      output_fixed_bed,
+      output_bigbed
     ]

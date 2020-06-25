@@ -4,16 +4,11 @@ use warnings;
 use strict;
 use POSIX;
 
+#20190318 - fixed umitools umi naming change
+
 my %revstrand;
 $revstrand{"+"} = "-";
 $revstrand{"-"} = "+";
-my $scores = "\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/0123456789:;<=>?\@ABCDEFGHIJ";
-my %convert_phred;
-my @split_scores = split(//,$scores);
-for (my $i=0;$i<@split_scores;$i++) {
-    $convert_phred{$split_scores[$i]} = $i;
-}
-
 
 my $hashing_value = 1000;
 my %enst2type;
@@ -172,7 +167,7 @@ sub run_pcr_duplicate_removal {
 	my $r1 = $read_hash{$r1name}{R1};
 	
 	my @tmp_r1 = split(/\t/,$r1);
-	my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
+#	my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
 	
 	my $r1sam_flag = $tmp_r1[1];
 
@@ -189,10 +184,14 @@ sub run_pcr_duplicate_removal {
 	    print STDERR "R1 strand error $r1sam_flag\n";
 	}
 
-	
-	my @read_name = split(/\:/,$tmp_r1[0]);
-	my $randommer = $read_name[0];
+	my @read_name = split(/\_/,$tmp_r1[0]);
+	my $randommer = pop(@read_name);
+	my $r1name = join("_",@read_name);
 
+#        my ($r1name,$randommer) = split(/\_/,$tmp_r1[0]);	
+#	my @read_name = split(/\:/,$tmp_r1[0]);
+#	my $randommer = $read_name[0];
+#	print STDERR "run_pcr_duplicate_removal readname $r1name, randommer $randommer\n";
 	my $r1_cigar = $tmp_r1[5];
 
       # 165 = R2 unmapped, R1 rev strand -- frag on fwd strand
@@ -283,7 +282,7 @@ sub read_unique_mapped {
 	chomp($r1);
 	
 	my @tmp_r1 = split(/\t/,$r1);
-	my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
+#	my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
 	
 	my $r1sam_flag = $tmp_r1[1];
 	next if ($r1sam_flag == 4);
@@ -317,8 +316,14 @@ sub read_unique_mapped {
 	    next;
 	}
 ###
-	my @read_name = split(/\:/,$tmp_r1[0]);
-	my $randommer = $read_name[0];
+	my @read_name = split(/\_/,$tmp_r1[0]);
+        my $randommer = pop(@read_name);
+	my $r1name = join("_",@read_name);
+
+#        my ($r1name,$randommer) = split(/\_/,$tmp_r1[0]);
+#	print STDERR "read_unique_mapped readname $r1name, randommer $randommer\n";
+#	my @read_name = split(/\:/,$tmp_r1[0]);
+#	my $randommer = $read_name[0];
 	
 	my $r1_cigar = $tmp_r1[5];
 	
@@ -531,8 +536,15 @@ sub read_rep_family {
 	}
 	
 	my @tmp_r1 = split(/\t/,$r1);
-	my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
-	
+#	my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
+	my @read_name = split(/\_/,$tmp_r1[0]);
+        my $r1bc = pop(@read_name);
+	my $r1name = join("_",@read_name);
+
+#	my ($r1name,$r1bc) = split(/\_/,$tmp_r1[0]);
+#        print STDERR "read_rep_family readname $r1name, randommer $r1bc\n";
+
+
 	my $r1sam_flag = $tmp_r1[1];
 	next if ($r1sam_flag == 4);
 	
@@ -772,7 +784,9 @@ sub parse_mismatch_string_foralignmentscore {
     my @phred_scoress = split(//,$phred_scores);
     my @quality_scores;
     for (my $i=0;$i<@phred_scoress;$i++) {
-        $quality_scores[$i] = $convert_phred{$phred_scoress[$i]};
+#        $quality_scores[$i] = $convert_phred{$phred_scoress[$i]};
+        $quality_scores[$i] = ord($phred_scoress[$i]) - 33;
+	print STDERR "error quality score out of range $quality_scores[$i] $phred_scoress[$i]\n" if ($quality_scores[$i] < 0 || $quality_scores[$i] > 43);
     }
 
     my $current_pos = 0;
@@ -848,7 +862,9 @@ sub parse_cigar_string_foralignmentscore {
     my @phred_scoress = split(//,$phred_scores);
     my @quality_scores;
     for (my $i=0;$i<@phred_scoress;$i++) {
-        $quality_scores[$i] = $convert_phred{$phred_scoress[$i]};
+	$quality_scores[$i] = ord($phred_scoress[$i]) - 33;
+        print STDERR "error quality score out of range $quality_scores[$i] $phred_scoress[$i]\n" if ($quality_scores[$i] < 0 || $quality_scores[$i] > 43);        
+#$quality_scores[$i] = $convert_phred{$phred_scoress[$i]};
     }
 
     my $gap_open = 5;

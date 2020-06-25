@@ -11,7 +11,9 @@ requirements:
     ramMin: 32000
     tmpdirMin: 8000
     outdirMin: 8000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/eclipdemux:0.0.1
 
 baseCommand: [eclipdemux]
 
@@ -44,10 +46,6 @@ inputs:
     inputBinding:
       position: 5
       prefix: --dataset
-
-  # TODO: remove when safe
-  # seqdatapath:
-  #   type: string
 
   reads:
     type:
@@ -120,18 +118,6 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.dataset).$(inputs.reads.name).$(inputs.reads.barcodeids[1]).r2.fq.gz
-
-  #output_demuxedpairedend_fastq1_all:
-  #  type: File[]
-  #  outputBinding:
-  #    glob: "*_R1.*.f*q.gz"
-  #    #glob: $(inputs.dataset).$(inputs.reads.name).*.r1.fq.gz
-
-  #output_demuxedpairedend_fastq2_all:
-  #  type: File[]
-  #  outputBinding:
-  #    glob: "*_R2.*.f*q.gz"
-  #    #glob: $(inputs.dataset).$(inputs.reads.name).*.r2.fq.gz
 
   output_demuxedpairedend_metrics:
     type: File

@@ -6,6 +6,7 @@ cwlVersion: v1.0
 class: Workflow
 
 requirements:
+  - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement      # TODO needed?
@@ -42,6 +43,8 @@ inputs:
   read2:
     type: File
 
+  ## Defaults (don't change unless we have a very good reason) ##
+  
   sort_names:
     type: boolean
     default: true
@@ -54,21 +57,42 @@ inputs:
 
 outputs:
 
-
   X_output_trim_first:
     type: File[]
     outputSource: step_gzip_sort_X_trim/gzipped
   X_output_trim_first_metrics:
     type: File
     outputSource: X_trim/output_trim_report
-
+  X_output_trim_first_fastqc_report_R1:
+    type: File
+    outputSource: step_fastqc_trim_R1/output_qc_report
+  X_output_trim_first_fastqc_stats_R1:
+    type: File
+    outputSource: step_fastqc_trim_R1/output_qc_stats
+  X_output_trim_first_fastqc_report_R2:
+    type: File
+    outputSource: step_fastqc_trim_R2/output_qc_report
+  X_output_trim_first_fastqc_stats_R2:
+    type: File
+    outputSource: step_fastqc_trim_R2/output_qc_stats
   X_output_trim_again:
     type: File[]
     outputSource: step_gzip_sort_X_trim_again/gzipped
   X_output_trim_again_metrics:
     type: File
     outputSource: X_trim_again/output_trim_report
-
+  X_output_trim_again_fastqc_report_R1:
+    type: File
+    outputSource: step_fastqc_trim_again_R1/output_qc_report
+  X_output_trim_again_fastqc_stats_R1:
+    type: File
+    outputSource: step_fastqc_trim_again_R1/output_qc_stats
+  X_output_trim_again_fastqc_report_R2:
+    type: File
+    outputSource: step_fastqc_trim_again_R2/output_qc_report
+  X_output_trim_again_fastqc_stats_R2:
+    type: File
+    outputSource: step_fastqc_trim_again_R2/output_qc_stats
   A_output_maprepeats_mapped_to_genome:
     type: File
     outputSource: rename_mapped_repeats/outfile
@@ -178,7 +202,7 @@ steps:
       times: trim_times
       error_rate: trim_error_rate
     out: [output_trim, output_trim_report]
-
+  
   A_sort_trimmed_fastq:
     run: fastqsort.cwl
     scatter: input_fastqsort_fastq
@@ -195,6 +219,59 @@ steps:
     out:
       - gzipped
       
+###########################################################################
+# FastQC
+###########################################################################
+  step_fastqc_trim_R1:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim/gzipped
+        valueFrom: |
+          ${
+            return self[0];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
+  step_fastqc_trim_R2:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim/gzipped
+        valueFrom: |
+          ${
+            return self[1];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
+
+  step_fastqc_trim_again_R1:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim_again/gzipped
+        valueFrom: |
+          ${
+            return self[0];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
+  step_fastqc_trim_again_R2:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim_again/gzipped
+        valueFrom: |
+          ${
+            return self[1];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
+
 ###########################################################################
 # Mapping
 ###########################################################################
@@ -225,14 +302,10 @@ steps:
     out: [
       outfile
     ]
-  rename_unmapped_repeats:
+  rename_unmapped_repeats_r1:
     run: rename.cwl
-    scatter: srcfile
     in:
-      srcfile: [
-        A_map_repeats/output_map_unmapped_fwd,
-        A_map_repeats/output_map_unmapped_rev
-      ]
+      srcfile: A_map_repeats/output_map_unmapped_fwd
       suffix:
         default: ".fq"
       newname:
@@ -241,14 +314,29 @@ steps:
     out: [
       outfile
     ]
+  rename_unmapped_repeats_r2:
+    run: rename.cwl
+    in:
+      srcfile: A_map_repeats/output_map_unmapped_rev
+      suffix:
+        default: ".fq"
+      newname:
+        source: read2
+        valueFrom: ${ return self.nameroot + ".repeat-unmapped"; }
+    out: [
+      outfile
+    ]
   A_sort_repunmapped_fastq:
     run: fastqsort.cwl
     scatter: input_fastqsort_fastq
     in:
-      input_fastqsort_fastq: rename_unmapped_repeats/outfile
+      input_fastqsort_fastq: [
+        rename_unmapped_repeats_r1/outfile,
+        rename_unmapped_repeats_r2/outfile
+      ]
     out:
       [output_fastqsort_sortedfastq]
-      
+  
   step_gzip_sort_repunmapped_fastq:
     run: gzip.cwl
     scatter: input
@@ -275,7 +363,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_genome/aligned
-      suffix:
+      suffix: 
         default: ".bam"
       newname:
         source: read1
@@ -306,7 +394,6 @@ steps:
 ###########################################################################
 # Downstream
 ###########################################################################
-
 
 doc: |
   This workflow takes in appropriate trimming params and demultiplexed reads,

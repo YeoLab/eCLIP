@@ -11,7 +11,10 @@ requirements:
     coresMin: 8
     coresMax: 16
     ramMin: 32000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/clipper:997fe25532a5bdcf5957f2a467ca283bbd550303
+    
 baseCommand: [clipper]
 
 # hints:

@@ -83,26 +83,49 @@ outputs:
   output_ip_b1_trimx1_metrics:
     type: File
     outputSource: step_ip_alignment/b1_trimx1_metrics
+  output_ip_b1_trimx1_fastqc_report:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_report
+  output_ip_b1_trimx1_fastqc_stats:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx1_fastqc_stats
   output_ip_b1_trimx2_fastq:
     type: File[]
     outputSource: step_ip_alignment/b1_trimx2_fastq
   output_ip_b1_trimx2_metrics:
     type: File
     outputSource: step_ip_alignment/b1_trimx2_metrics
-
+  output_ip_b1_trimx2_fastqc_report:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_report
+  output_ip_b1_trimx2_fastqc_stats:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_stats
+    
   output_input_b1_trimx1_fastq:
     type: File[]
     outputSource: step_input_alignment/b1_trimx1_fastq
   output_input_b1_trimx1_metrics:
     type: File
     outputSource: step_input_alignment/b1_trimx1_metrics
+  output_input_b1_trimx1_fastqc_report:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_report
+  output_input_b1_trimx1_fastqc_stats:
+    type: File
+    outputSource: step_input_alignment/b1_trimx1_fastqc_stats
   output_input_b1_trimx2_fastq:
     type: File[]
     outputSource: step_input_alignment/b1_trimx2_fastq
   output_input_b1_trimx2_metrics:
     type: File
     outputSource: step_input_alignment/b1_trimx2_metrics
-
+  output_input_b1_trimx2_fastqc_report:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_report
+  output_input_b1_trimx2_fastqc_stats:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_stats
 
   ### Repeat mapping outputs ###
 
@@ -260,8 +283,12 @@ steps:
       # b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
+      b1_trimx1_fastqc_report,
+      b1_trimx1_fastqc_stats,
       b1_trimx2_fastq,
       b1_trimx2_metrics,
+      b1_trimx2_fastqc_report,
+      b1_trimx2_fastqc_stats,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,
@@ -295,8 +322,12 @@ steps:
       # b1_demuxed_fastq_r2,
       b1_trimx1_fastq,
       b1_trimx1_metrics,
+      b1_trimx1_fastqc_report,
+      b1_trimx1_fastqc_stats,
       b1_trimx2_fastq,
       b1_trimx2_metrics,
+      b1_trimx2_fastqc_report,
+      b1_trimx2_fastqc_stats,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,

@@ -38,7 +38,7 @@ while (<F>) {
     chomp($r1);
 
     my @tmp_r1 = split(/\t/,$r1);
-    my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
+#    my ($r1name,$r1bc) = split(/\s+/,$tmp_r1[0]);
 
     my $r1sam_flag = $tmp_r1[1];
 #    unless ($r1sam_flag) {
@@ -58,7 +58,11 @@ while (<F>) {
     }
 
     my @read_name = split(/\_/,$tmp_r1[0]);
-    my $randommer = $read_name[1];
+    my $randommer = pop(@read_name);
+    my $r1name = join("_",@read_name);
+
+#    my @read_name = split(/\_/,$tmp_r1[0]);
+#    my $randommer = $read_name[1];
     my $first2rand = substr($randommer,0,2);
     print { $filehandles{$first2rand} } "".$r1."\n";
 }

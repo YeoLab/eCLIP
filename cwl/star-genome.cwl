@@ -10,19 +10,14 @@ requirements:
   - class: ResourceRequirement
     coresMin: 8
     coresMax: 16
-    #ramMin: 32000
+    ramMin: 35000
     #tmpdirMin: 32000
     #outdirMin: 4000
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
-
-### Comment out - TSCC does not use Docker ###
-# hints:
-# - class: DockerRequirement
-#     #dockerImageId: scidap/star:v2.5.0b #not yet ready
-#   dockerPull: scidap/star:v2.5.0b
-#   dockerFile: >
-#     $import: STAR-Dockerfile
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/star:2.4.0j
 
 inputs:
   winBinNbits:
@@ -398,7 +393,7 @@ inputs:
 
       '
   runMode:
-    default: alignReads  # TODO: eCLIP 0.1.5 Defaults
+    # default: alignReads  # TODO: eCLIP 0.1.5 Defaults
     type: string
     default: alignReads
     inputBinding:

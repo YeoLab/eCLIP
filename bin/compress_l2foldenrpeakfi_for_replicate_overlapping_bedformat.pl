@@ -11,8 +11,8 @@ my $hashing_value = 100000;
 # uses l2foldenr peak files
 
 my $fi = $ARGV[0];
-# my $output_fi = $fi.".compressed.bed";
 my $output_fi = $ARGV[1];
+# my $output_fi = $fi.".compressed.bed";
 open(O,">$output_fi");
 
 my %peaks2size;

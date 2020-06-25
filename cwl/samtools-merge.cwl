@@ -12,19 +12,11 @@ requirements:
     #tmpdirMin: 4000
     #outdirMin: 4000
 
-
-
-# samtools executable in bin folder is v 0.1.18-dev (r982:313)
-
 baseCommand: [samtools, merge]
 
-#$namespaces:
-#  ex: http://example.com/
-
-#hints:
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/samtools:1.5
 
 inputs:
 

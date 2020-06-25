@@ -7,8 +7,9 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-# hints:
-#  - $import: samtools-docker.yml
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/samtools:1.5
 
 requirements:
   InitialWorkDirRequirement:

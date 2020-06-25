@@ -16,7 +16,10 @@ requirements:
     ramMin: 32000
     tmpdirMin: 8000
     outdirMin: 8000
-
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/umi_tools:1.0.0
+            
 baseCommand: [umi_tools, extract]
 arguments: ["--random-seed", "1"]
 inputs:

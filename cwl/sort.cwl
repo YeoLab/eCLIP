@@ -18,7 +18,9 @@ requirements:
     tmpdirMin: 8000
     outdirMin: 8000
 
-# samtools executable in bin folder is v 0.1.18-dev (r982:313)
+hints:
+  - class: DockerRequirement
+    dockerImageId: brianyee/samtools:1.5
 
 baseCommand: [samtools, sort]
 

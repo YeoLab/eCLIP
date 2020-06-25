@@ -48,7 +48,10 @@ inputs:
               type: string
             adapters:
               type: File
-
+  
+  blacklist_file:
+    type: File
+    
   ### repeat mapping options ###
 
   bowtie2_db:
@@ -262,7 +265,24 @@ outputs:
     type: File[]
     outputSource: wf_encode_se_full/output_compressed_peaks
 
-
+  
+  ### Downstream peak outputs ###
+  
+  
+  output_blacklist_removed_bed:
+    type: File[]
+    outputSource: wf_encode_se_full/output_blacklist_removed_bed
+  output_narrowpeak:
+    type: File[]
+    outputSource: wf_encode_se_full/output_narrowpeak
+  output_fixed_bed:
+    type: File[]
+    outputSource: wf_encode_se_full/output_fixed_bed
+  output_bigbed:
+    type: File[]
+    outputSource: wf_encode_se_full/output_bigbed
+    
+    
   ### Repeat element outputs ###
 
 
@@ -361,6 +381,7 @@ steps:
       trna_bed_file: trna_bed_file
       lncrna_table_file: lncrna_table_file
       lncrna_full_file: lncrna_full_file
+      blacklist_file: blacklist_file
     out: [
       output_ip_b1_demuxed_fastq_r1,
       output_input_b1_demuxed_fastq_r1,
@@ -399,6 +420,10 @@ steps:
       output_clipper_bed,
       output_inputnormed_peaks,
       output_compressed_peaks,
+      output_blacklist_removed_bed,
+      output_narrowpeak,
+      output_fixed_bed,
+      output_bigbed,
       output_ip_concatenated_pre_rmDup_sam_file,
       output_input_concatenated_pre_rmDup_sam_file,
       output_barcode1_concatenated_rmDup_sam_file,
