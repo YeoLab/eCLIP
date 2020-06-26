@@ -10,7 +10,7 @@ requirements:
 
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/fastqc:0.11.8
+    dockerPull: brianyee/fastqc:0.10.1
 
 baseCommand: [fastqc, -t, "2", --extract, -k, "7"]
 

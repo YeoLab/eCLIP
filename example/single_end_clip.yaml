@@ -1,7 +1,4 @@
-#!/usr/bin/env eCLIP_singleend_singlethreaded
-
-### eCLIP_singleend ###
-### wf_get_peaks_scatter_se.cwl ###
+#!/usr/bin/env eCLIP_singleend_singlenode
 
 dataset: ENCODE4
 
@@ -9,15 +6,15 @@ species: hg19
 
 chrom_sizes:
   class: File
-  path: inputs/hg19.chrom.sizes
+  path: /home/centos/refs/STAR/chrNameLength.txt
 
 speciesGenomeDir:
   class: Directory
-  path: inputs/hg19_star_sjdb
+  path: /home/centos/refs/STAR
 
 repeatElementGenomeDir:
   class: Directory
-  path: inputs/homo_sapiens_repbase_v2
+  path: /home/centos/refs/STAR_repeat/
 
 samples:
   - 
@@ -25,17 +22,20 @@ samples:
       name: 4020_CLIP1
       read1:
         class: File
-        path: example_fastqs/4020_CLIP1_S18_L007_R1_001.fastq.gz
+        path: /home/centos/seRBFOX2/4020_CLIP1_S18_L007_R1_001.fastq.gz
       adapters:
         class: File
-        path: inputs/InvRNA1_adapters.fasta
+        path: /home/centos/eclip/example/inputs/InvRNA1_adapters.fasta
 
     - input_read:
       name: 4020_INPUT1
       read1:
         class: File
-        path: example_fastqs/4020_INPUT1_S17_L007_R1_001.fastq.gz
+        path: /home/centos/seRBFOX2/4020_INPUT1_S17_L007_R1_001.fastq.gz
       adapters:
         class: File
-        path: inputs/InvRNA5_adapters.fasta
+        path: /home/centos/eclip/example/inputs/InvRNA5_adapters.fasta
 
+blacklist_file:
+  class: File
+  path: /home/centos/refs/ENCFF039QTN.bed

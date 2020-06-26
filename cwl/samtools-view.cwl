@@ -12,7 +12,7 @@ requirements:
 
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/samtools:1.5
+    dockerPull: brianyee/samtools:1.6
     
 inputs:
   isbam:
