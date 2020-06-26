@@ -26,7 +26,7 @@ For human datasets, we recommend at least 8 cores (for Clipper) and 32G memory (
   - clipper=997fe25532a5bdcf5957f2a467ca283bbd550303
   - cutadapt=1.14
   - eclipdemux=0.0.1
-  - fastqc=0.10.1
+  - fastqc=0.11.8
   - fastq-tools=0.8
   - perl=5.10.1
     - Statistics::Basic 1.6611
