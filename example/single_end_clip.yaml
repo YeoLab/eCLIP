@@ -19,23 +19,23 @@ repeatElementGenomeDir:
 samples:
   - 
     - ip_read:
-      name: 4020_CLIP1
+      name: IP
       read1:
         class: File
-        path: /home/centos/seRBFOX2/4020_CLIP1_S18_L007_R1_001.fastq.gz
+        path: /home/centos/seRBFOX2/INV_IP_B_S58_L005_R1_001.fastq.gz
       adapters:
         class: File
         path: /home/centos/eclip/example/inputs/InvRNA1_adapters.fasta
 
     - input_read:
-      name: 4020_INPUT1
+      name: INPUT
       read1:
         class: File
-        path: /home/centos/seRBFOX2/4020_INPUT1_S17_L007_R1_001.fastq.gz
+        path: /home/centos/seRBFOX2/INV_IN_B_S57_L005_R1_001.fastq.gz
       adapters:
         class: File
         path: /home/centos/eclip/example/inputs/InvRNA5_adapters.fasta
 
 blacklist_file:
   class: File
-  path: /home/centos/refs/ENCFF039QTN.bed
+  path: /home/centos/eclip/example/inputs/ENCFF039QTN.bed
