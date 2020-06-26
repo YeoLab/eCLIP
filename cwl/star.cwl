@@ -1,23 +1,15 @@
 #!/usr/bin/env cwltool
 
 cwlVersion: v1.0
+
 class: CommandLineTool
 
-### doc: 'STAR Aligner' ###
-
-### TSCC requirements ###
 requirements:
-  - class: ResourceRequirement
-    coresMin: 8
-    coresMax: 16
-    ramMin: 32000
-    tmpdirMin: 32000
-    #outdirMin: 4000
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/star:2.4.0j
+    dockerPull: brianyee/star:2.4.0j
 
 inputs:
   winBinNbits:

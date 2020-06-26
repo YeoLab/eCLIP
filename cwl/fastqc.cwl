@@ -4,28 +4,15 @@ cwlVersion: v1.0
 
 class: CommandLineTool
 
-
 requirements:
   - class: ResourceRequirement
     coresMin: 2
-    ramMin: 8000
-    tmpdirMin: 4000
-    outdirMin: 4000
 
-baseCommand: [fastqc, -t, "2", --extract, -k, "7", -j, "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.el7_6.x86_64/jre/bin/java"]
+hints:
+  - class: DockerRequirement
+    dockerPull: brianyee/fastqc:0.11.8
 
-#$namespaces:
-#  ex: http://example.com/
-
-#hints:
-
-#  - class: ex:PackageRequirement
-#    packages:
-#      - name: openjdk-7-jre-headless
-
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
+baseCommand: [fastqc, -t, "2", --extract, -k, "7"]
 
 inputs:
 

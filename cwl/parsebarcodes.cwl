@@ -1,17 +1,12 @@
-#!/usr/bin/env cwl-runner
-
-### doc: "cwl wrapper for bash script that parses barcodes based on overlap length" ###
+#!/usr/bin/env cwltool
 
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
-    ramMin: 2000
-    #tmpdirMin: 4000
-    #outdirMin: 4000
 
 baseCommand: [parsebarcodes.sh]
 
@@ -43,6 +38,7 @@ inputs:
     type: string
     inputBinding:
       position: 3
+
   barcodeidB:
     type: string
     inputBinding:

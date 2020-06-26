@@ -1,21 +1,19 @@
-#!/usr/bin/env cwl-runner
+#!/usr/bin/env cwltool
 
 ### doc: "collapses eCLIP barcodes to remove PCR duplicates" ###
 
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
-    # ramMin: 64000
-    # tmpdirMin: 4000
-    # outdirMin: 4000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/umi_tools:1.0.0
+    dockerPull: brianyee/umi_tools:1.0.0
     
 baseCommand: [umi_tools, dedup]
 

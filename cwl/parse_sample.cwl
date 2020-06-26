@@ -1,7 +1,5 @@
 #!/usr/bin/env cwltool
 
-### parses a record object into two reads (read1 and read2) ###
-
 cwlVersion: v1.0
 class: ExpressionTool
 
@@ -23,6 +21,7 @@ outputs:
 
   ip_read:
     type: record
+
   input_read:
     type: record
 
@@ -35,5 +34,4 @@ expression: |
     }
 
 doc: |
-  This tool wraps
-    Usage:
+  This tool parses a record object into two reads (read1 and read2)

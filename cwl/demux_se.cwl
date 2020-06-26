@@ -6,19 +6,14 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-#$namespaces:
-#  ex: http://example.com/
-
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    ramMin: 32000
-    tmpdirMin: 8000
-    outdirMin: 8000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/umi_tools:1.0.0
+    dockerPull: brianyee/umi_tools:1.0.0
             
 baseCommand: [umi_tools, extract]
 arguments: ["--random-seed", "1"]

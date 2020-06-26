@@ -1,33 +1,20 @@
-#!/usr/bin/env cwl-runner
+#!/usr/bin/env cwltool
 
 ### doc: "collapses eCLIP barcodes to remove PCR duplicates" ###
 
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
-    # ramMin: 32000
-    # tmpdirMin: 4000
-    # outdirMin: 4000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/python:2.7.16
+    dockerPull: brianyee/python:2.7.16
     
 baseCommand: [barcodecollapsepe.py]
-
-inputs:
-
-  input_barcodecollapsepe_bam:
-    type: File
-    # format: http://edamontology.org/format_2572
-    inputBinding:
-      position: 1
-      prefix: -b
-    label: ""
-    doc: "input bam to barcode collapse. NOTE: no use for a bai index file!"
 
 arguments: [
   "-o",
@@ -36,11 +23,21 @@ arguments: [
   $(inputs.input_barcodecollapsepe_bam.nameroot).rmDup.metrics
   ]
 
+inputs:
+
+  input_barcodecollapsepe_bam:
+    type: File
+
+    inputBinding:
+      position: 1
+      prefix: -b
+    label: ""
+    doc: "input bam to barcode collapse. NOTE: no use for a bai index file!"
+
 outputs:
 
   output_barcodecollapsepe_bam:
     type: File
-    # format: http://edamontology.org/format_2572
     outputBinding:
       glob: $(inputs.input_barcodecollapsepe_bam.nameroot).rmDup.bam
     label: ""

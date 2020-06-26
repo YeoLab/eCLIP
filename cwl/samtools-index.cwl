@@ -5,11 +5,12 @@
 ### This tool returns alignments with index as secondaryFile    ###
 
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/samtools:1.5
+    dockerPull: brianyee/samtools:1.5
 
 requirements:
   InitialWorkDirRequirement:

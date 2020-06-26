@@ -1,43 +1,20 @@
 #!/usr/bin/env cwltool
 
 cwlVersion: v1.0
+
 class: CommandLineTool
-
-# , $overlap_length_option
-# , $g_adapters_option
-# , $A_adapters_option
-# , $a_adapters_option
-# , -o, out_fastq.fastq.gz
-# , -p, out_pair.fastq.gz
-# , in_fastq.fastq.gz
-# , in_pair.fastq.gz
-# > report
-
-#$namespaces:
-#  ex: http://example.com/
 
 requirements:
   - class: ResourceRequirement
     coresMin: 2
-    ramMin: 32000
-    tmpdirMin: 4000
-    #outdirMin: 4000
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/cutadapt:1.14
+    dockerPull: brianyee/cutadapt:1.14
 
 baseCommand: [cutadapt]
-
-# arguments: [-f, fastq,
-#   --match-read-wildcards,
-#   --times, "2",
-#   -e, "0.0",
-#   --quality-cutoff, "6",
-#   -m, "18",
-#   -o, $(inputs.input_trim.nameroot)Tr.fqgz
-#   ]
 
 inputs:
 
@@ -158,18 +135,10 @@ inputs:
     inputBinding:
       position: 12
 
-  # cores:
-  #   type: int
-  #   default: 2
-  #   inputBinding:
-  #     position: 13
-  #     prefix: -j
-
   input_trim:
     type: File[]?
     inputBinding:
-      position: 14
-
+      position: 13
 
 stdout: $(inputs.input_trim[0].nameroot)Tr.metrics
 

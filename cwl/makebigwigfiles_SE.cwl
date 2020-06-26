@@ -1,19 +1,18 @@
 #!/usr/bin/env cwltool
 
 cwlVersion: v1.0
-class: CommandLineTool
 
+class: CommandLineTool
 
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    ramMin: 16000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/makebigwigfiles:0.0.3
+    dockerPull: brianyee/makebigwigfiles:0.0.3
 
 baseCommand: [makebigwigfiles]
-
 
 arguments: [
   --bw_pos,

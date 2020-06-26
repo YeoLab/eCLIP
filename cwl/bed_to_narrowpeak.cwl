@@ -1,6 +1,4 @@
-#!/usr/bin/env cwl-runner
-
-### doc: "Convert peak bed to narrowPeak" ###
+#!/usr/bin/env cwltool
 
 cwlVersion: v1.0
 class: CommandLineTool
@@ -8,12 +6,17 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/python:2.7.16
+    dockerPull: brianyee/python:2.7.16
     
 baseCommand: [bed_to_narrowpeak.py]
+
+arguments: [
+  "--output_narrowpeak",
+  $(inputs.input_bed.nameroot).narrowPeak
+]
 
 inputs:
 
@@ -24,16 +27,12 @@ inputs:
       prefix: --input_bed
     label: ""
     doc: "input bam to convert to narrowPeak format. Must be ECLIP-style input-normed format! (log10p in col4, log2fold in col5)"
+
   species:
     type: string
     inputBinding: 
       position: 2
       prefix: --species
-      
-arguments: [
-  "--output_narrowpeak",
-  $(inputs.input_bed.nameroot).narrowPeak
-]
 
 outputs:
 

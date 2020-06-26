@@ -1,31 +1,24 @@
 #!/usr/bin/env cwltool
 
-### doc: "clipper cwl tool (https://github.com/yeolab/clipper)" ###
-
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
-    coresMin: 8
-    coresMax: 16
-    ramMin: 32000
+    coresMin: 4
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/clipper:997fe25532a5bdcf5957f2a467ca283bbd550303
+    dockerPull: brianyee/clipper:997fe25532a5bdcf5957f2a467ca283bbd550303
     
 baseCommand: [clipper]
-
-# hints:
-#   DockerRequirement:
-#     dockerPull: brianyee/clipper
 
 inputs:
 
   species:
     type: string
-    # default: hg19
     inputBinding:
       position: 0
       prefix: --species
@@ -33,31 +26,9 @@ inputs:
 
   bam:
     type: File
-    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 1
       prefix: --bam
-    #secondaryFiles:
-    #  - ".bai"
-
-  # timeout can not be omitted, default value of None in clipper creates error
-  # timeout:
-  #   type: string
-  #   # 600 seconds, 10 minutes
-  #   # default: "600"
-  #   # 100 hours, > 4 days
-  #   default: "3600000"
-  #   inputBinding:
-  #     position: 7
-  #     prefix: --timeout
-
-  # maxgenes:
-  #   type: string
-  #   #default: "2100"
-  #   default: "1000000"
-  #   inputBinding:
-  #     position: 8
-  #     prefix: --maxgenes
 
   gene:
     type: string?
@@ -103,7 +74,6 @@ outputs:
         }
   output_bed:
     type: File
-    # format: http://edamontology.org/format_3003
     outputBinding:
       glob: |
         ${

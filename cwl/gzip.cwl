@@ -6,11 +6,6 @@ class: CommandLineTool
 
 baseCommand: [gzip]
 
-requirements:
-  - class: ResourceRequirement
-    tmpdirMin: 20000
-    outdirMin: 20000
-
 inputs:
 
   stdout:

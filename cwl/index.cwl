@@ -1,35 +1,23 @@
 #!/usr/bin/env cwltool
 
-### doc: "Indexes a bam file (should be deprecated by samtools-index.cwl so kept for legacy)" ###
-
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
-    ramMin: 8000
-    #tmpdirMin: 4000
-    #outdirMin: 4000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/samtools:1.5
-    
-# samtools executable in bin folder is v 0.1.18-dev (r982:313)
+    dockerPull: brianyee/samtools:1.5
 
 baseCommand: [samtools, index]
-
-#hints:
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
 
 inputs:
 
   input_index_bam:
     type: File
-    # format: http://edamontology.org/format_2572
     inputBinding:
       position: -1
     label: ""
@@ -41,7 +29,6 @@ outputs:
 
   output_index_bai:
     type: File
-    # format: http://edamontology.org/format_3327
     outputBinding:
       glob: $(inputs.input_index_bam.basename).bai
     label: ""

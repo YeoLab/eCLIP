@@ -3,6 +3,7 @@
 ### doc: "Convert peak bed to narrowPeak" ###
 
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
@@ -12,7 +13,7 @@ requirements:
   - class: InlineJavascriptRequirement
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/ucsc-tools:377
+    dockerPull: brianyee/ucsc-tools:377
     
 baseCommand: [bedToBigBed]
 
@@ -23,10 +24,12 @@ inputs:
     inputBinding:
       position: 1
     label: ""
+
   chrom_sizes:
     type: File
     inputBinding:
       position: 2
+
   output_bb_filename:
     type: string
     default: ""

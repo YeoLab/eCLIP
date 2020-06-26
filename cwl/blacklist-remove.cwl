@@ -1,20 +1,24 @@
 #!/usr/bin/env cwltool
 
-### Given a list of 'blacklist' regions, remove those regions from an input BED file ###
-
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/bedtools:2.27.1
+    dockerPull: brianyee/bedtools:2.27.1
     
 baseCommand: [bedtools, intersect]
+
+arguments: [
+  "-v",
+  "-s",
+  ]
 
 inputs:
 
@@ -29,13 +33,7 @@ inputs:
     inputBinding:
       position: 2
       prefix: -b
-      
-arguments: [
-  "-v",
-  "-s",
-  ]
-  
-  
+
 stdout: $(inputs.input_bed.nameroot).blacklist-removed.bed
 
 outputs:
@@ -46,4 +44,5 @@ outputs:
       glob: $(inputs.input_bed.nameroot).blacklist-removed.bed
 
 doc: |
+  Given a list of 'blacklist' regions, remove those regions from an input BED file
   This tool wraps bedtools intersect -v to remove blacklist regions

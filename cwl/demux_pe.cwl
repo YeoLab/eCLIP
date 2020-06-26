@@ -8,12 +8,10 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-    ramMin: 32000
-    tmpdirMin: 8000
-    outdirMin: 8000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/eclipdemux:0.0.1
+    dockerPull: brianyee/eclipdemux:0.0.1
 
 baseCommand: [eclipdemux]
 

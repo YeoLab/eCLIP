@@ -13,23 +13,12 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
-    ramMin: 8000
-    # tmpdirMin: 4000
-    # outdirMin: 4000
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/samtools:1.5
+    dockerPull: brianyee/samtools:1.5
+
 baseCommand: [samtools, sort]
-
-#$namespaces:
-#  ex: http://example.com/
-
-#hints:
-
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
 
 inputs:
 
@@ -58,23 +47,15 @@ inputs:
 
   input_sort_bam:
     type: File
-    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 3
     label: ""
     doc: "input bam"
 
-
-# arguments: [
-#   "-o",
-#   $(inputs.input_sort_bam.nameroot)So.bam
-#   ]
-
 outputs:
 
   output_sort_bam:
     type: File
-    # format: http://edamontology.org/format_2572
     outputBinding:
       glob: |
         ${

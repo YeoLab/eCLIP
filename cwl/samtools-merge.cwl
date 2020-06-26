@@ -8,22 +8,18 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    ramMin: 8000
-    #tmpdirMin: 4000
-    #outdirMin: 4000
 
 baseCommand: [samtools, merge]
 
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/samtools:1.5
+    dockerPull: brianyee/samtools:1.5
 
 inputs:
 
   output_bam:
     type: string
     default: ""
-    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 1
       valueFrom: |
@@ -40,7 +36,6 @@ inputs:
 
   input_bam_files:
     type: File[]
-    # format: http://edamontology.org/format_2572
     inputBinding:
       position: 2
     label: ""
@@ -50,7 +45,6 @@ outputs:
 
   output_bam_file:
     type: File
-    # format: http://edamontology.org/format_3327
     outputBinding:
       glob: |
         ${

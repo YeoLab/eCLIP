@@ -1,21 +1,24 @@
 #!/usr/bin/env cwltool
 
-### Sorts a BED file ###
-### cmd: sort -k1,1 -k2,2n unsorted.bed > sorted.bed ###
-
 cwlVersion: v1.0
+
 class: CommandLineTool
 
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-    coresMax: 16
+
 hints:
   - class: DockerRequirement
-    dockerImageId: brianyee/bedtoola:2.27.1
+    dockerPull: brianyee/bedtoola:2.27.1
     
 baseCommand: [sort]
+
+arguments: [
+  "-k1,1",
+  "-k2,2n"
+  ]
 
 inputs:
 
@@ -24,12 +27,6 @@ inputs:
     inputBinding:
       position: 1
 
-arguments: [
-  "-k1,1",
-  "-k2,2n"
-  ]
-  
-  
 stdout: $(inputs.unsorted_bed.nameroot).sorted.bed
 
 outputs:
@@ -41,3 +38,5 @@ outputs:
 
 doc: |
   This tool wraps unix sort to sort a BED file.
+  
+  Usage: sort -k1,1 -k2,2n unsorted.bed > sorted.bed
