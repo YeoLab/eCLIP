@@ -127,7 +127,7 @@ outputs:
 
   X_output_sorted_bam:
     type: File
-    outputSource: X_sort/output_sort_bam
+    outputSource: index_rmdup_bam/alignments_with_index
 
 steps:
 
@@ -330,6 +330,12 @@ steps:
     in:
       input_sort_bam: X_barcodecollapsese/output_barcodecollapsese_bam
     out: [output_sort_bam]
+
+  index_rmdup_bam:
+    run: samtools-index.cwl
+    in:
+      alignments: X_sort/output_sort_bam
+    out: [alignments_with_index]
 
 ###########################################################################
 # Downstream

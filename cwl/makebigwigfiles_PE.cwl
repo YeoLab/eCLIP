@@ -28,6 +28,7 @@ inputs:
      inputBinding:
        position: 1
        prefix: --bam
+     secondaryFiles: [.bai]
 
   chromsizes:
     type: File

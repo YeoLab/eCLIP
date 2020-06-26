@@ -28,12 +28,20 @@ inputs:
      inputBinding:
        position: 1
        prefix: --bam
+     secondaryFiles: [.bai]
 
   chromsizes:
     type: File
     inputBinding:
       position: 3
       prefix: --genome
+  
+  direction:
+    default: f
+    type: string
+    inputBinding:
+      position: 4
+      prefix: --direction
 
 outputs:
 
