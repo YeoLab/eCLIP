@@ -7,6 +7,10 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
+  - class: InitialWorkDirRequirement
+    listing:
+      - entry: $(inputs.bam)
+        writable: true
 
 hints:
   - class: DockerRequirement
