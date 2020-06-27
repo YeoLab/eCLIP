@@ -68,7 +68,7 @@ Alternatively, you may refer to the [Dockerfiles](https://github.com/YeoLab/wrap
 # Description of the manifest
 
 STAR indices:
-```
+```YAML
 speciesGenomeDir:
   class: Directory
   path: /path/to/stargenome
@@ -231,8 +231,8 @@ cwltool wf_get_peaks_se_scatter.cwl single_end_clip.yaml
 
 Running on a complete dataset takes about a day for human ENCODE data 
 (24 hours), so sit back and relax by reading the rest of this README.
-```
 
+```
 # Outputs:
 
 Input-normalized peaks will contain candidate binding regions.
