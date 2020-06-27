@@ -342,18 +342,6 @@ steps:
       output_neg_bw
     ]
 
-  step_index_ip:
-    run: samtools-index.cwl
-    in:
-      alignments: step_ip_alignment/b1_output_rmdup_sorted_bam
-    out: [alignments_with_index]
-
-  step_index_input:
-    run: samtools-index.cwl
-    in:
-      alignments: step_input_alignment/b1_output_rmdup_sorted_bam
-    out: [alignments_with_index]
-
   step_clipper:
     run: clipper.cwl
     in:

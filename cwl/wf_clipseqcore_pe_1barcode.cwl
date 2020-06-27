@@ -1,7 +1,19 @@
 #!/usr/bin/env cwltool
 
-### Workflow for handling reads containing one barcode ###
-### Returns a bam file containing read2 only ###
+doc: |
+  Workflow for handling reads containing one barcode.
+  Returns the bam file containing read2 only.
+  
+  Notes:
+
+    runs the following steps: 
+    - demultiplex
+    - trimfirst_file2string
+    - trimagain_file2string
+    - b1_trim_and_map
+    - view_r2
+    - index_r2_bam
+    - make_bigwigs
 
 cwlVersion: v1.0
 class: Workflow
@@ -9,15 +21,8 @@ class: Workflow
 requirements:
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
-  - class: ScatterFeatureRequirement      # TODO needed?
   - class: MultipleInputFeatureRequirement
   - class: InlineJavascriptRequirement
-
-#hints:
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-
 
 inputs:
   dataset:
@@ -28,10 +33,6 @@ inputs:
 
   repeatElementGenomeDir:
     type: Directory
-
-  # TODO: remove, we don't use it here.
-  species:
-    type: string
 
   chrom_sizes:
     type: File
@@ -70,7 +71,7 @@ outputs:
     outputSource: demultiplex/A_output_demuxed_read2
 
 
-  ### TRIMMED OUTPUTS ###
+  ### TRIMMED OUTPUTS (ROUND 1) ###
 
 
   b1_trimx1_fastq:
@@ -91,6 +92,11 @@ outputs:
   b1_trimx1_fastqc_stats_R2: 
     type: File
     outputSource: b1_trim_and_map/X_output_trim_first_fastqc_stats_R2
+
+
+  ### TRIMMED OUTPUTS (ROUND 2) ###
+
+
   b1_trimx2_fastq:
     type: File[]
     outputSource: b1_trim_and_map/X_output_trim_again
@@ -109,6 +115,7 @@ outputs:
   b1_trimx2_fastqc_stats_R2: 
     type: File
     outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats_R2
+
 
   ### REPEAT MAPPING OUTPUTS ###
 
@@ -208,6 +215,10 @@ steps:
       AB_A_adapters
     ]
 
+###########################################################################
+# Main workflow
+###########################################################################
+
   trimfirst_file2string:
     run: file2string.cwl
     in:
@@ -260,7 +271,6 @@ steps:
       X_output_sorted_bam
     ]
 
-
 ###########################################################################
 # Downstream (candidate for merging with main pipeline)
 ###########################################################################
@@ -274,7 +284,7 @@ steps:
       isbam:
         default: true
     out: [output]
-  
+
   index_r2_bam:
     run: samtools-index.cwl
     in:

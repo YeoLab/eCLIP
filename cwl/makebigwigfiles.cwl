@@ -11,6 +11,7 @@ requirements:
     listing:
       - entry: $(inputs.bam)
         writable: true
+
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/makebigwigfiles:0.0.3
@@ -38,6 +39,13 @@ inputs:
     inputBinding:
       position: 3
       prefix: --genome
+  
+  direction:
+    default: f
+    type: string
+    inputBinding:
+      position: 4
+      prefix: --direction
 
 outputs:
 

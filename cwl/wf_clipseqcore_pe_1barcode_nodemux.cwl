@@ -1,7 +1,7 @@
 #!/usr/bin/env cwltool
 
 doc: |
-  Workflow for handling reads containing two barcodes.
+  Workflow for handling reads containing one barcode.
   Returns the bam file containing read2 only.
   
   Notes:
@@ -15,13 +15,16 @@ doc: |
     - index_r2_bam
     - make_bigwigs
 
+    ** This is a modification from the standard workflow that can accept post-demuxed eCLIP reads **
+    Useful for re-processing fastq files from ENCODEPROJECT.org, which is already demultiplexed. 
+    Runs the eclipdemux tool to parse out barcodes and other necessary inputs, but it does not actually demultiplex the reads.
+
 cwlVersion: v1.0
 class: Workflow
 
 requirements:
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
-  - class: ScatterFeatureRequirement      # TODO needed?
   - class: MultipleInputFeatureRequirement
   - class: InlineJavascriptRequirement
 
@@ -66,20 +69,15 @@ outputs:
   b1_demuxed_fastq_r1:
     label: "Barcode1 read1 demultiplexed fastq"
     type: File
-    outputSource: demultiplex/A_output_demuxed_read1
+    outputSource: |
+      valueFrom: ${ return inputs.read.read1; }
   b1_demuxed_fastq_r2:
     type: File
-    outputSource: demultiplex/A_output_demuxed_read2
-
-  b2_demuxed_fastq_r1:
-    type: File
-    outputSource: demultiplex/B_output_demuxed_read1
-  b2_demuxed_fastq_r2:
-    type: File
-    outputSource: demultiplex/B_output_demuxed_read2
+    outputSource: |
+      valueFrom: ${ return inputs.read.read2; }
 
 
-  ### TRIMMED OUTPUTS (BARCODE1, ROUND 1) ###
+  ### TRIMMED OUTPUTS (ROUND 1) ###
 
 
   b1_trimx1_fastq:
@@ -102,7 +100,7 @@ outputs:
     outputSource: b1_trim_and_map/X_output_trim_first_fastqc_stats_R2
 
 
-  ### TRIMMED OUTPUTS (BARCODE1, ROUND 2) ###
+  ### TRIMMED OUTPUTS (ROUND 2) ###
 
 
   b1_trimx2_fastq:
@@ -125,59 +123,7 @@ outputs:
     outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats_R2
 
 
-  ### TRIMMED OUTPUTS (BARCODE2, ROUND 1) ###
-
-
-  b2_trimx1_fastq:
-    type: File[]
-    outputSource: b2_trim_and_map/X_output_trim_first
-  b2_trimx1_metrics:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_first_metrics
-  b2_trimx2_fastq:
-    type: File[]
-    outputSource: b2_trim_and_map/X_output_trim_again
-  b2_trimx2_metrics:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_metrics
-  b2_trimx1_fastqc_report_R1:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_first_fastqc_report_R1
-  b2_trimx1_fastqc_stats_R1: 
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_first_fastqc_stats_R1
-  b2_trimx1_fastqc_report_R2:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_first_fastqc_report_R2
-  b2_trimx1_fastqc_stats_R2: 
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_first_fastqc_stats_R2
-
-
-  ### TRIMMED OUTPUTS (BARCODE2, ROUND 2) ###
-
-
-  b2_trimx2_fastq:
-    type: File[]
-    outputSource: b2_trim_and_map/X_output_trim_again
-  b2_trimx2_metrics:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_metrics
-  b2_trimx2_fastqc_report_R1:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_fastqc_report_R1
-  b2_trimx2_fastqc_stats_R1: 
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_fastqc_stats_R1
-  b2_trimx2_fastqc_report_R2:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_fastqc_report_R2
-  b2_trimx2_fastqc_stats_R2: 
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_fastqc_stats_R2
-
-
-  ### REPEAT MAPPING OUTPUTS (BARCODE1) ###
+  ### REPEAT MAPPING OUTPUTS ###
 
 
   b1_maprepeats_mapped_to_genome:
@@ -194,24 +140,7 @@ outputs:
     outputSource: b1_trim_and_map/A_output_sort_repunmapped_fastq
 
 
-  ### REPEAT MAPPING OUTPUTS (BARCODE2) ###
-
-
-  b2_maprepeats_mapped_to_genome:
-    type: File
-    outputSource: b2_trim_and_map/A_output_maprepeats_mapped_to_genome
-  b2_maprepeats_stats:
-    type: File
-    outputSource: b2_trim_and_map/A_output_maprepeats_stats
-  b2_maprepeats_star_settings:
-    type: File
-    outputSource: b2_trim_and_map/A_output_maprepeats_star_settings
-  b2_sorted_unmapped_fastq:
-    type: File[]
-    outputSource: b2_trim_and_map/A_output_sort_repunmapped_fastq
-
-
-  ### GENOME MAPPING OUTPUTS (BARCODE1) ###
+  ### GENOME MAPPING OUTPUTS ###
 
 
   b1_mapgenome_mapped_to_genome:
@@ -225,21 +154,7 @@ outputs:
     outputSource: b1_trim_and_map/A_output_mapgenome_star_settings
 
 
-  ### GENOME MAPPING OUTPUTS (BARCODE2) ###
-
-
-  b2_mapgenome_mapped_to_genome:
-    type: File
-    outputSource: b2_trim_and_map/A_output_mapgenome_mapped_to_genome
-  b2_mapgenome_stats:
-    type: File
-    outputSource: b2_trim_and_map/A_output_mapgenome_stats
-  b2_mapgenome_star_settings:
-    type: File
-    outputSource: b2_trim_and_map/A_output_mapgenome_star_settings
-
-
-  ### RMDUP BAM OUTPUTS (BARCODE1) ###
+  ### RMDUP BAM OUTPUTS ###
 
 
   b1_output_prermdup_sorted_bam:
@@ -253,34 +168,12 @@ outputs:
     outputSource: b1_trim_and_map/X_output_barcodecollapsepe_metrics
 
 
-  ### RMDUP BAM OUTPUTS (BARCODE2) ###
-
-
-  b2_output_prermdup_sorted_bam:
-    type: File
-    outputSource: b2_trim_and_map/A_output_sorted_bam
-  b2_output_barcodecollapsepe_bam:
-    type: File
-    outputSource: b2_trim_and_map/X_output_barcodecollapsepe_bam
-  b2_output_barcodecollapsepe_metrics:
-    type: File
-    outputSource: b2_trim_and_map/X_output_barcodecollapsepe_metrics
-
-
-  ### SORTED RMDUP BAM OUTPUTS (BARCODE1) ###
+  ### SORTED RMDUP BAM OUTPUTS ###
 
 
   b1_output_sorted_bam:
     type: File
     outputSource: b1_trim_and_map/X_output_sorted_bam
-
-
-  ### SORTED RMDUP BAM OUTPUTS (BARCODE1) ###
-
-
-  b2_output_sorted_bam:
-    type: File
-    outputSource: b2_trim_and_map/X_output_sorted_bam
 
 
   ### READ2 MERGED BAM OUTPUTS ###
@@ -328,6 +221,10 @@ steps:
       AB_A_adapters
     ]
 
+###########################################################################
+# Main workflow
+###########################################################################
+
   trimfirst_file2string:
     run: file2string.cwl
     in:
@@ -352,8 +249,12 @@ steps:
       a_adapters: demultiplex/AB_a_adapters
       a_adapters_default: demultiplex/AB_a_adapters_default
       A_adapters: demultiplex/AB_A_adapters
-      read1: demultiplex/A_output_demuxed_read1
-      read2: demultiplex/A_output_demuxed_read2
+      read1: 
+        source: read
+        valueFrom: ${ return self.read1; }
+      read2: 
+        source: read
+        valueFrom: ${ return self.read2; }
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,
@@ -379,55 +280,6 @@ steps:
       X_output_barcodecollapsepe_metrics,
       X_output_sorted_bam
     ]
-
-  b2_trim_and_map:
-    run: wf_trim_and_map_pe.cwl
-    in:
-      speciesGenomeDir: speciesGenomeDir
-      repeatElementGenomeDir: repeatElementGenomeDir
-      trimfirst_overlap_length: trimfirst_file2string/output
-      trimagain_overlap_length: trimagain_file2string/output
-      g_adapters: demultiplex/AB_g_adapters
-      g_adapters_default: demultiplex/AB_g_adapters_default
-      a_adapters: demultiplex/AB_a_adapters
-      a_adapters_default: demultiplex/AB_a_adapters_default
-      A_adapters: demultiplex/AB_A_adapters
-      read1: demultiplex/B_output_demuxed_read1
-      read2: demultiplex/B_output_demuxed_read2
-    out: [
-      X_output_trim_first,
-      X_output_trim_first_metrics,
-      X_output_trim_first_fastqc_report_R1,
-      X_output_trim_first_fastqc_stats_R1,
-      X_output_trim_first_fastqc_report_R2,
-      X_output_trim_first_fastqc_stats_R2,
-      X_output_trim_again,
-      X_output_trim_again_metrics,
-      X_output_trim_again_fastqc_report_R1,
-      X_output_trim_again_fastqc_stats_R1,
-      X_output_trim_again_fastqc_report_R2,
-      X_output_trim_again_fastqc_stats_R2,
-      A_output_maprepeats_mapped_to_genome,
-      A_output_maprepeats_stats,
-      A_output_maprepeats_star_settings,
-      A_output_sort_repunmapped_fastq,
-      A_output_mapgenome_mapped_to_genome,
-      A_output_mapgenome_stats,
-      A_output_mapgenome_star_settings,
-      A_output_sorted_bam,
-      X_output_barcodecollapsepe_bam,
-      X_output_barcodecollapsepe_metrics,
-      X_output_sorted_bam
-    ]
-
-  merge:
-    run: samtools-merge.cwl
-    in:
-      input_bam_files: [
-        b1_trim_and_map/X_output_sorted_bam,
-        b2_trim_and_map/X_output_sorted_bam
-      ]
-    out: [output_bam_file]
 
 ###########################################################################
 # Downstream (candidate for merging with main pipeline)
@@ -436,7 +288,7 @@ steps:
   view_r2:
     run: samtools-viewr2.cwl
     in:
-      input: merge/output_bam_file
+      input: b1_trim_and_map/X_output_sorted_bam
       readswithbits:
         default: 128
       isbam:
