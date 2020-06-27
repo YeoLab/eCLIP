@@ -232,7 +232,6 @@ cwltool wf_get_peaks_se_scatter.cwl single_end_clip.yaml
 Running on a complete dataset takes about a day for human ENCODE data 
 (24 hours), so sit back and relax by reading the rest of this README.
 
-```
 # Outputs:
 
 Input-normalized peaks will contain candidate binding regions.
