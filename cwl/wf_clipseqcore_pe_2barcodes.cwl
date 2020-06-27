@@ -419,10 +419,16 @@ steps:
         default: true
     out: [output]
 
+  index_r2_bam:
+    run: samtools-index.cwl
+    in:
+      alignments: view_r2/output
+    out: [alignments_with_index]
+
   make_bigwigs:
     run: makebigwigfiles.cwl
     in:
       chromsizes: chrom_sizes
-      bam: view_r2/output
+      bam: index_r2_bam/alignments_with_index
     out:
       [posbw, negbw]
