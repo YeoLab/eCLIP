@@ -11,7 +11,7 @@ requirements:
 
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/bedtoola:2.27.1
+    dockerPull: brianyee/bedtools:2.27.1
     
 baseCommand: [sort]
 
