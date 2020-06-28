@@ -384,8 +384,8 @@ steps:
   step_input_normalize_peaks:
     run: overlap_peakfi_with_bam_PE.cwl
     in:
-      clipBamFile: step_index_ip/alignments_with_index
-      inputBamFile: step_index_input/alignments_with_index
+      clipBamFile: step_ip_alignment/b1_output_rmdup_sorted_bam
+      inputBamFile: step_input_alignment/b1_output_rmdup_sorted_bam
       peakFile: step_clipper/output_bed
       clipReadnum: step_ip_mapped_readnum/output
       inputReadnum: step_input_mapped_readnum/output

@@ -156,7 +156,6 @@ then
   cwltool --debug \
     --outdir ${OUTDIR} \
     --cachedir ${INTERM} \
-    --no-container \
     ${WORKFLOW_HOME}/cwl/${WORKFLOW}.cwl \
     ${JOB_FILE} \
     2>${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_LOG.txt | tee ${JOB_HOME}/${JOB_NAME}/${PIPELINE}_${JOB_NAME}_OUTPUT.json
