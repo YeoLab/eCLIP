@@ -64,7 +64,6 @@ outputs:
 
 
   b1_demuxed_fastq_r1:
-    label: "Barcode1 read1 demultiplexed fastq"
     type: File
     outputSource: demultiplex/A_output_demuxed_read1
   b1_demuxed_fastq_r2:
@@ -134,12 +133,6 @@ outputs:
   b2_trimx1_metrics:
     type: File
     outputSource: b2_trim_and_map/X_output_trim_first_metrics
-  b2_trimx2_fastq:
-    type: File[]
-    outputSource: b2_trim_and_map/X_output_trim_again
-  b2_trimx2_metrics:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_metrics
   b2_trimx1_fastqc_report_R1:
     type: File
     outputSource: b2_trim_and_map/X_output_trim_first_fastqc_report_R1
