@@ -15,6 +15,10 @@ doc: |
     - index_r2_bam
     - make_bigwigs
 
+    ** This is a modification from the standard workflow that can accept post-demuxed eCLIP reads **
+    Useful for re-processing fastq files from ENCODEPROJECT.org, which is already demultiplexed. 
+    Runs the eclipdemux tool to parse out barcodes and other necessary inputs, but it does not actually demultiplex the reads.
+
 cwlVersion: v1.0
 class: Workflow
 
@@ -66,17 +70,17 @@ outputs:
   b1_demuxed_fastq_r1:
     label: "Barcode1 read1 demultiplexed fastq"
     type: File
-    outputSource: demultiplex/A_output_demuxed_read1
+    outputSource: split_barcodes/b1_read1
   b1_demuxed_fastq_r2:
     type: File
-    outputSource: demultiplex/A_output_demuxed_read2
+    outputSource: split_barcodes/b1_read2
 
   b2_demuxed_fastq_r1:
     type: File
-    outputSource: demultiplex/B_output_demuxed_read1
+    outputSource: split_barcodes/b2_read1
   b2_demuxed_fastq_r2:
     type: File
-    outputSource: demultiplex/B_output_demuxed_read2
+    outputSource: split_barcodes/b2_read2
 
 
   ### TRIMMED OUTPUTS (BARCODE1, ROUND 1) ###
@@ -134,12 +138,6 @@ outputs:
   b2_trimx1_metrics:
     type: File
     outputSource: b2_trim_and_map/X_output_trim_first_metrics
-  b2_trimx2_fastq:
-    type: File[]
-    outputSource: b2_trim_and_map/X_output_trim_again
-  b2_trimx2_metrics:
-    type: File
-    outputSource: b2_trim_and_map/X_output_trim_again_metrics
   b2_trimx1_fastqc_report_R1:
     type: File
     outputSource: b2_trim_and_map/X_output_trim_first_fastqc_report_R1
@@ -328,6 +326,21 @@ steps:
       AB_A_adapters
     ]
 
+  split_barcodes:
+    run: split_barcodes.cwl
+    in:
+      read: read
+    out: [
+      b1_read1, 
+      b1_read2,
+      b2_read1,
+      b2_read2,
+    ]
+
+###########################################################################
+# Main workflow
+###########################################################################
+
   trimfirst_file2string:
     run: file2string.cwl
     in:
@@ -352,8 +365,8 @@ steps:
       a_adapters: demultiplex/AB_a_adapters
       a_adapters_default: demultiplex/AB_a_adapters_default
       A_adapters: demultiplex/AB_A_adapters
-      read1: demultiplex/A_output_demuxed_read1
-      read2: demultiplex/A_output_demuxed_read2
+      read1: split_barcodes/b1_read1
+      read2: split_barcodes/b1_read2
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,
@@ -392,8 +405,8 @@ steps:
       a_adapters: demultiplex/AB_a_adapters
       a_adapters_default: demultiplex/AB_a_adapters_default
       A_adapters: demultiplex/AB_A_adapters
-      read1: demultiplex/B_output_demuxed_read1
-      read2: demultiplex/B_output_demuxed_read2
+      read1: split_barcodes/b2_read1
+      read2: split_barcodes/b2_read2
     out: [
       X_output_trim_first,
       X_output_trim_first_metrics,

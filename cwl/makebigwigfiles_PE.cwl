@@ -46,7 +46,7 @@ inputs:
     inputBinding:
       position: 4
       prefix: --direction
-      
+
 outputs:
 
   posbw:

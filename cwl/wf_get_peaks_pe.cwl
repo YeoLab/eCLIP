@@ -511,7 +511,7 @@ steps:
     run: clipper.cwl
     in:
       species: species
-      bam: step_ip_alignment/output_r2_bam
+      bam: step_index_ip/alignments_with_index
       outfile:
         default: ""
     out:
