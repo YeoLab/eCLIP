@@ -9,6 +9,10 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
 
+hints: 
+  - class: DockerRequirement
+    dockerPull: brianyee/perl:5.10.1_eclip0.6.0
+
 baseCommand: [overlap_peakfi_with_bam.pl]
 
 inputs:

@@ -10,7 +10,7 @@ requirements:
 
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/perl:5.10.1
+    dockerPull: brianyee/perl:5.10.1_eclip0.6.0
     
 baseCommand: [compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl]
 
