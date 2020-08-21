@@ -12,7 +12,7 @@ eCLIP is a pipeline designed to identify genomic locations of RNA-bound proteins
 - Calls enriched peak regions (peak clusters) with CLIPPER
 - Uses size-matched input sample to normalize and calculate fold-change enrichment within enriched peak regions with custom perl scripts (overlap_peakfi_with_bam_PE.pl, compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl)
 
-For a full description (including commandline args), please see ```tests/eCLIP-(VERSION)``` (ie. [Repeat mapping](https://raw.githubusercontent.com/YeoLab/eclip/master/tests/eCLIP-0.5.0/05_repeat_mapping_pe/run_star.sh)). Or, you may refer to the [Standard Operating Procedure](https://raw.githubusercontent.com/YeoLab/eclip/master/documentation/eCLIP_analysisSOP_v2.2.docx)
+For a full description (including commandline args), you may refer to the [Standard Operating Procedure](https://raw.githubusercontent.com/YeoLab/eclip/master/documentation/eCLIP_analysisSOP_v2.2.docx)
 
 Explore the pipeline definition [here](https://view.commonwl.org/workflows/github.com/YeoLab/eclip/blob/master/cwl/wf_get_peaks_scatter_se.cwl):
 
@@ -33,13 +33,13 @@ For human datasets, we recommend at least 8 cores (for Clipper) and 32G memory (
     - Statistics::Distributions 1.02
     - Statistics::R 0.34
   - R=3.3.2
-  - python=2.7.16
+  - python=2.7.15
   - samtools=1.6
   - star=2.5.2b
   - ucsc-tools=377
   - umi_tools=1.0.0
 
-Alternatively, you may refer to the [Dockerfiles](https://github.com/YeoLab/wrapped_tools) that comprise the CWL commandline tool environments.
+Alternatively, you may refer to the dockerRequirements within each CWL document to pull the proper environments for each step.
 
 #### Additional pipeline-specific requirements (minimal, one node w/ one or more cores):
   - [cwlref-runner=1.0](https://pypi.org/project/cwlref-runner/1.0/)
@@ -53,7 +53,7 @@ Alternatively, you may refer to the [Dockerfiles](https://github.com/YeoLab/wrap
 <b>(make sure to place this in a location with plenty of space!)</b>:
 - Sequencing data (in fastq format). You may download our reference RBFOX2 HepG2 raw data here: [RBFOX2](https://s3-us-west-1.amazonaws.com/external-collaborator-data/reference-data/204_01_RBFOX2.tar.gz)
 - Genome STAR index directory (fasta files can be downloaded from UCSC; [hg19](http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz))
-- Repeat element STAR index directory (fasta files can be downloaded from [RepBase (most current)](https://www.girinst.org/server/RepBase/) or the fasta file ```MASTER_filelist.wrepbaseandtRNA.fa.fixed.fa.UpdatedSimpleRepeat.fa``` found within the bowtie index [here](https://external-collaborator-data.s3-us-west-1.amazonaws.com/reference-data/repeat-mapping-bowtie2-refdata.tar.gz))
+- Repeat element STAR index directory (We now recommend using the most up-to-date RepBase files corresponding to your species of interest, otherwise you may email us for an example human-based reference).
 - FASTA file containing barcodes for demultiplexing reads
     - For paired-end data, use [yeolabbarcodes_20170101.fasta](https://raw.githubusercontent.com/YeoLab/eclip/master/example/inputs/yeolabbarcodes_20170101.fasta)
     - For single-end data, use either [a_adapters.fasta](https://raw.githubusercontent.com/YeoLab/eclip/master/example/inputs/a_adapters.fasta) or the ```InvRNA*_adapters.fasta``` files, described below.
@@ -276,7 +276,7 @@ For Paired-end eCLIP:
 
 # References:
 
-Van Nostrand, Eric L., et al. "Robust, Cost-Effective Profiling of RNA Binding Protein Targets with Single-end Enhanced Crosslinking and Immunoprecipitation (seCLIP)." mRNA Processing. Humana Press, New York, NY, 2017. 177-200.
+Van Nostrand, Eric L., et al. "Robust, Cost-Effective Profiling of RNA Binding Protein Targets with Single-end Enhanced Crosslinking and Immunoprecipitation (seCLIP)." mRNA Processing. Methods Mol Biol. 2017;1648:177-200.
 
 Van Nostrand, E.L., Pratt, G.A., Shishkin, A.A., Gelboin-Burkhart, C., Fang, M.Y., Sundararaman, B., Blue, S.M., Nguyen, T.B., Surka, C., Elkins, K. and Stanton, R. "Robust transcriptome-wide discovery of RNA-binding protein binding sites with enhanced CLIP (eCLIP)." Nature methods 13.6 (2016): 508-514.
 

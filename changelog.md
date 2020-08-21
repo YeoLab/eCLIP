@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [0.6.0a] - 2020-08-20
+### Added
+- The core pipeline (wf_get_peaks_scatter_se.cwl and wf_get_peaks_scatter_pe.cwl) *should* now be fully portable on AWS.
+- Slight modifications to README (updated references)
+
+### Fixed
+- Updated adapter examples (was missing one base in the last adapter)
+
 ## [Unreleased 0.5.99] - 2020-06-24
 ### Added
 - Added docker requirement definitions to most commandlinetools.

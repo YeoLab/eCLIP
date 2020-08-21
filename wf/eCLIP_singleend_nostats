@@ -21,7 +21,7 @@ CWLRUNNER=cwltorq # either: cwltool cwltoil or cwltorq
 WORKFLOW=wf_get_peaks_scatter_se_nostats # the prefix of the workflow cwl (without .cwl extension)
 
 PIPELINE=ECLIP  # workflow prefix
-PIPELINEVERSION=0.6.0  # workflow version
+PIPELINEVERSION=0.6.0a  # workflow version
 
 FULLPATHCOMMAND=$0
 JOB_FILE=$1
