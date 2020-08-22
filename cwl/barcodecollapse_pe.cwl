@@ -12,7 +12,7 @@ requirements:
 
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/python:2.7.16
+    dockerPull: brianyee/eclip:0.6.0a_python
     
 baseCommand: [barcodecollapsepe.py]
 

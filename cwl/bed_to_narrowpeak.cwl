@@ -9,7 +9,7 @@ requirements:
 
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/python:2.7.15_eclip0.6.0
+    dockerPull: brianyee/eclip:0.6.0a_python
     
 baseCommand: [bed_to_narrowpeak.py]
 

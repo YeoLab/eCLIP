@@ -8,9 +8,9 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
 
-hints:
+hints: 
   - class: DockerRequirement
-    dockerPull: brianyee/perl:5.10.1_eclip0.6.0
+    dockerPull: brianyee/eclip:0.6.0a_perl
     
 baseCommand: [compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl]
 

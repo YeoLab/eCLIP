@@ -10,6 +10,10 @@ requirements:
 
 baseCommand: [parsebarcodes.sh]
 
+hints: 
+  - class: DockerRequirement
+    dockerPull: brianyee/eclip:0.6.0a_python
+    
 inputs:
 
 # these are now hard-coded in parser.sh

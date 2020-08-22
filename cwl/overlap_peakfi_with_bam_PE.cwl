@@ -11,7 +11,7 @@ requirements:
 
 hints: 
   - class: DockerRequirement
-    dockerPull: brianyee/perl:5.10.1_eclip0.6.0
+    dockerPull: brianyee/eclip:0.6.0a_perl
     
 baseCommand: [overlap_peakfi_with_bam_PE.pl]
 

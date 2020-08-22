@@ -11,7 +11,7 @@ requirements:
     coresMax: 16
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/python:2.7.15_eclip0.6.0
+    dockerPull: brianyee/eclip:0.6.0a_python
     
 baseCommand: [fix_bed_for_bigbed_conversion.py]
 
