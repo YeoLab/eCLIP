@@ -7,7 +7,8 @@ class: CommandLineTool
 requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
-    coresMin: 4
+    coresMin: 8
+    ramMin: 32000
 
 hints:
   - class: DockerRequirement

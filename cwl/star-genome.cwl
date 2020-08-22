@@ -7,6 +7,9 @@ class: CommandLineTool
 requirements:
   - class: StepInputExpressionRequirement
   - class: InlineJavascriptRequirement
+  - class: ResourceRequirement
+    coresMin: 8
+    ramMin: 32000
 
 hints:
   - class: DockerRequirement
