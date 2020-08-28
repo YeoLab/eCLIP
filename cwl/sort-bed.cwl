@@ -8,7 +8,8 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 8000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/bedtools:2.27.1

@@ -7,7 +7,8 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 4000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/samtools:1.6

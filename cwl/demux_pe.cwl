@@ -8,7 +8,8 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 8000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/eclipdemux:0.0.1

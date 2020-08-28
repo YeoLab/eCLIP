@@ -10,7 +10,8 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 32000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/umi_tools:1.0.0

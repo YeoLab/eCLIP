@@ -7,6 +7,7 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
+    ramMin: 1000
 
 baseCommand: [parsebarcodes.sh]
 

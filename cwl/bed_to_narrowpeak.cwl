@@ -6,7 +6,8 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 8000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/eclip:0.6.0a_python

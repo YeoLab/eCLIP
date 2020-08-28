@@ -7,6 +7,7 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 1
+    ramMin: 8000
   - class: InitialWorkDirRequirement
     listing:
       - entry: $(inputs.bam)

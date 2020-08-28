@@ -13,7 +13,8 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 16000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/samtools:1.6

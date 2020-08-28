@@ -9,6 +9,7 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
+    ramMin: 8000
 
 hints:
   - class: DockerRequirement

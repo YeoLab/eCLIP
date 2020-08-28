@@ -7,7 +7,8 @@ class: CommandLineTool
 requirements:
   - class: ResourceRequirement
     coresMin: 2
-
+    ramMin: 8000
+    
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/fastqc:0.11.8

@@ -8,7 +8,8 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ResourceRequirement
     coresMin: 1
-
+    ramMin: 8000
+    
 baseCommand: [samtools, merge]
 
 hints:
