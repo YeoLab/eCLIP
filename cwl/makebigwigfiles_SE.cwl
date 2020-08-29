@@ -33,7 +33,7 @@ inputs:
      inputBinding:
        position: 1
        prefix: --bam
-     secondaryFiles: [.bai]
+#     secondaryFiles: [.bai]
 
   chromsizes:
     type: File

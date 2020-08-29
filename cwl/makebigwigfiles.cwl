@@ -12,7 +12,6 @@ requirements:
     listing:
       - entry: $(inputs.bam)
         writable: true
-
 hints:
   - class: DockerRequirement
     dockerPull: brianyee/makebigwigfiles:0.0.3
@@ -33,7 +32,7 @@ inputs:
      inputBinding:
        position: 1
        prefix: --bam
-     secondaryFiles: [.bai]
+#     secondaryFiles: [.bai]
 
   chromsizes:
     type: File
