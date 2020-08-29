@@ -15,7 +15,7 @@ hints:
   - class: DockerRequirement
     dockerPull: brianyee/eclip:0.6.0a_python
     
-baseCommand: [python, barcodecollapsepe.py]
+baseCommand: [barcodecollapsepe.py]
 
 arguments: [
   "-o",
