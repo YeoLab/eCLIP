@@ -408,6 +408,14 @@ outputs:
     outputSource: step_get_peaks/output_compressed_peaks
 
 
+  ### Entropy calculation ###
+
+
+  output_entropynum:
+    type: File[]
+    outputSource: step_get_peaks/output_entropynum
+    
+    
 steps:
 
 ###########################################################################
@@ -509,5 +517,6 @@ steps:
       output_input_neg_bw,
       output_clipper_bed,
       output_inputnormed_peaks,
-      output_compressed_peaks
+      output_compressed_peaks,
+      output_entropynum
     ]

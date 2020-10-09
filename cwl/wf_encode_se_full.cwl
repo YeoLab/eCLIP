@@ -274,7 +274,9 @@ outputs:
   output_bigbed:
     type: File
     outputSource: step_bed_to_bigbed/output_bigbed
-    
+  output_entropynum:
+    type: File
+    outputSource: step_calculate_entropy/output_entropynum
     
   ### Repeat element outputs ###
 
@@ -525,6 +527,14 @@ steps:
       input_bed: step_fix_bed_for_bigbed_conversion/output_fixed_bed
       chrom_sizes: chrom_sizes
     out: [output_bigbed]
+    
+  step_calculate_entropy:
+    run: calculate_entropy.cwl
+    in:
+      full: step_input_normalize_peaks/inputnormedBedfull
+      ip_mapped: step_ip_mapped_readnum/output
+      input_mapped: step_input_mapped_readnum/output
+    out: [output_entropynum]
     
 ###########################################################################
 # Downstream - repeat mapping

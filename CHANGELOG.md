@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [0.7.0] - 2020-10-09
+### Added
+- Extra step to calculate total entropy
+
+### Changed
+- Updated clipper.cwl to "Clipper3" () and include the latest ENCODE annotations (GRCh38_v29e)
+- Updated star*.cwl STAR to version 2.7.6, fixes a bug that produces non-ascii characters
+
+### 
+
 ## [0.6.0a] - 2020-08-20
 ### Added
 - The core pipeline (wf_get_peaks_scatter_se.cwl and wf_get_peaks_scatter_pe.cwl) *should* now be fully portable on AWS.

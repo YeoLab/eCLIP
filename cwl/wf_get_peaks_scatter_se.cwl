@@ -277,6 +277,9 @@ outputs:
   output_bigbed:
     type: File[]
     outputSource: step_get_peaks/output_bigbed
+  output_entropynum:
+    type: File[]
+    outputSource: step_get_peaks/output_entropynum
     
 steps:
 
@@ -340,5 +343,6 @@ steps:
       output_blacklist_removed_bed,
       output_narrowpeak,
       output_fixed_bed,
-      output_bigbed
+      output_bigbed,
+      output_entropynum
     ]

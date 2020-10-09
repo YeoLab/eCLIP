@@ -281,7 +281,9 @@ outputs:
   output_bigbed:
     type: File[]
     outputSource: wf_encode_se_full/output_bigbed
-    
+  output_entropynum:
+    type: File[]
+    outputSource: wf_encode_se_full/output_entropynum
     
   ### Repeat element outputs ###
 
@@ -424,6 +426,7 @@ steps:
       output_narrowpeak,
       output_fixed_bed,
       output_bigbed,
+      output_entropynum,
       output_ip_concatenated_pre_rmDup_sam_file,
       output_input_concatenated_pre_rmDup_sam_file,
       output_barcode1_concatenated_rmDup_sam_file,

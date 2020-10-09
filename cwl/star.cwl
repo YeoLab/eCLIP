@@ -9,7 +9,7 @@ requirements:
   - class: InlineJavascriptRequirement
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/star:2.5.2b
+    dockerPull: brianyee/star:2.7.6a
 
 inputs:
   winBinNbits:

@@ -368,6 +368,14 @@ outputs:
     type: File
     outputSource: step_compress_peaks/output_bed
 
+
+  ### Entropy calculation ###
+
+
+  output_entropynum:
+    type: File
+    outputSource: step_calculate_entropy/output_entropynum
+    
 steps:
 
 ###########################################################################
@@ -564,3 +572,11 @@ steps:
     in:
       input_bed: step_input_normalize_peaks/inputnormedBed
     out: [output_bed]
+
+  step_calculate_entropy:
+    run: calculate_entropy.cwl
+    in:
+      full: step_input_normalize_peaks/inputnormedBedfull
+      ip_mapped: step_ip_mapped_readnum/output
+      input_mapped: step_input_mapped_readnum/output
+    out: [output_entropynum]

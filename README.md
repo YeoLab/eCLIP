@@ -23,7 +23,7 @@ For human datasets, we recommend at least 8 cores (for Clipper) and 32G memory (
 
 ## The pipeline has been tested using the following softwares and their versions:
   - bedtools=2.27.1
-  - clipper=997fe25532a5bdcf5957f2a467ca283bbd550303
+  - clipper=5d865bb17b2bc6787b4c382bc857119ae917ad59
   - cutadapt=1.14
   - eclipdemux=0.0.1
   - fastqc=0.11.8
@@ -33,9 +33,12 @@ For human datasets, we recommend at least 8 cores (for Clipper) and 32G memory (
     - Statistics::Distributions 1.02
     - Statistics::R 0.34
   - R=3.3.2
-  - python=2.7.15
+  - python=2.7.16
+    - pysam=0.15.4
+    - numpy=1.16.5
+    - seaborn
   - samtools=1.6
-  - star=2.5.2b
+  - star=2.7.6a
   - ucsc-tools=377
   - umi_tools=1.0.0
 
