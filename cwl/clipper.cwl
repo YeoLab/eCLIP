@@ -37,13 +37,6 @@ inputs:
      position: 8
      prefix: --gene
 
-  savepickle:
-    type: boolean
-    default: true
-    inputBinding:
-      position: 9
-      prefix: --save-pickle
-
   outfile:
     type: string
     default: ""
@@ -83,18 +76,6 @@ outputs:
           }
           else {
             return inputs.outfile;
-          }
-        }
-  output_pickle:
-    type: File
-    outputBinding:
-      glob: |
-        ${
-          if (inputs.outfile == "") {
-            return inputs.bam.nameroot + ".peakClusters.bed.pickle";
-          }
-          else {
-            return inputs.outfile + ".pickle";
           }
         }
 

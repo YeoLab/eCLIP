@@ -445,7 +445,7 @@ steps:
       outfile:
         default: ""
     out:
-      [output_tsv, output_bed, output_pickle]
+      [output_tsv, output_bed]
 
 
 ###########################################################################

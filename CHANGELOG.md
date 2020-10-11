@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 - Extra step to calculate total entropy
 
 ### Changed
-- Updated clipper.cwl to "Clipper3" () and include the latest ENCODE annotations (GRCh38_v29e)
+- Updated clipper.cwl to "Clipper3" () and include the latest ENCODE annotations (GRCh38_v29e). Also removed pickle intermediates, although this has never made it to the final outputs. 
 - Updated star*.cwl STAR to version 2.7.6, fixes a bug that produces non-ascii characters
 
 ### 
