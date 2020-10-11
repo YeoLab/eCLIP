@@ -54,18 +54,7 @@ inputs:
         }
 
 outputs:
-  output_tsv:
-    type: File
-    outputBinding:
-      glob: |
-        ${
-          if (inputs.outfile == "") {
-            return inputs.bam.nameroot + ".peakClusters.bed.tsv";
-          }
-          else {
-            return inputs.outfile + ".tsv";
-          }
-        }
+
   output_bed:
     type: File
     outputBinding:

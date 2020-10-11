@@ -352,7 +352,7 @@ steps:
       outfile:
         default: ""
     out:
-      [output_tsv, output_bed]
+      [output_bed]
   
 
 ###########################################################################
