@@ -1,6 +1,12 @@
 #!/usr/bin/env cwltool
 
-### ###
+doc: |
+  The "main" workflow. Takes fastq files generated using the seCLIP protocol 
+  (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5991800/) and outputs 
+  candidate RBP binding regions (peaks). 
+
+  runs:
+    wf_get_peaks_se.cwl through scatter across multiple samples.
 
 cwlVersion: v1.0
 class: Workflow
@@ -8,15 +14,8 @@ class: Workflow
 requirements:
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
-  - class: ScatterFeatureRequirement      # TODO needed?
+  - class: ScatterFeatureRequirement
   - class: MultipleInputFeatureRequirement
-
-
-#hints:
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-
 
 inputs:
   dataset:
@@ -48,9 +47,10 @@ inputs:
               type: string
             adapters:
               type: File
+
   blacklist_file: 
     type: File
-    
+
 outputs:
 
 
@@ -66,7 +66,7 @@ outputs:
     outputSource: step_get_peaks/output_input_b1_demuxed_fastq_r1
 
 
-  ### TRIMMED OUTPUTS ###
+  ### TRIMMED ROUND1 OUTPUTS ###
 
 
   output_ip_b1_trimx1_fastq:
@@ -91,30 +91,8 @@ outputs:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_trimx1_metrics
 
-  # output_ip_b1_trimx2_fastq:
-  #   type:
-  #     type: array
-  #     items:
-  #       type: array
-  #       items: File
-  #   outputSource: step_get_peaks/output_ip_b1_trimx2_fastq
-  # output_ip_b1_trimx2_metrics:
-  #   type: File[]
-  #   outputSource: step_get_peaks/output_ip_b1_trimx2_metrics
-  
-  # output_input_b1_trimx2_fastq:
-  #   type:
-  #     type: array
-  #     items:
-  #       type: array
-  #       items: File
-  #   outputSource: step_get_peaks/output_input_b1_trimx2_fastq
-  # output_input_b1_trimx2_metrics:
-  #   type: File[]
-  #   outputSource: step_get_peaks/output_input_b1_trimx2_metrics
 
-
-  ### FASTQC ###
+  ### FASTQC ROUND1 OUTPUTS ###
   
   
   output_ip_b1_trimx1_fastqc_report:
@@ -123,25 +101,56 @@ outputs:
   output_ip_b1_trimx1_fastqc_stats:
     type: File[]
     outputSource: step_get_peaks/output_ip_b1_trimx1_fastqc_stats
-  # output_ip_b1_trimx2_fastqc_report:
-  #   type: File[]
-  #   outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_report
-  # output_ip_b1_trimx2_fastqc_stats:
-  #   type: File[]
-  #   outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_stats
-  
   output_input_b1_trimx1_fastqc_report:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_report
   output_input_b1_trimx1_fastqc_stats:
     type: File[]
     outputSource: step_get_peaks/output_input_b1_trimx1_fastqc_stats
-  # output_input_b1_trimx2_fastqc_report:
-  #   type: File[]
-  #   outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_report
-  # output_input_b1_trimx2_fastqc_stats:
-  #   type: File[]
-  #   outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_stats
+
+
+  ### TRIMMED ROUND2 OUTPUTS ###
+
+
+  output_ip_b1_trimx2_fastq:
+    type:
+      type: array
+      items:
+        type: array
+        items: File
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastq
+  output_ip_b1_trimx2_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_metrics
+  
+  output_input_b1_trimx2_fastq:
+    type:
+      type: array
+      items:
+        type: array
+        items: File
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastq
+  output_input_b1_trimx2_metrics:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_metrics
+
+
+  ### FASTQC ROUND2 OUTPUTS ###
+  
+  
+  output_ip_b1_trimx2_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_report
+  output_ip_b1_trimx2_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_ip_b1_trimx2_fastqc_stats
+
+  output_input_b1_trimx2_fastqc_report:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_report
+  output_input_b1_trimx2_fastqc_stats:
+    type: File[]
+    outputSource: step_get_peaks/output_input_b1_trimx2_fastqc_stats
     
     
   ### REPEAT MAPPING OUTPUTS ###
@@ -274,11 +283,8 @@ outputs:
     
 steps:
 
-###########################################################################
-# Upstream
-###########################################################################
   step_get_peaks:
-    run: wf_get_peaks_trim_partial_se.cwl
+    run: wf_get_peaks_chimeric_se.cwl
     scatter: sample
     in:
       dataset: dataset
@@ -299,14 +305,14 @@ steps:
       output_input_b1_trimx1_metrics,
       output_input_b1_trimx1_fastqc_report,
       output_input_b1_trimx1_fastqc_stats,
-      # output_ip_b1_trimx2_fastq,
-      # output_ip_b1_trimx2_metrics,
-      # output_ip_b1_trimx2_fastqc_report,
-      # output_ip_b1_trimx2_fastqc_stats,
-      # output_input_b1_trimx2_fastq,
-      # output_input_b1_trimx2_metrics,
-      # output_input_b1_trimx2_fastqc_report,
-      # output_input_b1_trimx2_fastqc_stats,
+      output_ip_b1_trimx2_fastq,
+      output_ip_b1_trimx2_metrics,
+      output_ip_b1_trimx2_fastqc_report,
+      output_ip_b1_trimx2_fastqc_stats,
+      output_input_b1_trimx2_fastq,
+      output_input_b1_trimx2_metrics,
+      output_input_b1_trimx2_fastqc_report,
+      output_input_b1_trimx2_fastqc_stats,
       output_ip_b1_maprepeats_mapped_to_genome,
       output_ip_b1_maprepeats_stats,
       output_ip_b1_maprepeats_star_settings,

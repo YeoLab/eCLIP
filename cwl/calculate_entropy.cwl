@@ -12,7 +12,7 @@ requirements:
     
 hints:
   - class: DockerRequirement
-    dockerPull: brianyee/eclip:0.6.0a_python
+    dockerPull: brianyee/eclip:0.7.0_python
     
 baseCommand: [calculate_entropy.py]
 

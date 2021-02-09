@@ -89,18 +89,18 @@ outputs:
   output_ip_b1_trimx1_fastqc_stats:
     type: File
     outputSource: step_ip_alignment/b1_trimx1_fastqc_stats
-  # output_ip_b1_trimx2_fastq:
-  #   type: File[]
-  #   outputSource: step_ip_alignment/b1_trimx2_fastq
-  # output_ip_b1_trimx2_metrics:
-  #   type: File
-  #   outputSource: step_ip_alignment/b1_trimx2_metrics
-  # output_ip_b1_trimx2_fastqc_report:
-  #   type: File
-  #   outputSource: step_ip_alignment/b1_trimx2_fastqc_report
-  # output_ip_b1_trimx2_fastqc_stats:
-  #   type: File
-  #   outputSource: step_ip_alignment/b1_trimx2_fastqc_stats
+  output_ip_b1_trimx2_fastq:
+    type: File[]
+    outputSource: step_ip_alignment/b1_trimx2_fastq
+  output_ip_b1_trimx2_metrics:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_metrics
+  output_ip_b1_trimx2_fastqc_report:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_report
+  output_ip_b1_trimx2_fastqc_stats:
+    type: File
+    outputSource: step_ip_alignment/b1_trimx2_fastqc_stats
     
   output_input_b1_trimx1_fastq:
     type: File[]
@@ -114,18 +114,18 @@ outputs:
   output_input_b1_trimx1_fastqc_stats:
     type: File
     outputSource: step_input_alignment/b1_trimx1_fastqc_stats
-  # output_input_b1_trimx2_fastq:
-  #   type: File[]
-  #   outputSource: step_input_alignment/b1_trimx2_fastq
-  # output_input_b1_trimx2_metrics:
-  #   type: File
-  #   outputSource: step_input_alignment/b1_trimx2_metrics
-  # output_input_b1_trimx2_fastqc_report:
-  #   type: File
-  #   outputSource: step_input_alignment/b1_trimx2_fastqc_report
-  # output_input_b1_trimx2_fastqc_stats:
-  #   type: File
-  #   outputSource: step_input_alignment/b1_trimx2_fastqc_stats
+  output_input_b1_trimx2_fastq:
+    type: File[]
+    outputSource: step_input_alignment/b1_trimx2_fastq
+  output_input_b1_trimx2_metrics:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_metrics
+  output_input_b1_trimx2_fastqc_report:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_report
+  output_input_b1_trimx2_fastqc_stats:
+    type: File
+    outputSource: step_input_alignment/b1_trimx2_fastqc_stats
 
   ### Repeat mapping outputs ###
 
@@ -267,7 +267,7 @@ steps:
 ###########################################################################
 
   step_ip_alignment:
-    run: wf_clipseqcore_trim_partial_se_1barcode.cwl
+    run: wf_clipseqcore_chimeric_se_1barcode.cwl
     in:
       read:
         source: sample
@@ -287,10 +287,10 @@ steps:
       b1_trimx1_metrics,
       b1_trimx1_fastqc_report,
       b1_trimx1_fastqc_stats,
-      # b1_trimx2_fastq,
-      # b1_trimx2_metrics,
-      # b1_trimx2_fastqc_report,
-      # b1_trimx2_fastqc_stats,
+      b1_trimx2_fastq,
+      b1_trimx2_metrics,
+      b1_trimx2_fastqc_report,
+      b1_trimx2_fastqc_stats,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,
@@ -306,7 +306,7 @@ steps:
     ]
 
   step_input_alignment:
-    run: wf_clipseqcore_trim_partial_se_1barcode.cwl
+    run: wf_clipseqcore_chimeric_se_1barcode.cwl
     in:
       read:
         source: sample
@@ -326,10 +326,10 @@ steps:
       b1_trimx1_metrics,
       b1_trimx1_fastqc_report,
       b1_trimx1_fastqc_stats,
-      # b1_trimx2_fastq,
-      # b1_trimx2_metrics,
-      # b1_trimx2_fastqc_report,
-      # b1_trimx2_fastqc_stats,
+      b1_trimx2_fastq,
+      b1_trimx2_metrics,
+      b1_trimx2_fastqc_report,
+      b1_trimx2_fastqc_stats,
       b1_maprepeats_mapped_to_genome,
       b1_maprepeats_stats,
       b1_maprepeats_star_settings,
@@ -343,18 +343,6 @@ steps:
       output_pos_bw,
       output_neg_bw
     ]
-
-  step_index_ip:
-    run: samtools-index.cwl
-    in:
-      alignments: step_ip_alignment/b1_output_rmdup_sorted_bam
-    out: [alignments_with_index]
-
-  step_index_input:
-    run: samtools-index.cwl
-    in:
-      alignments: step_input_alignment/b1_output_rmdup_sorted_bam
-    out: [alignments_with_index]
 
   step_clipper:
     run: clipper.cwl
@@ -398,8 +386,8 @@ steps:
   step_input_normalize_peaks:
     run: overlap_peakfi_with_bam_PE.cwl
     in:
-      clipBamFile: step_index_ip/alignments_with_index
-      inputBamFile: step_index_input/alignments_with_index
+      clipBamFile: step_ip_alignment/b1_output_rmdup_sorted_bam
+      inputBamFile: step_input_alignment/b1_output_rmdup_sorted_bam
       peakFile: step_clipper/output_bed
       clipReadnum: step_ip_mapped_readnum/output
       inputReadnum: step_input_mapped_readnum/output
@@ -413,7 +401,7 @@ steps:
     in:
       input_bed: step_input_normalize_peaks/inputnormedBed
     out: [output_bed]
-    
+  
   step_sort_bed:
     run: sort-bed.cwl
     in:

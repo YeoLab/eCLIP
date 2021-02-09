@@ -64,6 +64,10 @@ inputs:
     type: string
     default: ".bam"
     
+  hard_trim_length:
+    type: int
+    default: -9
+    
 outputs:
 
   X_output_trim_first:

@@ -13,7 +13,7 @@ baseCommand: [parsebarcodes.sh]
 
 hints: 
   - class: DockerRequirement
-    dockerPull: brianyee/eclip:0.6.0a_python
+    dockerPull: brianyee/eclip:0.7.0_perl
     
 inputs:
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env cwltool
 
-### This sub workflow should be identical to wf_trim_and_map_se.cwl except that it runs cutadapt only once. ###
+### space to remind me of what the metadata runner is ###
 
 cwlVersion: v1.0
 class: Workflow
@@ -72,7 +72,7 @@ outputs:
 
   X_output_trim_first:
     type: File[]
-    outputSource: step_gzip_trim_umi/gzipped
+    outputSource: step_gzip_sort_X_trim/gzipped
   X_output_trim_first_metrics:
     type: File
     outputSource: X_trim/output_trim_report
@@ -82,18 +82,19 @@ outputs:
   X_output_trim_first_fastqc_stats:
     type: File
     outputSource: step_fastqc_trim/output_qc_stats
-  # X_output_trim_again:
-  #   type: File[]
-  #   outputSource: step_gzip_sort_X_trim_again/gzipped
-  # X_output_trim_again_metrics:
-  #   type: File
-  #   outputSource: X_trim_again/output_trim_report
-  # X_output_trim_again_fastqc_report:
-  #   type: File
-  #   outputSource: step_fastqc_trim_again/output_qc_report
-  # X_output_trim_again_fastqc_stats:
-  #   type: File
-  #   outputSource: step_fastqc_trim_again/output_qc_stats
+    
+  X_output_trim_again:
+    type: File[]
+    outputSource: step_gzip_sort_X_trim_again/gzipped
+  X_output_trim_again_metrics:
+    type: File
+    outputSource: X_trim_again/output_trim_report
+  X_output_trim_again_fastqc_report:
+    type: File
+    outputSource: step_fastqc_trim_again/output_qc_report
+  X_output_trim_again_fastqc_stats:
+    type: File
+    outputSource: step_fastqc_trim_again/output_qc_stats
     
   A_output_maprepeats_mapped_to_genome:
     type: File
@@ -160,7 +161,7 @@ steps:
       times: trim_times
       error_rate: trim_error_rate
     out: [output_trim, output_trim_report]
-
+  
   step_gzip_sort_X_trim:
     run: gzip.cwl
     scatter: input
@@ -169,14 +170,40 @@ steps:
     out:
       - gzipped
       
+  X_trim_again:
+    run: trim_se.cwl
+    in:
+      input_trim: X_trim/output_trim
+      input_trim_overlap_length: trimagain_overlap_length
+      input_trim_a_adapters: get_a_adapters/output
+      times: trim_times
+      error_rate: trim_error_rate
+    out: [output_trim, output_trim_report]
+  
+  A_sort_trimmed_fastq:
+    run: fastqsort.cwl
+    scatter: input_fastqsort_fastq
+    in:
+      input_fastqsort_fastq: X_trim_again/output_trim
+    out:
+      [output_fastqsort_sortedfastq]
+  
+  step_gzip_sort_X_trim_again:
+    run: gzip.cwl
+    scatter: input
+    in:
+      input: A_sort_trimmed_fastq/output_fastqsort_sortedfastq
+    out:
+      - gzipped
+      
   X_trim_umi:
     run: trim_umi.cwl
     in:
       # cores: cores
       hard_trim_length: hard_trim_length
-      input_trim: X_trim/output_trim
+      input_trim: X_trim_again/output_trim
     out: [output_trim, output_trim_report]
-    
+  
   step_gzip_trim_umi:
     run: gzip.cwl
     scatter: input
@@ -185,14 +212,6 @@ steps:
     out:
       - gzipped
       
-  A_sort_trimmed_fastq:
-    run: fastqsort.cwl
-    scatter: input_fastqsort_fastq
-    in:
-      input_fastqsort_fastq: X_trim/output_trim
-    out:
-      [output_fastqsort_sortedfastq]
-      
 ###########################################################################
 # FastQC
 ###########################################################################
@@ -200,7 +219,7 @@ steps:
     run: wf_fastqc.cwl
     in:
       reads: 
-        source: step_gzip_trim_umi/gzipped
+        source: step_gzip_sort_X_trim/gzipped
         valueFrom: |
           ${
             return self[0];
@@ -208,7 +227,19 @@ steps:
     out:
       - output_qc_report
       - output_qc_stats
-
+      
+  step_fastqc_trim_again:
+    run: wf_fastqc.cwl
+    in:
+      reads: 
+        source: step_gzip_sort_X_trim_again/gzipped
+        valueFrom: |
+          ${
+            return self[0];
+          }
+    out:
+      - output_qc_report
+      - output_qc_stats
       
 ###########################################################################
 # Mapping
@@ -217,7 +248,7 @@ steps:
   A_map_repeats:
     run: star-repeatmapping.cwl
     in:
-      readFilesIn: A_sort_trimmed_fastq/output_fastqsort_sortedfastq
+      readFilesIn: X_trim_umi/output_trim
       genomeDir: repeatElementGenomeDir
     out: [
       aligned,
@@ -229,7 +260,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_repeats/aligned
-      suffix: 
+      suffix:
         default: ".bam"
       newname:
         source: read1
@@ -241,7 +272,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_repeats/output_map_unmapped_fwd
-      suffix: 
+      suffix:
         default: ".fq"
       newname:
         source: read1

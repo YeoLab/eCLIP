@@ -94,18 +94,18 @@ outputs:
   b1_trimx1_fastqc_stats: 
     type: File
     outputSource: b1_trim_and_map/X_output_trim_first_fastqc_stats
-  # b1_trimx2_fastq:
-  #   type: File[]
-  #   outputSource: b1_trim_and_map/X_output_trim_again
-  # b1_trimx2_metrics:
-  #   type: File
-  #   outputSource: b1_trim_and_map/X_output_trim_again_metrics
-  # b1_trimx2_fastqc_report:
-  #   type: File
-  #   outputSource: b1_trim_and_map/X_output_trim_again_fastqc_report
-  # b1_trimx2_fastqc_stats: 
-  #   type: File
-  #   outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats
+  b1_trimx2_fastq:
+    type: File[]
+    outputSource: b1_trim_and_map/X_output_trim_again
+  b1_trimx2_metrics:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_metrics
+  b1_trimx2_fastqc_report:
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_report
+  b1_trimx2_fastqc_stats: 
+    type: File
+    outputSource: b1_trim_and_map/X_output_trim_again_fastqc_stats
     
   b1_maprepeats_mapped_to_genome:
     type: File
@@ -167,7 +167,7 @@ steps:
     ]
 
   b1_trim_and_map:
-    run: wf_trim_partial_and_map_se.cwl
+    run: wf_trim_and_map_chimeric_se.cwl
     in:
       speciesGenomeDir: speciesGenomeDir
       repeatElementGenomeDir: repeatElementGenomeDir
@@ -189,6 +189,10 @@ steps:
       X_output_trim_first_metrics,
       X_output_trim_first_fastqc_report,
       X_output_trim_first_fastqc_stats,
+      X_output_trim_again,
+      X_output_trim_again_metrics,
+      X_output_trim_again_fastqc_report,
+      X_output_trim_again_fastqc_stats,
       A_output_maprepeats_mapped_to_genome,
       A_output_maprepeats_stats,
       A_output_maprepeats_star_settings,
