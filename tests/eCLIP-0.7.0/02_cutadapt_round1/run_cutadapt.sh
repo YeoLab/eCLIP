@@ -1,0 +1,61 @@
+# cutadapt 1.14 
+
+cutadapt -O 1 \
+-f fastq \
+--match-read-wildcards \
+--times 1 \
+-e 0.1 \
+--quality-cutoff 6 \
+-m 18 \
+-o rep1.IP.umi.r1.fqTr.fq.gz \
+-a AGATCGGAAGAGCAC \
+-a GATCGGAAGAGCACA \
+-a ATCGGAAGAGCACAC \
+-a TCGGAAGAGCACACG \
+-a CGGAAGAGCACACGT \
+-a GGAAGAGCACACGTC \
+-a GAAGAGCACACGTCT \
+-a AAGAGCACACGTCTG \
+-a AGAGCACACGTCTGA \
+-a GAGCACACGTCTGAA \
+-a AGCACACGTCTGAAC \
+-a GCACACGTCTGAACT \
+-a CACACGTCTGAACTC \
+-a ACACGTCTGAACTCC \
+-a CACGTCTGAACTCCA \
+-a ACGTCTGAACTCCAG \
+-a CGTCTGAACTCCAGT \
+-a GTCTGAACTCCAGTC \
+-a TCTGAACTCCAGTCA \
+-a CTGAACTCCAGTCAC \
+../01_umi_tools_extract/rep1.IP.umi.r1.fq.gz > rep1.IP.umi.r1.fqTr.metrics
+
+cutadapt -O 1 \
+-f fastq \
+--match-read-wildcards \
+--times 1 \
+-e 0.1 \
+--quality-cutoff 6 \
+-m 18 \
+-o rep1.IN.umi.r1.fqTr.fq.gz \
+-a AGATCGGAAGAGCAC \
+-a GATCGGAAGAGCACA \
+-a ATCGGAAGAGCACAC \
+-a TCGGAAGAGCACACG \
+-a CGGAAGAGCACACGT \
+-a GGAAGAGCACACGTC \
+-a GAAGAGCACACGTCT \
+-a AAGAGCACACGTCTG \
+-a AGAGCACACGTCTGA \
+-a GAGCACACGTCTGAA \
+-a AGCACACGTCTGAAC \
+-a GCACACGTCTGAACT \
+-a CACACGTCTGAACTC \
+-a ACACGTCTGAACTCC \
+-a CACGTCTGAACTCCA \
+-a ACGTCTGAACTCCAG \
+-a CGTCTGAACTCCAGT \
+-a GTCTGAACTCCAGTC \
+-a TCTGAACTCCAGTCA \
+-a CTGAACTCCAGTCAC \
+../01_umi_tools_extract/rep1.IN.umi.r1.fq.gz > rep1.IN.umi.r1.fqTr.metrics
