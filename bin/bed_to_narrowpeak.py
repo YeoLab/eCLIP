@@ -73,7 +73,7 @@ def main():
     # Hack to get around the hg19/38 -> GRCh37/38 ucsc schema.
     if species.upper() == 'GRCH37':
         species = 'hg19'
-    elif species.upper() == 'GRCh38':
+    elif species.upper() == 'GRCH38':
         species = 'hg38'
         
     # main func

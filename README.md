@@ -276,6 +276,8 @@ For Paired-end eCLIP:
 
 ## Notes regarding outputs (FAQ):
 - When going through the merged BAM file results, I can only find files with only one of the paired barcodes (e.g. A01 of A01/B06). Is this normal? <b>Yes, ```*.merged*.bam``` indicates that both barcodes have been merged, I just use the first as a prefix namespace for the next step.</b>
+- Regarding the narrowPeak files - The scores in the 5th column are almost always equal to 1000 or 200, where do these values come from and what do they represent? <b>200/1000 flags each peak as significant (1000) or not (200) visually on the genome browser</b>
+- Regarding 
 
 # References:
 
