@@ -545,6 +545,8 @@ steps:
       gencodeTableBrowser: gencodeTableBrowser
       repMaskBEDFile: repMaskBEDFile
       prefixes: prefixes
+      se_or_pe: 
+        default: SE
     out:
       - output_ip_concatenated_pre_rmDup_sam_file
       - output_input_concatenated_pre_rmDup_sam_file
