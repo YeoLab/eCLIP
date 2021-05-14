@@ -240,7 +240,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_repeats/aligned
-      suffix: 
+      suffix:
         default: ".bam"
       newname:
         source: read1
@@ -252,7 +252,7 @@ steps:
     run: rename.cwl
     in:
       srcfile: A_map_repeats/output_map_unmapped_fwd
-      suffix: 
+      suffix:
         default: ".fq"
       newname:
         source: read1

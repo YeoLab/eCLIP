@@ -44,10 +44,6 @@ inputs:
         fields:
           read1:
             type: File
-          # read2:
-          #   type: File
-          # barcodeids:
-          #   type: string[]
           name:
             type: string
           adapters:
@@ -64,19 +60,12 @@ inputs:
     type: string
   fileListFile1:
     type: File
-  fileListFile2:
-    type: File
 
   gencodeGTF:
     type: File
   gencodeTableBrowser:
     type: File
   repMaskBEDFile:
-    type: File
-
-  chrM_genelist_file:
-    type: File
-  mirbase_gff3_file:
     type: File
   
   prefixes:
@@ -274,7 +263,9 @@ outputs:
   output_bigbed:
     type: File
     outputSource: step_bed_to_bigbed/output_bigbed
-    
+  output_entropynum:
+    type: File
+    outputSource: step_calculate_entropy/output_entropynum
     
   ### Repeat element outputs ###
 
@@ -304,24 +295,12 @@ outputs:
   output_input_parsed:
     type: File
     outputSource: step_rep_element_mapping/output_input_parsed
-  output_ip_reparsed:
-    type: File
-    outputSource: step_rep_element_mapping/output_ip_reparsed
-  output_input_reparsed:
-    type: File
-    outputSource: step_rep_element_mapping/output_input_reparsed
   output_nopipes:
     type: File
     outputSource: step_rep_element_mapping/output_nopipes
   output_withpipes:
     type: File
     outputSource: step_rep_element_mapping/output_withpipes
-  output_reparsed_nopipes:
-    type: File
-    outputSource: step_rep_element_mapping/output_reparsed_nopipes
-  output_reparsed_withpipes:
-    type: File
-    outputSource: step_rep_element_mapping/output_reparsed_withpipes
 
 
   ### Region normalization outputs ###
@@ -443,7 +422,7 @@ steps:
       outfile:
         default: ""
     out:
-      [output_tsv, output_bed]
+      [output_bed]
 
 
 ###########################################################################
@@ -526,6 +505,14 @@ steps:
       chrom_sizes: chrom_sizes
     out: [output_bigbed]
     
+  step_calculate_entropy:
+    run: calculate_entropy.cwl
+    in:
+      full: step_input_normalize_peaks/inputnormedBedfull
+      ip_mapped: step_ip_mapped_readnum/output
+      input_mapped: step_input_mapped_readnum/output
+    out: [output_entropynum]
+    
 ###########################################################################
 # Downstream - repeat mapping
 ###########################################################################
@@ -554,13 +541,12 @@ steps:
       bowtie2_db: bowtie2_db
       bowtie2_prefix: bowtie2_prefix
       fileListFile1: fileListFile1
-      fileListFile2: fileListFile2
       gencodeGTF: gencodeGTF
       gencodeTableBrowser: gencodeTableBrowser
       repMaskBEDFile: repMaskBEDFile
-      chrM_genelist_file: chrM_genelist_file
-      mirbase_gff3_file: mirbase_gff3_file
       prefixes: prefixes
+      se_or_pe: 
+        default: SE
     out:
       - output_ip_concatenated_pre_rmDup_sam_file
       - output_input_concatenated_pre_rmDup_sam_file
@@ -568,12 +554,8 @@ steps:
       - output_input_concatenated_rmDup_sam_file
       - output_ip_parsed
       - output_input_parsed
-      - output_ip_reparsed
-      - output_input_reparsed
       - output_nopipes
       - output_withpipes
-      - output_reparsed_nopipes
-      - output_reparsed_withpipes
 
 ###########################################################################
 # Downstream - region-level normalization

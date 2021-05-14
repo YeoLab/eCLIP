@@ -24,16 +24,19 @@ def sum_entropy(full, ip_mapped, input_mapped, l10p, l2fc):
     """
     Computes the entropy 
     """
-    with open(ip_mapped, 'r') as f:
-        ip_mapped_num = int(f.readline().rstrip())
-    with open(input_mapped, 'r') as f:
-        input_mapped_num = int(f.readline().rstrip())
+    try:
+        with open(ip_mapped, 'r') as f:
+            ip_mapped_num = int(f.readline().rstrip())
+        with open(input_mapped, 'r') as f:
+            input_mapped_num = int(f.readline().rstrip())
 
-    peaks = pd.read_csv(full, names=FULL_HEADER, sep='\t')
-    peaks = peaks[(peaks['l10p'] >= l10p) & (peaks['l2fc'] >= l2fc)]
-    peaks['entropy'] = peaks.apply(entropy, args=(ip_mapped_num, input_mapped_num, ), axis=1)
-    
-    return peaks['entropy'].sum()
+        peaks = pd.read_csv(full, names=FULL_HEADER, sep='\t')
+        peaks = peaks[(peaks['l10p'] >= l10p) & (peaks['l2fc'] >= l2fc)]
+        peaks['entropy'] = peaks.apply(entropy, args=(ip_mapped_num, input_mapped_num, ), axis=1)
+
+        return peaks['entropy'].sum()
+    except Exception as e:
+        return e
     
 def main():
     parser = argparse.ArgumentParser()

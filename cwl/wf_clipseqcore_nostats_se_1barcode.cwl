@@ -11,7 +11,7 @@ requirements:
   - class: SubworkflowFeatureRequirement
   - class: ScatterFeatureRequirement      # TODO needed?
   - class: MultipleInputFeatureRequirement
-
+  - class: InlineJavascriptRequirement
 
 #hints:
 #  - class: ex:ScriptRequirement

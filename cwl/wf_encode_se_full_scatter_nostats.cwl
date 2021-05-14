@@ -1,22 +1,13 @@
 #!/usr/bin/env cwltool
 
-### ###
-
 cwlVersion: v1.0
 class: Workflow
 
 requirements:
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
-  - class: ScatterFeatureRequirement      # TODO needed?
+  - class: ScatterFeatureRequirement
   - class: MultipleInputFeatureRequirement
-
-
-#hints:
-#  - class: ex:ScriptRequirement
-#    scriptlines:
-#      - "#!/bin/bash"
-
 
 inputs:
   dataset:
@@ -60,19 +51,12 @@ inputs:
     type: string
   fileListFile1:
     type: File
-  fileListFile2:
-    type: File
 
   gencodeGTF:
     type: File
   gencodeTableBrowser:
     type: File
   repMaskBEDFile:
-    type: File
-
-  chrM_genelist_file:
-    type: File
-  mirbase_gff3_file:
     type: File
     
   prefixes:
@@ -281,7 +265,9 @@ outputs:
   output_bigbed:
     type: File[]
     outputSource: wf_encode_se_full/output_bigbed
-    
+  output_entropynum:
+    type: File[]
+    outputSource: wf_encode_se_full/output_entropynum
     
   ### Repeat element outputs ###
 
@@ -314,24 +300,12 @@ outputs:
   output_input_parsed:
     type: File[]
     outputSource: wf_encode_se_full/output_input_parsed
-  output_ip_reparsed:
-    type: File[]
-    outputSource: wf_encode_se_full/output_ip_reparsed
-  output_input_reparsed:
-    type: File[]
-    outputSource: wf_encode_se_full/output_input_reparsed
   output_nopipes:
     type: File[]
     outputSource: wf_encode_se_full/output_nopipes
   output_withpipes:
     type: File[]
     outputSource: wf_encode_se_full/output_withpipes
-  output_reparsed_nopipes:
-    type: File[]
-    outputSource: wf_encode_se_full/output_reparsed_nopipes
-  output_reparsed_withpipes:
-    type: File[]
-    outputSource: wf_encode_se_full/output_reparsed_withpipes
 
 
   ### Region normalization outputs ###
@@ -371,12 +345,9 @@ steps:
       bowtie2_db: bowtie2_db
       bowtie2_prefix: bowtie2_prefix
       fileListFile1: fileListFile1
-      fileListFile2: fileListFile2
       gencodeGTF: gencodeGTF
       gencodeTableBrowser: gencodeTableBrowser
       repMaskBEDFile: repMaskBEDFile
-      chrM_genelist_file: chrM_genelist_file
-      mirbase_gff3_file: mirbase_gff3_file
       prefixes: prefixes
       trna_bed_file: trna_bed_file
       lncrna_table_file: lncrna_table_file
@@ -424,18 +395,15 @@ steps:
       output_narrowpeak,
       output_fixed_bed,
       output_bigbed,
+      output_entropynum,
       output_ip_concatenated_pre_rmDup_sam_file,
       output_input_concatenated_pre_rmDup_sam_file,
       output_barcode1_concatenated_rmDup_sam_file,
       output_input_concatenated_rmDup_sam_file,
       output_ip_parsed,
       output_input_parsed,
-      output_ip_reparsed,
-      output_input_reparsed,
       output_nopipes,
       output_withpipes,
-      output_reparsed_nopipes,
-      output_reparsed_withpipes,
       clipBroadFeatureCountsFile,
       inputBroadFeatureCountsFile,
       combinedOutputFile,
