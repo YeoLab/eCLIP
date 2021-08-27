@@ -25,7 +25,7 @@ samples:
         path: /home/centos/seRBFOX2/INV_IP_B_S58_L005_R1_001.fastq.gz
       adapters:
         class: File
-        path: /home/centos/eclip/example/inputs/InvRNA1_adapters.fasta
+        path: /home/centos/eclip/example/inputs/InvRil19_adapters.yaml
 
     - input_read:
       name: INPUT
@@ -34,7 +34,7 @@ samples:
         path: /home/centos/seRBFOX2/INV_IN_B_S57_L005_R1_001.fastq.gz
       adapters:
         class: File
-        path: /home/centos/eclip/example/inputs/InvRNA5_adapters.fasta
+        path: /home/centos/eclip/example/inputs/InvRil19_adapters.yaml
 
 blacklist_file:
   class: File
