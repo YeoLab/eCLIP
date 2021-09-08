@@ -18,6 +18,8 @@ hints:
     
 baseCommand: [umi_tools, dedup]
 
+arguments: ["--random-seed", "1"]
+
 inputs:
 
   input_barcodecollapsese_bam:

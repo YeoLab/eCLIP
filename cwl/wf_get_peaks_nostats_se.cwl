@@ -256,7 +256,9 @@ outputs:
   output_bigbed:
     type: File
     outputSource: step_bed_to_bigbed/output_bigbed
-    
+  output_entropynum:
+    type: File
+    outputSource: step_calculate_entropy/output_entropynum
     
 steps:
 
@@ -342,18 +344,6 @@ steps:
       output_neg_bw
     ]
 
-  step_index_ip:
-    run: samtools-index.cwl
-    in:
-      alignments: step_ip_alignment/b1_output_rmdup_sorted_bam
-    out: [alignments_with_index]
-
-  step_index_input:
-    run: samtools-index.cwl
-    in:
-      alignments: step_input_alignment/b1_output_rmdup_sorted_bam
-    out: [alignments_with_index]
-
   step_clipper:
     run: clipper.cwl
     in:
@@ -396,8 +386,8 @@ steps:
   step_input_normalize_peaks:
     run: overlap_peakfi_with_bam_PE.cwl
     in:
-      clipBamFile: step_index_ip/alignments_with_index
-      inputBamFile: step_index_input/alignments_with_index
+      clipBamFile: step_ip_alignment/b1_output_rmdup_sorted_bam
+      inputBamFile: step_input_alignment/b1_output_rmdup_sorted_bam
       peakFile: step_clipper/output_bed
       clipReadnum: step_ip_mapped_readnum/output
       inputReadnum: step_input_mapped_readnum/output
@@ -444,3 +434,11 @@ steps:
       input_bed: step_fix_bed_for_bigbed_conversion/output_fixed_bed
       chrom_sizes: chrom_sizes
     out: [output_bigbed]
+
+  step_calculate_entropy:
+    run: calculate_entropy.cwl
+    in:
+      full: step_input_normalize_peaks/inputnormedBedfull
+      ip_mapped: step_ip_mapped_readnum/output
+      input_mapped: step_input_mapped_readnum/output
+    out: [output_entropynum]

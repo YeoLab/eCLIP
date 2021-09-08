@@ -1444,7 +1444,7 @@ baseCommand: [STAR]
 $namespaces:
   s: http://schema.org/
 $schemas:
-- https://schema.org/version/latest/schema.rdf
+- http://schema.org/docs/schema_org_rdfa.html
 
 s:mainEntity:
   class: s:SoftwareSourceCode

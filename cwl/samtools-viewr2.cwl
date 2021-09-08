@@ -208,12 +208,6 @@ outputs:
 baseCommand: [samtools, view]
 
 
-$namespaces:
-  s: http://schema.org/
-
-$schemas:
-- https://schema.org/version/latest/schema.rdf
-
 # s:mainEntity:
 #   $import: samtools-metadata.yaml
 

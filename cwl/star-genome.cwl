@@ -1445,10 +1445,6 @@ outputs:
       #   }
 
 baseCommand: [STAR]
-$namespaces:
-  s: http://schema.org/
-$schemas:
-- https://schema.org/version/latest/schema.rdf
 
 s:mainEntity:
   class: s:SoftwareSourceCode

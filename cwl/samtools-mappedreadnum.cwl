@@ -189,16 +189,6 @@ outputs:
 
 baseCommand: [samtools, view]
 
-
-$namespaces:
-  s: http://schema.org/
-
-$schemas:
-- https://schema.org/version/latest/schema.rdf
-
-# s:mainEntity:
-#   $import: samtools-metadata.yaml
-
 s:downloadUrl: https://github.com/common-workflow-language/workflows/blob/master/tools/samtools-view.cwl
 s:codeRepository: https://github.com/common-workflow-language/workflows
 s:license: http://www.apache.org/licenses/LICENSE-2.0
