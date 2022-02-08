@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+
+INBAM=$1
+
+
+if [ $# -eq 0 ]
+then
+    echo usage: bamflippairs INBAM
+else
+    echo samtools view -h $INBAM | awk 'BEGIN {OFS=\"\\t\"} {if(!!and($2,0x0080)) {if(!!and($2, 0x0004)) {$2 = $2 - 16} else {$2 = $2 + 16}}; print $0}' | samtools view -bS -
+    samtools view -h $INBAM | awk 'BEGIN {OFS=\"\\t\"} {if(!!and($2,0x0080)) {if(!!and($2, 0x0004)) {$2 = $2 - 16} else {$2 = $2 + 16}}; print $0}' | samtools view -bS -
+fi

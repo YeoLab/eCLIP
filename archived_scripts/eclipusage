@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+  echo "--------------------------------------------------------------"
+  echo "ECLIP INITIALIZATION"
+  echo "--------------------"
+  echo "Eclip template and demo data files have been placed in this folder:"
+  echo "- template.eclip: an eclip job template"
+  echo "- rawdata: a folder 6 5 small fq.gz files to be replaced with your data"
+  echo "Place your fastq.gz files for eclip processing in this folder"
+  echo "Copy and rename the template.eclip template file"
+  echo "for example rename template.eclip to NOVELRBP42.eclip"
+  echo "Edit the eclip job file to:"
+  echo "- refer to your fastq.gz files"
+  echo "- refer to a species (hg19, mm10)"
+  echo "- edit the 'normalize' section to reflect your IPs-INPUTs pairings"
+  echo "You are now ready to run eclip with this command:"
+  echo "> ./NOVELRBP42.eclip"
+  echo "---------------------------------------------------------------"
+

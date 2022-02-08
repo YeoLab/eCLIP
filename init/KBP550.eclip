@@ -1,0 +1,105 @@
+#!/usr/bin/env eclip
+
+###############################################################################
+# Collaborator Name  : ENCODE
+#
+# Experiment title   : KBP550 
+#
+# Cell Line / Tissue : human cell line HepG2
+#
+# Samples specs      : first 550,000 base pairs of RBFOX2 encode eCLIP dataset
+#
+###############################################################################
+
+# barcodes fasta file (Yeo Lab standard)
+barcodesfasta:
+  class: File
+  #path: /projects/ps-yeolab/barcodes/yeolabbarcodes_20170101.fasta
+  path: KBP550barcodes.fasta
+
+# choose among: GRCh38 hg19 hg19chr19kbp550 mm10 mm9 ce11 ce10
+species: hg19chr19kbp550
+
+# reference data tar file
+#eclipreferencetar:
+#  class: File
+#  #path: /projects/ps-yeolab/software/eclip/eclipref-0.1.6/eclip_reference_hg19chr19kbp550.tar
+#  path: eclip_reference_hg19chr19kbp550.tar
+
+# normally "10", some old assays used "5"
+randomer_length: "5"
+
+# normally "1"
+out_filter_multimap_nmax_1: "1"
+
+# dataset prefix for all output filenames
+dataset: KBP550
+
+# log2 fold-change minimum for filtering before analysis
+l2fc: "3"
+# pvalue minimum for filtering before analysis
+pval: "3"
+
+# change to True to perfom mapping to repetitive elements
+dorepmap: False
+
+
+clipalize_items:
+
+  - name: CLIP1
+    fwd:
+      class: File
+      path: KBP550fastqs/chrom19kbp550_clip1_r1.fastq.gz
+    rev:
+      class: File
+      path: KBP550fastqs/chrom19kbp550_clip1_r2.fastq.gz
+    barcodeids: [A01, B06]
+
+  - name: NPUT1
+    fwd:
+      class: File
+      path: KBP550fastqs/chrom19kbp550_input_r1.fastq.gz
+    rev:
+      class: File
+      path: KBP550fastqs/chrom19kbp550_input_r2.fastq.gz
+    barcodeids: [NIL, NIL]
+
+  - name: CLIP2
+    fwd:
+      class: File
+      path: KBP550fastqs/chrom19kbp550_clip2_r1.fastq.gz
+    rev:
+      class: File
+      path: KBP550fastqs/chrom19kbp550_clip2_r2.fastq.gz
+    barcodeids: [C01, D8f]
+
+#  - name: NPUT2
+#    fwd:
+#      class: File
+#      path: KBP550fastqs/chrom19kbp550_input_r1.fastq.gz
+#    rev:
+#      class: File
+#      path: KBP550fastqs/chrom19kbp550_input_r2.fastq.gz
+#    barcodeids: [NIL, NIL]
+
+
+normalize_items:
+
+  - ip: CLIP1
+    in: NPUT1
+
+  - ip: CLIP2
+    in: NPUT1
+
+
+idrize_items:
+  []
+#  - ip1: CLIP1
+#    ip2: CLIP2
+#    in1: NPUT1
+#    in2: NPUT1
+
+
+overlapize_items:
+  []
+

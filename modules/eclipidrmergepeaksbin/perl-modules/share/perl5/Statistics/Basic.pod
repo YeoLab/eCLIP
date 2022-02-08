@@ -1,0 +1,721 @@
+=head1 NAME
+
+Statistics::Basic - A collection of very basic statistics modules
+
+=head1 SYNOPSIS
+
+    use Statistics::Basic qw(:all);
+
+These actually return objects, not numbers.  The objects will interpolate as
+nicely formated numbers (using L<Number::Format>).  Or the actual number will be
+returned when the object is used as a number.
+
+    my $median = median( 1,2,3 );
+    my $mean   = mean(  [1,2,3]); # array refs are ok too
+
+    my $variance = variance( 1,2,3 );
+    my $stddev   = stddev(   1,2,3 );
+
+Although passing unblessed numbers and array refs to these functions works, it's
+sometimes better to pass vector objects so the objects can reuse calculated
+values.
+
+    my $v1       = $mean->query_vector;
+    my $variance = variance( $v1 );
+    my $stddev   = stddev(   $v1 );
+
+Here, the mean used by the variance and the variance used by the standard
+deviation will not need to be recalculated.  Now consider these two
+calculations.
+
+    my $covariance  = covariance(  [1 .. 3], [1 .. 3] );
+    my $correlation = correlation( [1 .. 3], [1 .. 3] );
+
+The covariance above would need to be recalculated by the correlation when these
+functions are called this way.  But, if we instead built vectors first, that
+wouldn't happen:
+
+    # $v1 is defined above
+    my $v2  = vector(1,2,3);
+    my $cov = covariance(  $v1, $v2 );
+    my $cor = correlation( $v1, $v2 );
+
+Now C<$cor> can reuse the variance calculated in C<$cov>.
+
+All of the functions above return objects that interpolate or evaluate as a
+single string or as a number.  L<Statistics::Basic::LeastSquareFit> and
+L<Statistics::Basic::Mode> are different:
+
+    my $unimodal   = mode(1,2,3,3);
+    my $multimodal = mode(1,2,3);
+
+    print "The modes are: $unimodal and $multimodal.\n";
+    print "The first is multimodal... " if $unimodal->is_multimodal;
+    print "The second is multimodal.\n" if $multimodal->is_multimodal;
+
+In the first case, C<$unimodal> will interpolate as a string B<and> function
+correctly as a number.  However, in the second case, trying to use
+C<$multimodal> as a number will C<croak> an error -- it still interpolates fine
+though.
+
+    my $lsf = leastsquarefit($v1, $v2);
+
+This C<$lsf> will interpolate fine, showing C<LSF( alpha: $alpha, beta: $beta
+)>, but it will C<croak> if you try to use the object as a number.
+
+    my $v3             = $multimodal->query;
+    my ($alpha, $beta) = $lsf->query;
+    my $average        = $mean->query;
+
+All of the objects allow you to explicitly query, if you're not in the mood to
+use L<overload>.
+
+    my @answers = (
+        $mode->query,
+        $median->query,
+        $stddev->query,
+    );
+
+=head1 SHORTCUTS
+
+The following shortcut functions can be used in place of calling the module's
+C<new()> method directly.
+
+They all take either array refs B<or> lists as arguments, with the exception of
+the shortcuts that need two vectors to process (e.g.
+L<Statistics::Basic::Correlation>).
+
+=over
+
+=item B<vector()>
+
+Returns a L<Statistics::Basic::Vector> object.
+Arguments to C<vector()> can be any of: an array ref, a list of numbers, or a
+blessed vector object.  If passed a blessed vector object, vector will just
+return the vector passed in.
+
+=item B<mean()> B<average()> B<avg()>
+
+Returns a L<Statistics::Basic::Mean> object.
+You can choose to call C<mean()> as C<average()> or C<avg()>.  Arguments can be
+any of: an array ref, a list of numbers, or a blessed vector object.
+
+=item B<median()>
+
+Returns a L<Statistics::Basic::Median> object.
+Arguments can be any of: an array ref, a list of numbers, or a blessed vector
+object.
+
+=item B<mode()>
+
+Returns a L<Statistics::Basic::Mode> object.
+Arguments can be any of: an array ref, a list of numbers, or a blessed vector
+object.
+
+=item B<variance()> B<var()>
+
+Returns a L<Statistics::Basic::Variance> object.
+You can choose to call C<variance()> as C<var()>.  Arguments can be any of: an
+array ref, a list of numbers, or a blessed vector object.  If you will also be
+calculating the mean of the same list of numbers it's recommended to do this:
+
+    my $vec  = vector(1,2,3);
+    my $mean = mean($vec);
+    my $var  = variance($vec);
+
+This would also work:
+
+    my $mean = mean(1,2,3);
+    my $var  = variance($mean->query_vector);
+
+This will calculate the same mean twice:
+
+    my $mean = mean(1,2,3);
+    my $var  = variance(1,2,3);
+
+If you really only need the variance, ignore the above and this is fine:
+
+    my $variance = variance(1,2,3,4,5);
+
+=item B<stddev()>
+
+Returns a L<Statistics::Basic::StdDev> object.
+Arguments can be any of: an array ref, a list of numbers, or a blessed vector
+object.  Pass a vector object to C<stddev()> to avoid recalculating the variance
+and mean if applicable (see C<variance()>).
+
+=item B<covariance()> B<cov()>
+
+Returns a L<Statistics::Basic::Covariance> object.
+Arguments to C<covariance()> or C<cov()> must be array ref or vector objects.
+There must be precisely two arguments (or none, setting the vectors to two empty
+ones), and they must be the same length.
+
+=item B<correlation()> B<cor()> B<corr()>
+
+Returns a L<Statistics::Basic::Correlation> object.
+Arguments to C<correlation()> or C<cor()>/C<corr()> must be array ref or vector
+objects.  There must be precisely two arguments (or none, setting the vectors to
+two empty ones), and they must be the same length.
+
+=item B<leastsquarefit()> B<LSF()> B<lsf()>
+
+Returns a L<Statistics::Basic::LeastSquareFit> object.
+Arguments to C<leastsquarefit()> or C<lsf()>/C<LSF()> must be array ref or
+vector objects.  There must be precisely two arguments (or none, setting the
+vectors to two empty ones), and they must be the same length.
+
+=item B<computed()>
+
+Returns a L<Statistics::Basic::ComputedVector> object.
+Argument must be a blessed vector object.  See the section on
+L<COMPUTED VECTORS> for more information on this.
+
+=item B<handle_missing_values()> B<handle_missing()>
+
+Returns two L<Statistics::Basic::ComputedVector> objects.
+Arguments to this function should be two vector arguments.  See the section on
+L</MISSING VALUES> for further information on this function.
+
+=back
+
+=head1 COMPUTED VECTORS
+
+Sometimes it will be handy to have a vector computed from another (or at least
+that updates based on the first).  Consider the case of outliers:
+
+    my @a = ( (1,2,3) x 7, 15 );
+    my @b = ( (1,2,3) x 7 );
+
+    my $v1 = vector(@a);
+    my $v2 = vector(@b);
+    my $v3 = computed($v1);
+       $v3->set_filter(sub {
+           my $m = mean($v1);
+           my $s = stddev($v1);
+
+           grep { abs($_-$m) <= $s } @_;
+       });
+
+This filter sets C<$v3> to always be equal to C<$v1> such that all the elements
+that differ from the mean by more than a standard deviation are removed.  As
+such, C<"$v2" eq "$v3"> since C<15> is clearly an outlier by inspection.
+
+    print "$v1\n";
+    print "$v3\n";
+
+... prints:
+
+    [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 15]
+    [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]
+
+=head1 MISSING VALUES
+
+Something I get asked about quite a lot is, "can S::B handle missing values?"
+The answer used to be, "that really depends on your data set, use
+L<grep|perlfunc/grep>," but I recently decided (5/29/09) that it was time to
+just go ahead and add this feature.
+
+Strictly speaking, the feature was already there.  You simply need to add a
+couple filters to your data.  See C<t/75_filtered_missings.t> for the test
+example.
+
+This is what people usually mean when they ask if S::B can "handle" missing
+data:
+
+    my $v1 = vector(1,2,3,undef,4);
+    my $v2 = vector(1,2,3,4, undef);
+    my $v3 = computed($v1);
+    my $v4 = computed($v2);
+
+    $v3->set_filter(sub {
+        my @v = $v2->query;
+        map {$_[$_]} grep { defined $v[$_] and defined $_[$_] } 0 .. $#_;
+    });
+
+    $v4->set_filter(sub {
+        my @v = $v1->query;
+        map {$_[$_]} grep { defined $v[$_] and defined $_[$_] } 0 .. $#_;
+    });
+
+    print "$v1 $v2\n"; # prints: [1, 2, 3, _, 4] [1, 2, 3, 4, _]
+    print "$v3 $v4\n"; # prints: [1, 2, 3] [1, 2, 3]
+
+But I've made it even simpler.  Since this is such a common request, I have
+provided a helper function to build the filters automatically:
+
+    my $v1 = vector(1,2,3,undef,4);
+    my $v2 = vector(1,2,3,4, undef);
+
+    my ($f1, $f2) = handle_missing_values($v1, $v2);
+
+    print "$f1 $f2\n"; # prints: [1, 2, 3] [1, 2, 3]
+
+Note that in practice, you would still manipulate (insert, and shift) C<$v1> and
+C<$v2>, I<not> the computed vectors.  But for correlations and the like, you
+would use C<$f1> and C<$f2>.
+
+    $v1->insert(5);
+    $v2->insert(6);
+
+    my $correlation = correlation($f1, $f2);
+
+You can still insert on C<$f1> and C<$f2>, but it updates the input vector
+rather than the computed one (which is just a filter handler).
+
+=head1 REUSE DETAILS
+
+Most of the objects have a variety of query functions that allow you to extract
+the objects used within.  Although, the objects are smart enough to prevent
+needless duplication.  That is, the following would test would pass:
+
+    use Statistics::Basic qw(:all);
+
+    my $v1 = vector(1,2,3,4,5);
+    my $v2 = vector($v1);
+    my $sd = stddev( $v1 );
+    my $v3 = $sd->query_vector;
+    my $m1 = mean( $v1 );
+    my $m2 = $sd->query_mean;
+    my $m3 = Statistics::Basic::Mean->new( $v1 );
+    my $v4 = $m3->query_vector;
+
+    use Scalar::Util qw(refaddr);
+    use Test; plan tests => 5;
+
+    ok( refaddr($v1), refaddr($v2) );
+    ok( refaddr($v2), refaddr($v3) );
+    ok( refaddr($m1), refaddr($m2) );
+    ok( refaddr($m2), refaddr($m3) );
+    ok( refaddr($v3), refaddr($v4) );
+
+    # this is t/54_* in the distribution
+
+Also, note that the mean is only calculated once even though we've calculated a
+variance and a standard deviation above.
+
+Suppose you'd like a copy of the L<Statistics::Basic::Variance> object that the
+L<Statistics::Basic::StdDev> object is using.  All of the objects within should
+be accessible with query functions as follows.
+
+=head1 QUERY FUNCTIONS
+
+=over
+
+=item B<query()>
+
+This method exists in all of the objects.  L<Statistics::Basic::LeastSquareFit>
+is the only one that returns two values (alpha and beta) as a list.
+L<Statistics::Basic::Vector> returns either the list of elements in the vector,
+or reference to that array (depending on the context).  All of the other
+C<query()> methods return a single number, the number the module purports to
+calculate.
+
+=item B<query_mean()>
+
+Returns the L<Statistics::Basic::Mean> object used by
+L<Statistics::Basic::Variance> and L<Statistics::Basic::StdDev>.
+
+=item B<query_mean1()>
+
+Returns the first L<Statistics::Basic::Mean> object used by
+L<Statistics::Basic::Covariance>, L<Statistics::Basic::Correlation> and
+L<Statistics::Basic::LeastSquareFit>.
+
+=item B<query_mean2()>
+
+Returns the second L<Statistics::Basic::Mean> object used by
+L<Statistics::Basic::Covariance>, and L<Statistics::Basic::Correlation>.
+
+=item B<query_covariance()>
+
+Returns the L<Statistics::Basic::Covariance> object used by
+L<Statistics::Basic::Correlation> and L<Statistics::Basic::LeastSquareFit>.
+
+=item B<query_variance()>
+
+Returns the L<Statistics::Basic::Variance> object used by
+L<Statistics::Basic::StdDev>.
+
+=item B<query_variance1()>
+
+Returns the first L<Statistics::Basic::Variance> object used by
+L<Statistics::Basic::LeastSquareFit>.
+
+=item B<query_vector()>
+
+Returns the L<Statistics::Basic::Vector> object used by any of the single vector
+modules.
+
+=item B<query_vector1()>
+
+Returns the first L<Statistics::Basic::Vector> object used by any of the two
+vector modules.
+
+=item B<query_vector2()>
+
+Returns the second L<Statistics::Basic::Vector> object used by any of the two
+vector modules.
+
+=item B<is_multimodal()>
+
+L<Statistics::Basic::Mode> objects sometimes return L<Statistics::Basic::Vector>
+objects instead of numbers.  When C<is_multimodal()> is true, the mode is a
+vector, not a scalar.
+
+=item B<y_given_x()>
+
+L<Statistics::Basic::LeastSquareFit> is meant for finding a line of best fit.
+This function can be used to find the C<y> for a given C<x> based on the
+calculated C<$beta> (slope) and C<$alpha> (y-offset).
+
+=item B<x_given_y()>
+
+L<Statistics::Basic::LeastSquareFit> is meant for finding a line of best fit.
+This function can be used to find the C<x> for a given C<y> based on the
+calculated C<$beta> (slope) and C<$alpha> (y-offset).
+
+This function can produce divide-by-zero errors since it must divide by the
+slope to find the C<x> value.  (The slope should rarely be zero though, that's a
+vertical line and would represent very odd data points.)
+
+=back
+
+=head1 INSERT and SET FUNCTIONS
+
+These objects are all intended to be useful while processing long columns of
+data, like data you'd find in a database.
+
+=over
+
+=item B<insert()>
+
+Vectors try to stay the same size when they accept new elements, FIFO style.
+
+    my $v1 = vector(1,2,3); # a 3 touple
+       $v1->insert(4); # still a 3 touple
+
+    print "$v1\n"; # prints: [2, 3, 4]
+
+    $v1->insert(7); # still a 3 touple
+    print "$v1\n"; # prints: [3, 4, 7]
+
+All of the other L<Statistics::Basic> modules have this function too.  The
+modules that track two vectors will need two arguments to insert though.
+
+    my $mean = mean([1,2,3]);
+       $mean->insert(4);
+
+    print "mean: $mean\n"; # prints 3 ... (2+3+4)/3
+
+    my $correlation = correlation($mean->query_vector,
+        $mean->query_vector->copy);
+
+    print "correlation: $correlation\n"; # 1
+
+    $correlation->insert(3,4);
+    print "correlation: $correlation\n"; # 0.5
+
+Also, note that the underlying vectors keep track of recalculating
+automatically.
+
+    my $v = vector(1,2,3);
+    my $m = mean($v);
+    my $s = stddev($v);
+
+The mean has not been calculated yet.
+
+    print "$s; $m\n"; # 0.82; 2
+
+The mean has been calculated once (even though the L<Statistics::Basic::StdDev>
+uses it).
+
+    $v->insert(4); print "$s; $m\n"; 0.82; 3
+    $m->insert(5); print "$s; $m\n"; 0.82; 4
+    $s->insert(6); print "$s; $m\n"; 0.82; 5
+
+The mean has been calculated thrice more and only thrice more.
+
+=item B<append()> B<ginsert()>
+
+You can grow the vectors instead of sliding them (FIFO). For this, use
+C<append()> (or C<ginsert()>, same thing).
+
+    my $v = vector(1,2,3);
+    my $m = mean($v);
+    my $s = stddev($v);
+
+    $v->append(4); print "$s; $m\n"; 1.12; 2.5
+    $m->append(5); print "$s; $m\n"; 1.41; 3
+    $s->append(6); print "$s; $m\n"; 1.71; 1.71
+
+    print "$v\n"; # [1, 2, 3, 4, 5, 6]
+    print "$s\n"; # 1.71
+
+Of course, with a correlation, or a covariance, it'd look more like this:
+
+    my $c = correlation([1,2,3], [3,4,5]);
+       $c->append(7,7);
+
+    print "c=$c\n"; # c=0.98
+
+=item B<set_vector()>
+
+This allows you to set the vector to a known state.  It takes either array ref
+or vector objects.
+
+    my $v1 = vector(1,2,3);
+    my $v2 = $v1->copy;
+       $v2->set_vector([4,5,6]);
+
+    my $m = mean();
+
+    $m->set_vector([1,2,3]);
+    $m->set_vector($v2);
+
+    my $c = correlation();
+
+    $c->set_vector($v1,$v2);
+    $c->set_vector([1,2,3], [4,5,6]);
+
+=item B<set_size()>
+
+This sets the size of the vector.  When the vector is made bigger, the vector is
+filled to the new length with leading zeros (i.e., they are the first to be
+kicked out after new C<insert()>s.
+
+    my $v = vector(1,2,3);
+       $v->set_size(7);
+
+    print "$v\n"; # [0, 0, 0, 0, 1, 2, 3]
+
+    my $m = mean();
+       $m->set_size(7);
+
+    print "", $m->query_vector, "\n";
+     # [0, 0, 0, 0, 0, 0, 0]
+
+    my $c = correlation([3],[3]);
+       $c->set_size(7);
+
+    print "", $c->query_vector1, "\n";
+    print "", $c->query_vector2, "\n";
+     # [0, 0, 0, 0, 0, 0, 3]
+     # [0, 0, 0, 0, 0, 0, 3]
+
+=back
+
+=head1 OPTIONS
+
+Each of the following options can be specified on package import like this.
+
+    use Statistics::Basic qw(unbias=0); # start with unbias disabled
+    use Statistics::Basic qw(unbias=1); # start with unbias enabled
+
+When specified on import, each option has certain defaults.
+
+    use Statistics::Basic qw(unbias); # start with unbias enabled
+    use Statistics::Basic qw(nofill); # start with nofill enabled
+    use Statistics::Basic qw(toler);  # start with toler disabled
+    use Statistics::Basic qw(ipres);  # start with ipres=2
+
+Additionally, with the exception of L</ignore_env>, they can all be accessed via
+package variables of the same name in all upper case.  Example:
+
+    # code code code
+
+    $Statistics::Basic::UNBIAS = 0; # turn UNBIAS off
+
+    # code code code
+
+    $Statistics::Basic::UNBIAS = 1; # turn it back on
+
+    # code code code
+
+    { 
+        local $Statistics::Basic::DEBUG_STATS_B = 1; # debug, this block only
+    }
+ 
+Special caveat: L</toler> can in fact be changed via the package var (e.g.,
+C<$Statistics::Basic::TOLER=0.0001>).  But, for speed reasons, it must be
+L<defined|perlfunc/defined> before any other packages are imported or it will
+not actually do anything when changed.
+
+=over 4
+
+=item B<unbias>
+
+This module uses the B<sum(X - mean(X))/N> definition of variance.
+
+If you wish to use the I<unbiased>, B<sum(X-mean(X)/(N-1)> definition, then set
+the C<$Statistics::Basic::UNBIAS> true (possibly with
+C<use Statistics::Basic qw(unbias)>).
+
+This can be changed at any time with the package variable or at compile time.
+
+This feature was requested by C<< Robert McGehee <xxxxxxxx@wso.williams.edu> >>.
+
+[NOTE 2008-11-06: L<http://cpanratings.perl.org/dist/Statistics-Basic>, this can
+also be called "B<population (n)>" vs "B<sample (n-1)>" and is indeed fully
+addressed right here!]
+
+=item B<ipres>
+
+C<ipres> defaults to 2.  It is passed to L<Number::Format> as the second
+argument to L<format_number()|Number::Format/format_number> during string
+interpolation (see: L<overload>).
+
+=item B<toler>
+
+When set, C<$Statistics::Basic::TOLER> (which is not enabled by default),
+instructs the stats objects to test true when I<within> some tolerable range,
+pretty much like this:
+
+    sub is_equal {
+        return abs($_[0]-$_[1])<$Statistics::Basic::TOLER
+            if defined($Statistics::Basic::TOLER)
+
+        return $_[0] == $_[1]
+    }
+
+For performance reasons, this must be defined before the import of any other
+L<Statistics::Basic> modules or the modules will fail to overload the C<==>
+operator.
+
+C<$Statistics::Basic::TOLER> totally disabled:
+
+    use Statistics::Basic qw(:all toler);
+
+C<$Statistics::Basic::TOLER> disabled, but changeable:
+
+    use Statistics::Basic qw(:all toler=0);
+
+    $Statistics::Basic::TOLER = 0.000_001;
+
+You can I<change> the tolerance at runtime, but it must be set (or unset) at
+compile time before the packages load.
+
+=item B<nofill>
+
+Normally when you set the size of a vector it automatically fills with zeros on
+the first-out side of the vector.  You can disable the autofilling with this
+option.  It can be changed at any time.
+
+=item B<debug>
+
+Enable debugging with C<use Statistics::Basic qw(debug)> or disable a specific
+level (including C<0> to disable) with C<use Statistics::Basic qw(debug=2)>.
+
+This is also accessible at runtime using C<$Statistics::Basic::DEBUG_STATS_B> and can be
+switched on and off at any time.
+
+=item B<ignore_env>
+
+Normally the defaults for these options can be changed in the environment of the
+program.  Example:
+
+    UNBIAS=1 perl ./myprog.pl
+
+This does the same thing as C<$Statistics::Basic::UNBIAS=1> or
+C<use Statistics::Basic qw(unbias)> unless you disable the C<%ENV> checking with
+this option.
+
+    use Statistics::Basic qw(ignore_env);
+
+=back
+
+=head1 ENVIRONMENT VARIABLES
+
+You can change the defaults (assuming L<ignore_env|/ignore_env> is not used)
+from your bash prompt.  Example:
+
+    DEBUG_STATS_B=1 perl ./myprog.pl
+
+=over 4
+
+=item B<$ENV{DEBUG_STATS_B}>
+
+Sets the default value of L</debug>.
+
+=item B<$ENV{UNBIAS}>
+
+Sets the default value of L</unbias>.
+
+=item B<$ENV{NOFILL}>
+
+Sets the default value of L</nofill>.
+
+=item B<$ENV{IPRES}>
+
+Sets the default value of L</ipres>.
+
+=item B<$ENV{TOLER}>
+
+Sets the default value of L</toler>.
+
+=back
+
+=head1 OVERLOADS
+
+All of the objects are true in numeric context.  All of the objects print useful
+strings when evaluated as a string.  Most of the objects evaluate usefully as
+numbers, although L<Statistics::Basic::Vector> objects,
+L<Statistics::Basic::ComputedVector> objects, and
+L<Statistics::Basic::LeastSquareFit> objects do not -- they instead raise an
+error.
+
+=head1 Author's note on Statistics::Descriptive
+
+I've been asked a couple times now why I don't link to
+L<Statistics::Descriptive> in my see also section.  As a rule, I only link to
+packages there that I think are related or that I actually used in the package
+construction.  I've never personally used Descriptive, but it surely seems to do
+quite a lot more.  In a sense, this package really doesn't do statistics, not
+like a scientist would think about it anyway.  So I always figured people could
+find their own way to Descriptive anyway.
+
+The one thing this package does do, that I don't think Descriptive does (correct
+me if I'm wrong) is time difference computations.  If there are say, 200 things
+in the mean object, then after inserting (using this package) there'll still be
+200 things, allowing the computation of a moving average, moving stddev, moving
+correlation, etc.  You might argue that this is rarely needed, but it is really
+the only time I need to compute these things.
+
+  while( $data = $fetch_sth->fetchrow_arrayref ) {
+      $mean->insert($data);
+      $moving_avg_sth->execute(0 + $mean);
+  }
+
+Since I opened the topic I'd also like to mention that I find this package
+easier to use.  That is a matter of taste and since I wrote this, you might say
+I'm a little biased.  Your mileage may vary.
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+I am using this software in my own projects...  If you find bugs, please
+please please let me know. :) Actually, let me know if you find it handy at
+all.  Half the fun of releasing this stuff is knowing that people use it.
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL version 2.
+
+=head1 SEE ALSO
+
+perl(1), L<Number::Format>, L<overload>,
+L<Statistics::Basic::Vector>,
+L<Statistics::Basic::ComputedVector>,
+L<Statistics::Basic::_OneVectorBase>,
+L<Statistics::Basic::Mean>,
+L<Statistics::Basic::Median>,
+L<Statistics::Basic::Mode>,
+L<Statistics::Basic::Variance>,
+L<Statistics::Basic::StdDev>,
+L<Statistics::Basic::_TwoVectorBase>,
+L<Statistics::Basic::Correlation>,
+L<Statistics::Basic::Covariance>,
+L<Statistics::Basic::LeastSquareFit>
+
+=cut

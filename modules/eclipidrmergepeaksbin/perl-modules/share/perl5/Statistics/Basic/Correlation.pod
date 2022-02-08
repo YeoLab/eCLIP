@@ -1,0 +1,104 @@
+=head1 NAME
+
+Statistics::Basic::Correlation - find the correlation between two lists
+
+=head1 SYNOPSIS
+
+Invoke it this way:
+
+    my $correlation = correlation( [1,2,3], [1,2,3] );
+
+Or this way:
+
+    my $v1  = vector(1,2,3);
+    my $v2  = vector(1,2,3);
+    my $cor = corr($v1,$v2);
+
+And then either query the values or print them like so:
+
+    print "The correlation between $v1 and $v2: $correlation\n";
+    my $cq = $cor->query;
+    my $c0 = 0+$correlation;
+
+Create a 20 point "moving" correlation like so:
+
+    use Statistics::Basic qw(:all nofill);
+
+    my $sth = $dbh->prepare("select col1,col2 from data where something");
+    my $len = 20;
+    my $cor = corr()->set_size($len);
+
+    $sth->execute or die $dbh->errstr;
+    $sth->bind_columns( my ($lhs, $rhs) ) or die $dbh->errstr;
+
+    my $count = $len;
+    while( $sth->fetch ) {
+        $cor->insert( $lhs, $rhs );
+        if( defined( my $c = $cor->query ) ) {
+            print "Correlation: $c\n";
+        }
+
+        # This would also work:
+        # print "Correlation: $cor\n" if $cor->query_filled;
+    }
+
+=head1 METHODS
+
+This list of methods skips the methods inherited from
+L<Statistics::Basic::_TwoVectorBase>
+(things like L<query()|Statistics::Basic::_TwoVectorBase/query()>,
+L<insert()|Statistics::Basic::_TwoVectorBase/insert()>,
+and L<ginsert()|Statistics::Basic::_TwoVectorBase/ginsert()>).
+
+=over 4
+
+=item B<new()>
+
+Create a new L<Statistics::Basic::Correlation> object.  This function takes two
+arguments -- which can either be arrayrefs or L<Statistics::Basic::Vector>
+objects.  This function is called when the
+L<correlation()|Statistics::Basic/correlation() cor() corr()> shortcut-function
+is called.
+
+=item B<query_covariance()>
+
+Returns the L<Statistics::Basic::Covariance> object used to calculate the correlation.
+
+=item B<query_vector1()>
+
+Return the L<Statistics::Basic::Vector> for the first vector.
+
+=item B<query_vector2()>
+
+Return the L<Statistics::Basic::Vector> object for the second vector.
+
+=item B<query_mean1()>
+
+Returns the L<Statistics::Basic::Mean> object for the first vector.
+
+=item B<query_mean2()>
+
+Returns the L<Statistics::Basic::Mean> object for the second vector.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+calculation or the value of the computation in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::_TwoVectorBase>, L<Statistics::Basic::Vector>
+
+=cut

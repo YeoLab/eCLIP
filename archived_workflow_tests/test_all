@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+  mkdir regressiontests
+  cd regressiontests
+
+  eclip
+  ./kbp550.eclip
+  cd kbp550
+
+  test_demux
+  test_repmap
+  test_peaksperl
+
+  cd -

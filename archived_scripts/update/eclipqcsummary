@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -o xtrace
+
+mkdir -p qc
+cd results/intermediates
+
+echo about to run qcsummary from directory
+echo pwd: `pwd`
+
+qcsummaryeclip \
+  --analysis_dir ./ \
+  --output_csv ./eclipqcsummary.csv \
+  --number_usable 1000000 \
+  --percent_usable 0.7 \
+  --peak_threshold 3000
+
+
+pwd
+ls -la eclipqc*
+mv eclipqcsummary.csv ../../qc/qc-aggregate.csv
+mv eclipqcsummary.png ../../qc/qc-aggregate.png
+
+
+
+cd -

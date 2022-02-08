@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo fastqtools 0.8
+echo ==============
+echo the following commands are available
+ls -1 ${FASTQTOOLS_HOME}/bin
+echo
+
+

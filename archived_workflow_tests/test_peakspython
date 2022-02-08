@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+# set -o xtrace
+
+
+cd results/finals
+
+####### TESTING EXPECTED REP1 PEAK NUM #######
+
+EXPECTED=12
+
+ACTUAL=`wc -l KBP550.CLIP1.---.r-.fqTrTrU-SoMaSoCpSoMeV2ClNoCoFc1Pv1.bed | cut -f 1 -d ' '`
+
+TESTSTEP="TESTING EXPECTED REP1 PEAK NUM"
+
+if [ $EXPECTED -eq $ACTUAL ]
+then
+    echo test $TESTSTEP SUCCEDED
+else
+    echo test $TESTSTEP FAILED
+fi
+
+####### TESTING EXPECTED REP2 PEAK NUM #######
+
+EXPECTED=16
+
+ACTUAL=`wc -l KBP550.CLIP2.---.r-.fqTrTrU-SoMaSoCpSoMeV2ClNoCoFc1Pv1.bed | cut -f 1 -d ' '`
+
+TESTSTEP="TESTING EXPECTED REP2 PEAK NUM"
+
+if [ $EXPECTED -eq $ACTUAL ]
+then
+    echo test $TESTSTEP SUCCEDED
+else
+    echo test $TESTSTEP FAILED
+fi
+
+####### TESTING EXISTANCE OF SPECIFIC PEAKS #######
+
+TESTSTEP="TESTING EXISTANCE OF SPECIFIC PEAKS"
+
+EXPECTED=1
+
+ACTUAL=`grep '1.33078391024' KBP550.CLIP1.---.r-.fqTrTrU-SoMaSoCpSoMeV2ClNoCoFc1Pv1.bed | wc -l`
+
+if [ $EXPECTED -eq $ACTUAL ]
+then
+    echo test $TESTSTEP SUCCEDED
+else
+    echo test $TESTSTEP FAILED
+fi
+
+EXPECTED=2
+
+ACTUAL=`grep '1.07580997575' KBP550.CLIP2.---.r-.fqTrTrU-SoMaSoCpSoMeV2ClNoCoFc1Pv1.bed | wc -l`
+
+if [ $EXPECTED -eq $ACTUAL ]
+then
+    echo test $TESTSTEP SUCCEDED
+else
+    echo test $TESTSTEP FAILED
+fi
+
+cd - > /dev/null
+

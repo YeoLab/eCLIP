@@ -1,0 +1,82 @@
+=head1 NAME
+
+Statistics::Basic::Mean - find the mean of a list
+
+=head1 SYNOPSIS
+
+Invoke it this way:
+
+    my $avg = mean(1,2,3);
+
+Or this way:
+
+    my $v1  = vector(1,2,3);
+    my $avg = avg($v1);
+
+And then either query the values or print them like so:
+
+    print "The mean of $v1: $avg\n";
+    my $mq = $avg->query;
+    my $m0 = 0+$avg;
+
+Create a 20 point moving average like so:
+
+    use Statistics::Basic qw(:all nofill);
+
+    my $sth = $dbh->prepare("select col1 from data where something");
+    my $len = 20;
+    my $avg = mean()->set_size($len);
+
+    $sth->execute or die $dbh->errstr;
+    $sth->bind_columns( my $val ) or die $dbh->errstr;
+
+    while( $sth->fetch ) {
+        $avg->insert( $val );
+        if( defined( my $m = $avg->query ) ) {
+            print "Mean: $m\n";
+        }
+
+        # This would also work:
+        # print "Mean: $avg\n" if $avg->query_filled;
+    }
+
+=head1 METHODS
+
+=over 4
+
+=item B<new()>
+
+The constructor takes a single array ref or a single
+L<Statistics::Basic::Vector> as arguments.  It returns a
+L<Statistics::Basic::Mean> object.
+
+Note: normally you'd use the L<mean()|Statistics::Basic/mean() average() avg()>
+constructor, rather than building these by hand using C<new()>.
+
+=item B<_OVB::import()>
+
+This module also inherits all the overloads and methods from
+L<Statistics::Basic::_OneVectorBase>.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+calculation or the value of the computation in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::_OneVectorBase>, L<Statistics::Basic::Vector>
+
+=cut

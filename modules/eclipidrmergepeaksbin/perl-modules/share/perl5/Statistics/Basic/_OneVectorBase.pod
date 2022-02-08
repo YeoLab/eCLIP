@@ -1,0 +1,88 @@
+=head1 NAME
+
+Statistics::Basic::_OneVectorBase - base class objects like Mean
+
+=head1 METHODS
+
+=over 4
+
+=item B<query()>
+
+Query the value of the object.  It will return the undefined value until there's
+something to calculate (or until the vector is full when
+L<nofill|Statistics::Basic/nofill> is in effect).
+
+=item B<insert()>
+
+Insert new values into the vector. 
+
+    $object_instance->insert( 4, 3 ); # insert a 3 and a 4
+
+This function returns the object itself, for chaining purposes.
+
+=item B<append()> B<ginsert()>
+
+The growing insert inserts new elements, growing the max size of the vector to
+accommodate the new elements (if necessary).
+
+    $object_instance->ginsert( 4, 3 ); # append a 3 and a 4
+
+This function returns the object itself, for chaining purposes.
+
+=item B<query_size()>
+
+The current size of the vector -- regardless of its max size (as set by
+L</set_size()>).
+
+=item B<query_vector()>
+
+Returns the L<Statistics::Basic::Vector> object used by the computational
+object.
+
+=item B<set_size()>
+
+Set the maximum size for the underlying L<Statistics::Basic::Vector> object.
+This function requires one arguments.  
+
+Unless L<nofill|Statistics::Basic/nofill> is set, the vector will be
+filled with C<0>s (assuming the vector wouldn't otherwise be full) on the oldest
+side of the vector (so an insert will push off one of the filled-zeros).
+
+This function returns the object itself, for chaining purposes.
+
+=item B<set_vector()>
+
+Given a vector or array ref, this will set the contents (and size) of the vector
+used for the object computations.
+
+This function returns the object itself, for chaining purposes.
+
+=back
+
+=head1 OVERLOADS
+
+This class provides overloads.  If evaluated as a string, it will attempt to
+print a pretty value for the object (or C<n/a>, see L</query()> above).  the
+resulting string can be tuned, in terms of precision, see
+L<ipres|Statistics::Basic/ipres> for further information.
+
+If evaluated as a number, it will try to return the raw result of L</query()>,
+possibly turning the resulting C<undef> (if applicable) into a C<0> in the
+process -- note that Perl does this C<0>-izing, not the overload.
+
+The C<eq> and C<==> operators are also overloaded, trying to do the right thing.
+Also see L<toler|Statistics::Basic/toler> for further information.
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::Vector>
+
+=cut

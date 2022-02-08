@@ -1,0 +1,91 @@
+=head1 NAME
+
+Statistics::Basic::StdDev - find the standard deviation of a list
+
+=head1 SYNOPSIS
+
+Invoke it this way:
+
+    my $stddev = stddev(1,2,3);
+
+Or this way:
+
+    my $v1  = vector(1,2,3);
+    my $std = stddev($v1);
+
+And then either query the values or print them like so:
+
+    print "The stddev of $v1: $std\n";
+    my $sq = $std->query;
+    my $s0 = 0+$std;
+
+Create a 20 point "moving" stddev like so:
+
+    use Statistics::Basic qw(:all nofill);
+
+    my $sth = $dbh->prepare("select col1 from data where something");
+    my $len = 20;
+    my $std = stddev()->set_size($len);
+
+    $sth->execute or die $dbh->errstr;
+    $sth->bind_columns( my $val ) or die $dbh->errstr;
+
+    while( $sth->fetch ) {
+        $std->insert( $val );
+        if( defined( my $s = $std->query ) ) {
+            print "StdDev: $s\n";
+        }
+
+        # This would also work:
+        # print "StdDev: $s\n" $std->query_filled;
+    }
+
+=head1 METHODS
+
+=over 4
+
+=item B<new()>
+
+The constructor takes a list of values, a single array ref, or a
+single L<Statistics::Basic::Vector> as arguments.  It returns a
+L<Statistics::Basic::StdDev> object.
+
+Note: normally you'd use the L<mean()|Statistics::Basic/stddev()> constructor,
+rather than building these by hand using C<new()>.
+
+=item B<query_mean()>
+
+Returns the L<Statistics::Basic::Mean> object used in the standard deviation
+computation.
+
+=item B<_OVB::import()>
+
+This module also inherits all the overloads and methods from
+L<Statistics::Basic::_OneVectorBase>.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+calculation or the value of the computation in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+I am using this software in my own projects...  If you find bugs, please
+please please let me know. :) Actually, let me know if you find it handy at
+all.  Half the fun of releasing this stuff is knowing that people use it.
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>, L<Statistics::Basic::_OneVectorBase>, L<Statistics::Basic::Vector>
+
+=cut

@@ -1,0 +1,145 @@
+=head1 NAME
+
+Statistics::Basic::Vector - a class for handling lists of numbers
+
+=head1 SYNOPSIS
+
+Invoke it this way:
+
+    my $vector      = vector(1,2,3);
+    my $same_vector = vector($vector);
+    my $different   = $vector->copy;
+
+This module tracks which of the other L<Statistics::Basic> modules I<use> it.
+That's it's primary purpose.  Although, it does also have overloads to print the
+vectors in a pretty fashion.
+
+    print "$vector\n"; # pretty printed
+
+=head1 METHODS
+
+=over 4
+
+=item B<new()>
+
+The constructor can take a single array ref or a single
+L<Statistics::Basic::Vector> as its argument.  It can also take a list of
+values.
+
+It returns a L<Statistics::Basic::Vector> object.
+
+If given a vector object argument, this function will return the argument rather
+than creating a new vector.  This mainly used by the other L<Statistics::Basic>
+modules to try to prevent duplicate calculations.
+
+A vector's max size is set to the size of the argument or list on initialization.
+
+Note: normally you'd use the L<vector()|Statistics::Basic/vector()> constructor,
+rather than building these by hand using C<new()>.
+
+=item B<copy()>
+
+Creates a new vector object with the same contents and size as this one and returns it.
+
+    my $v1 = vector(3,7,9);
+    my $v2 = $v1->copy(); # $v2 is a new object, separate vector
+    my $v3 = vector($v1); # $v3 is the same object as $v1
+
+=item B<insert()>
+
+Insert new values into the vector.  If the vector was already full (see
+L</set_size()>), this will also shift oldest elements from the vector to
+compensate.
+
+    $vector->insert( 4, 3 ); # insert a 3 and a 4
+
+This function returns the object itself, for chaining purposes.
+
+=item B<append()> B<ginsert()>
+
+Insert new values into the vector.  If the vector was already full (see
+L</set_size()>), these functions will grow the size of the vector to accommodate
+the new values, rather than shifting things.  C<ginsert()> does the same thing.
+
+    $vector->append( 4, 3 ); # append a 3 and a 4
+
+This function returns the object itself, for chaining purposes.
+
+=item B<query()>
+
+C<query()> returns the contents of the vector either as a list or as an
+arrayref.
+
+    my @copy_of_contents      = $vector->query;
+    my $reference_to_contents = $vector->query;
+
+Note that changing the C<$reference_to_contents> will not usefully affect the
+contents of the vector itself, but it will adversely affect any computations
+based on the vector.  If you need to change the contents of a vector in a
+special way, use a L<Statistics::Basic::ComputedVector> object instead.
+
+Keeping C<$reference_to_contents> available long term should work acceptably
+(since it refers to the vector contents itself).
+
+=item B<query_filled()>
+
+Returns true when the vector is the same size as the max size set by
+L</set_size()>.  This function isn't useful unless operating under the effects
+of the L<nofill|Statistics::Basic/nofill> setting.
+
+=item B<query_size()>
+
+Returns the current number of elements in the vector object (not the size set
+with L</set_size()>).  This is almost never false unless you're using the
+L<nofill|Statistics::Basic/nofill> setting.
+
+=item B<set_size()>
+
+Sets the max size of the vector.
+
+    my $v1 = vector(1,2,3);
+       $v1->set_size(7); # [0, 0, 0, 0, 1, 2, 3]
+
+Unless L<nofill|Statistics::Basic/nofill> is set, the vector will be
+filled with C<0>s (assuming the vector wouldn't otherwise be full) on the oldest
+side of the vector (so an insert will push off one of the filled-zeros).
+
+This function returns the object itself, for chaining purposes.
+
+    my $v1 = vector(2 .. 5)->set_size(5);
+    # [0, 2, 3, 4, 5]
+
+=item B<set_vector()>
+
+Given a vector or array ref, this will set the contents (and size) of the input
+vector to match the argument.  If given a vector object argument, this will make
+the two vectors match, while still remaining separate objects.
+
+    my $v1 = vector(3,7,9);
+    my $v2 = vector()->set_vector($v1);
+    my $v3 = vector($v1); # $v3 is the same object as $v1
+
+This function returns the object itself, for chaining purposes.
+
+=back
+
+=head1 OVERLOADS
+
+This object is overloaded.  It tries to return an appropriate string for the
+vector and raises errors in numeric context.
+
+In boolean context, this object is always true (even when empty).
+
+=head1 AUTHOR
+
+Paul Miller C<< <jettero@cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2012 Paul Miller -- Licensed under the LGPL
+
+=head1 SEE ALSO
+
+perl(1), L<Statistics::Basic>
+
+=cut

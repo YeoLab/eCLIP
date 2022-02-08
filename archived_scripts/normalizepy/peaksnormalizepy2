@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# Debugging settings:
+#####################
+# exit immediately upon any error, output each line as it is executed
+set -o errexit
+set -o xtrace
+set -o pipefail
+
+#echo ${@}
+
+pwd
+ls -la
+
+cp ${1#file://} ./
+cp ${2#file://} ./
+cp ${3#file://} ./
+
+cp ${4#file://} ./
+cp ${5#file://} ./
+
+pwd
+ls -la
+
+IPBED=${6}
+IPBAM=${7}
+IPBAI=${8}
+
+INBAM=${9}
+INBAI=${10}
+
+OUTPUT=${11}
+OUTPUTFULL=${12}
+
+peaksnormalizepy.py \
+    --ipbam $IPBAM \
+    --inbam $INBAM \
+    --ipbed $IPBED \
+    --output $OUTPUT \
+    --outputfull $OUTPUTFULL \
+    --ipbai $IPBAI \
+    --inbai $INBAI
+
+#cp $(basename $OUTPUT No.bed)No.v3.bed               $(basename $OUTPUT No.bed)Np.bed
+#cp $(basename $OUTPUTFULL No.full.bed)No.full.v3.bed $(basename $OUTPUTFULL No.full.bed)Np.full.bed
+
+
+mv $(basename $OUTPUT No.bed)No.v0.bed               $(basename $OUTPUT No.bed)No.bed
+mv $(basename $OUTPUTFULL No.full.bed)No.full.v0.bed $(basename $OUTPUTFULL No.full.bed)No.full.bed
+
+#
+#mv $(basename $OUTPUT No.bed)No.v1.bed               $(basename $OUTPUT No.bed)N1.bed
+#mv $(basename $OUTPUTFULL No.full.bed)No.full.v1.bed $(basename $OUTPUTFULL No.full.bed)N1.full.bed
+#
+#mv $(basename $OUTPUT No.bed)No.v2.bed               $(basename $OUTPUT No.bed)N2.bed
+#mv $(basename $OUTPUTFULL No.full.bed)No.full.v2.bed $(basename $OUTPUTFULL No.full.bed)N2.full.bed
+#
+#mv $(basename $OUTPUT No.bed)No.v3.bed               $(basename $OUTPUT No.bed)N3.bed
+#mv $(basename $OUTPUTFULL No.full.bed)No.full.v3.bed $(basename $OUTPUTFULL No.full.bed)N3.full.bed
+#
+#mv $(basename $OUTPUT No.bed)No.v4.bed               $(basename $OUTPUT No.bed)N4.bed
+#mv $(basename $OUTPUTFULL No.full.bed)No.full.v4.bed $(basename $OUTPUTFULL No.full.bed)N4.full.bed
+
+
+pwd
+ls -la
+
