@@ -1,5 +1,5 @@
 # STAR 2.7.6a
-
+echo $(date +%x,%r) > TIMES.txt;
 STAR \
 --alignEndsType EndToEnd \
 --genomeDir repbase_STARindex \
@@ -20,9 +20,9 @@ STAR \
 --readFilesIn ../04_fastq_sort/rep1.IP.umi.r1.fqTrTr.sorted.fq \
 --runMode alignReads \
 --runThreadN 8
+echo $(date +%x,%r) >> TIMES.txt;
 
-
-
+echo $(date +%x,%r) >> TIMES.txt;
 STAR \
 --alignEndsType EndToEnd \
 --genomeDir repbase_STARindex \
@@ -43,3 +43,4 @@ STAR \
 --readFilesIn ../04_fastq_sort/rep1.IN.umi.r1.fqTrTr.sorted.fq \
 --runMode alignReads \
 --runThreadN 8
+echo $(date +%x,%r) >> TIMES.txt;

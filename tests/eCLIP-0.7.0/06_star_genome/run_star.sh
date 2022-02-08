@@ -1,5 +1,5 @@
 # STAR 2.7.6a
-
+echo $(date +%x,%r) > TIMES.txt;
 STAR \
 --alignEndsType EndToEnd \
 --genomeDir star_2_7_6a_gencode19_sjdb \
@@ -20,7 +20,8 @@ STAR \
 --readFilesIn ../05_star_repeat/rep1.IP.umi.r1.fqTrTr.sorted.STARUnmapped.out.mate1 \
 --runMode alignReads \
 --runThreadN 8
-
+echo $(date +%x,%r) >> TIMES.txt;
+echo $(date +%x,%r) >> TIMES.txt;
 STAR \
 --alignEndsType EndToEnd \
 --genomeDir star_2_7_6a_gencode19_sjdb \
@@ -41,3 +42,4 @@ STAR \
 --readFilesIn ../05_star_repeat/rep1.IN.umi.r1.fqTrTr.sorted.STARUnmapped.out.mate1 \
 --runMode alignReads \
 --runThreadN 8
+echo $(date +%x,%r) >> TIMES.txt;
